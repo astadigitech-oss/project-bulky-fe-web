@@ -22,6 +22,7 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-unused-vars": "warn",
       "react-hooks/exhaustive-deps": "off",
       "@next/next/no-img-element": "off",
+      "@tanstack/query/exhaustive-deps": "off",
     },
   },
 ]);
