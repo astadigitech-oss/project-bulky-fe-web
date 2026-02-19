@@ -1,0 +1,18 @@
+{
+  "Header": {
+    "search": {
+      "toggle": "Delete Search",
+      "placeholder": "Search products..."
+    },
+    "localeSwitcher": {
+      "toggle": "Switch Language",
+      "id": "Indonesian",
+      "en": "English"
+    },
+    "navigation": {
+      "home": "Home",
+      "products": "Products",
+      "about": "About Us"
+    }
+  }
+}

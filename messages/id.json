@@ -1,0 +1,18 @@
+{
+  "Header": {
+    "search": {
+      "toggle": "Hapus Pencarian",
+      "placeholder": "Cari produk..."
+    },
+    "localeSwitcher": {
+      "toggle": "Ganti Bahasa",
+      "id": "Bahasa Indonesia",
+      "en": "Bahasa Inggris"
+    },
+    "navigation": {
+      "home": "Beranda",
+      "products": "Produk",
+      "about": "Tentang Kami"
+    }
+  }
+}
