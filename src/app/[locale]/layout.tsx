@@ -1,0 +1,61 @@
+import { routing } from "@/i18n/routing";
+import { hasLocale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import React, { ReactNode } from "react";
+import { NextIntlClientProvider } from "next-intl";
+import QueryProviders from "@/providers/query-provider";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ToastProvider } from "@/providers/toast-provider";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "../globals.css";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Bulky",
+    default: "Bulky",
+  },
+};
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const LocaleLayout = async ({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}) => {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  setRequestLocale(locale);
+  return (
+    <html lang={locale} suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <QueryProviders>
+          <NuqsAdapter>
+            <NextIntlClientProvider>
+              <ToastProvider />
+              {children}
+            </NextIntlClientProvider>
+          </NuqsAdapter>
+        </QueryProviders>
+      </body>
+    </html>
+  );
+};
+
+export default LocaleLayout;

@@ -23,6 +23,7 @@
       "@components/*": ["./src/components/*"],
       "@svg/*": ["./src/components/svgs/*"],
       "@ui/*": ["./src/components/ui/*"],
+      "@i18n/*": ["./src/i18n/*"],
       "@messages/*": ["./messages/*"],
       "@config": ["./src/config.ts"],
     },

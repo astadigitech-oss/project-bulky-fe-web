@@ -1,4 +1,8 @@
 {
+  "Root": {
+    "nextSlide": "Slide Selanjutnya",
+    "prevSlide": "Slide Sebelumnya"
+  },
   "Header": {
     "search": {
       "toggle": "Hapus Pencarian",
@@ -14,5 +18,75 @@
       "products": "Produk",
       "about": "Tentang Kami"
     }
+  },
+  "Homepage": {
+    "hero": {
+      "title": "Bangun Masa Depan Di Bulky.id",
+      "description": "Belanja ratusan lelang likuidasi. Puluhan kategori produk. Semua ukuran dan kondisi.",
+      "startNow": "Mulai Sekarang"
+    },
+    "recommendation": "Rekomendasi",
+    "seeAllProducts": "Lihat Semua Produk",
+    "infoBanner": {
+      "title": "Kirim ke Seluruh Indonesia",
+      "getNow": "Dapatkan Sekarang",
+      "package": "Pengiriman kargo (ambil sendiri) atau layanan pengiriman",
+      "payment": "Pembayaran Terjamin 100% Aman",
+      "cs": "Dukungan Khusus 24 Jam",
+      "satisfied": "Pelanggan Puas"
+    },
+    "howItWorks": {
+      "title": "Bagaimana Bulky.id Bekerja?",
+      "description": "Kami menghubungkan bisnis ritel, distributor, dan mitra logistik untuk menciptakan ekosistem pengelolaan stok yang efisien dan menguntungkan. Setiap langkah dirancang untuk membantu bisnis memaksimalkan nilai dari setiap produk.",
+      "warehouse": "Pergudangan",
+      "sort": "Penyortiran",
+      "distribution": "Distribusi"
+    },
+    "testimony": {
+      "title": "Testimoni",
+      "description": "Apa kata pelanggan tentang produk dan layanan kami? Lihat pengalaman mereka di sini."
+    }
+  },
+  "Footer": {
+    "company": {
+      "description": "Platform Recommerce Antar Bisnis Pertama di Indonesia",
+      "altCompany": "logo_bulky",
+      "srCompany": "Logo Bulky",
+      "srInstagram": "Instagram Bulky",
+      "srTiktok": "TikTok Bulky"
+    },
+    "contactUs": {
+      "title": "Hubungi Kami",
+      "address": "Alamat Gudang Bulky",
+      "phone": "Nomor Telepon Bulky",
+      "email": "Email Bulky"
+    },
+    "helps": {
+      "title": "Bantuan",
+      "aboutUs": "Tentang Kami",
+      "howToBuy": "Cara Membeli",
+      "aboutPayment": "Informasi Pembayaran",
+      "faq": "Pertanyaan Umum",
+      "termsCondition": "Syarat dan Ketentuan",
+      "privacyPolicy": "Kebijakan Privasi"
+    },
+    "service": {
+      "title": "Layanan",
+      "otherProducts": "Produk Lainnya",
+      "order": "Pesanan",
+      "userProfile": "Profil"
+    },
+    "getItOn": {
+      "title": "Dapatkan di",
+      "altPlayStore": "dapatkan_di_google_play",
+      "altAppleStore": "unduh_di_app_store",
+      "srPlayStore": "Dapatkan di Google Play",
+      "srAppleStore": "Unduh di App Store"
+    },
+    "payment": {
+      "title": "Pembayaran Aman",
+      "altXendit": "didukung_oleh_xendit"
+    },
+    "copyright": "Hak Cipta © {date} <Link>Bulky.id</Link>. Seluruh Hak Dilindungi."
   }
 }

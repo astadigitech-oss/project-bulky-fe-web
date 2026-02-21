@@ -4,26 +4,23 @@ import React from "react";
 import { Button } from "@ui/button";
 import { Phone } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@i18n/navigation";
 import { CartMyIcon } from "@svg/cart-icon";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
-import {
-  LocaleSwitcher,
-  LocaleSwitcherProps,
-} from "@components/navbar/locale-switcher";
+import { LocaleSwitcher } from "@components/navbar/locale-switcher";
 import { Navigation } from "./navigation";
 import { Search } from "./search";
 
-export const Navbar = ({ changeLocaleAction }: LocaleSwitcherProps) => {
+export const Navbar = () => {
   return (
-    <header>
+    <header className="sticky -top-10 w-full z-50">
       <div className="flex items-center gap-2 h-10 bg-yellow-400 text-xs px-8 font-medium">
         <Phone className="fill-black size-3" />
         <p>0811-833-164</p>
         <p>|</p>
         <p>Hubungi kami untuk pengiriman luar Jabodetabek / Luar pulau</p>
       </div>
-      <nav className="px-8 h-16 flex items-center">
+      <nav className="px-8 h-16 flex items-center bg-white w-full shadow-lg">
         <div className="xl:max-w-7xl max-w-5xl w-full mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href={"/"}>
@@ -43,7 +40,7 @@ export const Navbar = ({ changeLocaleAction }: LocaleSwitcherProps) => {
           </div>
           <div className="flex items-center gap-3 w-full justify-end">
             <Search />
-            <LocaleSwitcher changeLocaleAction={changeLocaleAction} />
+            <LocaleSwitcher />
             <Button size={"icon"} variant={"outline"}>
               <CartMyIcon />
             </Button>
