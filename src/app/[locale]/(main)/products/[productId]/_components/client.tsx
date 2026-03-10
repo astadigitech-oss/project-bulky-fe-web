@@ -207,8 +207,8 @@ export const ProductIdClient = () => {
           </Button>
         </Link>
       </div>
-      <div className="grid grid-cols-5 gap-4">
-        {Array.from({ length: 5 }, (_, index) => (
+      <div className="grid grid-cols-6 gap-4">
+        {Array.from({ length: 6 }, (_, index) => (
           <Link key={index} href={`/products/${index + 1}`}>
             <div className="w-full border flex flex-col rounded-xl overflow-hidden border-gray-300 h-fit">
               <div className="aspect-square flex-none bg-gray-200 w-full relative overflow-hidden">
