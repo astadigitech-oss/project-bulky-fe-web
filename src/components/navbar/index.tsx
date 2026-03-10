@@ -41,9 +41,11 @@ export const Navbar = () => {
           <div className="flex items-center gap-3 w-full justify-end">
             <Search />
             <LocaleSwitcher />
-            <Button size={"icon"} variant={"outline"}>
-              <CartMyIcon />
-            </Button>
+            <Link href={"/cart"}>
+              <Button size={"icon"} variant={"outline"}>
+                <CartMyIcon />
+              </Button>
+            </Link>
             <Button size={"icon"} variant={"ghost"} className={"rounded-full"}>
               <Avatar className={"size-8"}>
                 <AvatarFallback>AF</AvatarFallback>
