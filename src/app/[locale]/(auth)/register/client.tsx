@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useMemo, useState } from "react";
-import { Eye, EyeOff, X } from "lucide-react";
+import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useTranslations } from "next-intl";
 
 type AssetWithFallbackProps = {
   src: string;
@@ -69,32 +69,21 @@ function OrDivider({ label }: { label: string }) {
 type SocialButtonProps = {
   iconSrc?: string;
   iconAlt: string;
-  icon?: React.ReactNode;
   label: string;
   onClick?: () => void;
 };
 
-function SocialButton({
-  iconSrc,
-  iconAlt,
-  icon,
-  label,
-  onClick,
-}: SocialButtonProps) {
+function SocialButton({ iconSrc, iconAlt, label, onClick }: SocialButtonProps) {
   const [iconFailed, setIconFailed] = useState(false);
 
   return (
     <Button
       type="button"
       variant="outline"
-      className="h-[39px] w-full justify-center gap-2 border-[#727272]/60 bg-white text-sm font-bold text-black hover:bg-gray-50"
+      className="h-[39px] w-full justify-center gap-2 rounded-lg border-[#727272]/60 bg-white text-sm font-bold text-black hover:bg-gray-50"
       onClick={onClick}
     >
-      {icon ? (
-        <span className="grid h-[22px] w-[22px] place-items-center">
-          {icon}
-        </span>
-      ) : iconSrc && !iconFailed ? (
+      {iconSrc && !iconFailed ? (
         <Image
           src={iconSrc}
           alt={iconAlt}
@@ -113,17 +102,18 @@ function SocialButton({
   );
 }
 
-export default function LoginPage() {
-  const t = useTranslations("Login");
+export default function RegisterPage() {
+  const t = useTranslations("Register");
 
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPass, setShowPass] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const assets = useMemo(
     () => ({
-      hero: "/assets/images/hero-login.svg",
+      container: "/assets/images/register-container.svg",
+      people: "/assets/images/register-people.svg",
       logo: "/assets/images/logo-bulky.webp",
       looperLeft: "/assets/images/Looper-kiri.svg",
       looperRight: "/assets/images/Looper-kanan.svg",
@@ -135,11 +125,16 @@ export default function LoginPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!agreed) {
+      setError(t("errors.mustAgree"));
+      return;
+    }
+
+    setError(null);
     setLoading(true);
 
     try {
-      // TODO: Integrasi login API
-      console.log("Login:", { phone, password });
+      console.log("Register:", { phone });
     } finally {
       setLoading(false);
     }
@@ -165,21 +160,32 @@ export default function LoginPage() {
         className="pointer-events-none absolute right-0 top-1/2 h-auto w-[40vw] min-w-[520px] -translate-y-1/2 select-none opacity-80"
       />
 
-      <section className="relative z-10 flex w-full max-w-[1366px] items-center justify-center gap-12 lg:justify-between lg:px-[146px]">
-        <div className="hidden lg:block">
-          <AssetWithFallback
-            src={assets.hero}
-            alt="Dua orang memegang kardus"
-            width={537}
-            height={537}
-            placeholderLabel="Hero image"
-            className="h-[537px] w-[537px] rounded-xl object-cover"
-            sizes="(min-width: 1024px) 537px, 0px"
-            priority
-          />
-        </div>
+      <div className="pointer-events-none absolute left-0 bottom-0 z-0 hidden h-[740px] w-[980px] lg:block">
+        <AssetWithFallback
+          src={assets.container}
+          alt=""
+          width={926}
+          height={579}
+          placeholderLabel="Container background"
+          className="absolute left-0 bottom-0 h-auto w-[900px] object-contain"
+          sizes="900px"
+          priority
+        />
 
-        <div className="relative flex min-h-[599px] w-full max-w-[365px] flex-col items-center rounded-[20px] bg-white px-[26px] pb-[40px] pt-[36px] shadow-sm [font-family:Roboto,Arial,sans-serif]">
+        <AssetWithFallback
+          src={assets.people}
+          alt={t("heroAlt")}
+          width={542}
+          height={725}
+          placeholderLabel="People foreground"
+          className="absolute left-[120px] bottom-0 h-auto w-[500px] object-contain"
+          sizes="500px"
+          priority
+        />
+      </div>
+
+      <section className="relative z-10 flex w-full max-w-[1366px] items-center justify-center lg:justify-end lg:px-[146px]">
+        <div className="relative flex w-full max-w-[365px] flex-col items-center rounded-[20px] bg-white px-[26px] pb-[32px] pt-[36px] shadow-sm [font-family:Roboto,Arial,sans-serif]">
           <Link
             href="/"
             className="absolute right-[22px] top-[25px]"
@@ -197,20 +203,43 @@ export default function LoginPage() {
             className="mb-[20px] h-[37px] w-auto object-contain"
           />
 
-          <div className="mb-[20px] flex w-full items-end justify-between">
-            <h1 className="text-[30px] leading-none font-bold tracking-[-0.01em] text-[#222]">
-              {t("title")}
-            </h1>
+          <h1 className="mb-[6px] w-full text-[30px] leading-none font-bold tracking-[-0.01em] text-[#222]">
+            {t("title")}
+          </h1>
+
+          <div className="mb-[24px] flex w-full items-center gap-1">
+            <span className="text-[14px] text-black">
+              {t("alreadyHaveAccount")}
+            </span>
             <Link
-              href="/register"
-              className="text-[16px] leading-none font-normal text-[#f90] hover:underline"
+              href="/login"
+              className="text-[14px] text-[#f90] hover:underline"
             >
-              {t("register")}
+              {t("login")}
             </Link>
           </div>
 
+          <div className="mb-[16px] flex w-full flex-col gap-[10px]">
+            <SocialButton
+              iconSrc={assets.google}
+              iconAlt="Google"
+              label={t("registerWithGoogle")}
+              onClick={() => console.log("Google OAuth")}
+            />
+            <SocialButton
+              iconSrc={assets.apple}
+              iconAlt="Apple"
+              label={t("registerWithApple")}
+              onClick={() => console.log("Apple OAuth")}
+            />
+          </div>
+
+          <div className="mb-[16px] w-full">
+            <OrDivider label={t("or")} />
+          </div>
+
           <form onSubmit={handleSubmit} className="flex w-full flex-col">
-            <div className="mb-[20px] flex flex-col gap-[6px]">
+            <div className="mb-[16px] flex flex-col gap-[6px]">
               <label
                 htmlFor="phone"
                 className="text-[14px] leading-none font-semibold text-[#727272]"
@@ -224,50 +253,13 @@ export default function LoginPage() {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder={t("phonePlaceholder")}
                 required
-                className="h-[39px] rounded border-[#f90] px-[12px] text-[16px] font-light text-[#727272] placeholder:text-[#9a9a9a] focus-visible:border-[#f90]"
+                className="h-[39px] rounded-lg border-[#f90] px-[12px] text-[16px] font-light text-[#727272] placeholder:text-[#9a9a9a] focus-visible:border-[#f90]"
               />
             </div>
 
-            <div className="mb-[10px] flex flex-col gap-[6px]">
-              <label
-                htmlFor="password"
-                className="text-[14px] leading-none font-semibold text-[#727272]"
-              >
-                {t("passwordLabel")}
-              </label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPass ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t("passwordPlaceholder")}
-                  required
-                  className="h-[39px] rounded border-[#f90] px-[12px] pr-[40px] text-[16px] font-light text-[#727272] placeholder:text-[#9a9a9a] focus-visible:border-[#f90]"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPass((prev) => !prev)}
-                  className="absolute right-[12px] top-1/2 -translate-y-1/2 text-black/60"
-                  aria-label={showPass ? t("hidePassword") : t("showPassword")}
-                >
-                  {showPass ? (
-                    <EyeOff className="h-[16px] w-[20px]" />
-                  ) : (
-                    <Eye className="h-[16px] w-[20px]" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-[24px] flex justify-end">
-              <Link
-                href="/lupa-kata-sandi"
-                className="text-[12px] leading-none font-normal text-[#f90] hover:underline"
-              >
-                {t("forgotPassword")}
-              </Link>
-            </div>
+            {error && (
+              <p className="mb-[10px] text-[12px] text-red-500">{error}</p>
+            )}
 
             <Button
               type="submit"
@@ -277,25 +269,30 @@ export default function LoginPage() {
               {loading ? t("processing") : t("submit")}
             </Button>
 
-            <div className="mb-[16px]">
-              <OrDivider label={t("or")} />
-            </div>
-
-            <div className="mb-[10px]">
-              <SocialButton
-                iconSrc={assets.google}
-                iconAlt="Google"
-                label={t("loginWithGoogle")}
-                onClick={() => console.log("Google login")}
+            <label className="flex cursor-pointer items-start gap-[8px]">
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                className="mt-[3px] shrink-0 accent-[#f90]"
               />
-            </div>
-
-            <SocialButton
-              iconSrc={assets.apple}
-              iconAlt="Apple"
-              label={t("loginWithApple")}
-              onClick={() => console.log("Apple login")}
-            />
+              <p className="text-[12px] leading-[20px] text-black">
+                {t("termsPrefix")}{" "}
+                <Link
+                  href="/syarat-ketentuan"
+                  className="text-[#f90] hover:underline"
+                >
+                  {t("terms")}
+                </Link>{" "}
+                {t("and")}{" "}
+                <Link
+                  href="/kebijakan-privasi"
+                  className="text-[#f90] hover:underline"
+                >
+                  {t("privacy")}
+                </Link>
+              </p>
+            </label>
           </form>
         </div>
       </section>
