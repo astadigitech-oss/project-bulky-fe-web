@@ -16,8 +16,29 @@
     "navigation": {
       "home": "Beranda",
       "products": "Produk",
-      "about": "Tentang Kami"
+      "about": "Tentang Kami",
+      "contact": "Hubungi Kami"
+    },
+    "auth": {
+      "login": "Masuk"
     }
+  },
+  "Login": {
+    "close": "Tutup",
+    "title": "Masuk",
+    "register": "Daftar",
+    "phoneLabel": "No Telepon",
+    "phonePlaceholder": "No Handphone",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Password",
+    "showPassword": "Tampilkan password",
+    "hidePassword": "Sembunyikan password",
+    "forgotPassword": "Lupa Kata Sandi?",
+    "processing": "Memproses...",
+    "submit": "Masuk",
+    "or": "Atau",
+    "loginWithGoogle": "Masuk dengan Google",
+    "loginWithApple": "Masuk dengan Apple"
   },
   "Homepage": {
     "hero": {

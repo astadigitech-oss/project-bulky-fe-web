@@ -3,6 +3,7 @@
 import React from "react";
 import { Button } from "@ui/button";
 import { Phone } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@i18n/navigation";
 import { CartMyIcon } from "@svg/cart-icon";
@@ -12,6 +13,11 @@ import { Navigation } from "./navigation";
 import { Search } from "./search";
 
 export const Navbar = () => {
+  const t = useTranslations("Header.auth");
+
+  // TODO: ganti dengan state auth asli dari store/cookie/session saat integrasi login
+  const isLoggedIn = false;
+
   return (
     <header className="sticky -top-10 w-full z-50">
       <div className="flex items-center gap-2 h-10 bg-yellow-400 text-xs px-8 font-medium">
@@ -46,15 +52,28 @@ export const Navbar = () => {
                 <CartMyIcon />
               </Button>
             </Link>
-            <Button size={"icon"} variant={"ghost"} className={"rounded-full"}>
-              <Avatar className={"size-8"}>
-                <AvatarFallback>AF</AvatarFallback>
-                <AvatarImage
-                  src={"/assets/images/logo-bulky.webp"}
-                  alt="user_profile"
-                />
-              </Avatar>
-            </Button>
+
+            {isLoggedIn ? (
+              <Button
+                size={"icon"}
+                variant={"ghost"}
+                className={"rounded-full"}
+              >
+                <Avatar className={"size-8"}>
+                  <AvatarFallback>AF</AvatarFallback>
+                  <AvatarImage
+                    src={"/assets/images/logo-bulky.webp"}
+                    alt="user_profile"
+                  />
+                </Avatar>
+              </Button>
+            ) : (
+              <Link href={"/login"}>
+                <Button className="h-10 rounded-lg bg-[#ffcf02] px-8 text-base font-bold text-black hover:bg-[#f5c800]">
+                  {t("login")}
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </nav>
