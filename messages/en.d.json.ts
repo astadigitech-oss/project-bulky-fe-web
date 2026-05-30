@@ -43,6 +43,27 @@ declare const messages: {
     "loginWithGoogle": "Continue with Google",
     "loginWithApple": "Continue with Apple"
   },
+  "Register": {
+    "close": "Close",
+    "heroAlt": "Bulky staff in front of shipping containers",
+    "title": "Register Now",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    "registerWithGoogle": "Google",
+    "registerWithApple": "Apple",
+    "or": "Or",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "Phone Number",
+    "processing": "Processing...",
+    "submit": "Register",
+    "termsPrefix": "By registering, I agree to the",
+    "terms": "Terms & Conditions",
+    "and": "and",
+    "privacy": "Privacy Policy",
+    "errors": {
+      "mustAgree": "Please agree to the Terms & Conditions first."
+    }
+  },
   "Homepage": {
     "hero": {
       "title": "Build Your Future with Bulky.id",

@@ -40,6 +40,27 @@
     "loginWithGoogle": "Masuk dengan Google",
     "loginWithApple": "Masuk dengan Apple"
   },
+  "Register": {
+    "close": "Tutup",
+    "heroAlt": "Staff Bulky di depan kontainer pengiriman",
+    "title": "Daftar Sekarang",
+    "alreadyHaveAccount": "Sudah Punya Akun?",
+    "login": "Masuk",
+    "registerWithGoogle": "Google",
+    "registerWithApple": "Apple",
+    "or": "Atau",
+    "phoneLabel": "Nomor Telepon",
+    "phonePlaceholder": "Nomor Handphone",
+    "processing": "Memproses...",
+    "submit": "Daftar",
+    "termsPrefix": "Dengan Mendaftar, Saya menyetujui",
+    "terms": "Syarat & Ketentuan",
+    "and": "serta",
+    "privacy": "Kebijakan Privasi",
+    "errors": {
+      "mustAgree": "Harap setujui Syarat & Ketentuan terlebih dahulu."
+    }
+  },
   "Homepage": {
     "hero": {
       "title": "Bangun Masa Depan Di Bulky.id",
