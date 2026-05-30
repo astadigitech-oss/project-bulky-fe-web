@@ -19,8 +19,29 @@ declare const messages: {
     "navigation": {
       "home": "Home",
       "products": "Products",
-      "about": "About Us"
+      "about": "About Us",
+      "contact": "Contact Us"
+    },
+    "auth": {
+      "login": "Login"
     }
+  },
+  "Login": {
+    "close": "Close",
+    "title": "Login",
+    "register": "Register",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "Phone Number",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "forgotPassword": "Forgot Password?",
+    "processing": "Processing...",
+    "submit": "Login",
+    "or": "Or",
+    "loginWithGoogle": "Continue with Google",
+    "loginWithApple": "Continue with Apple"
   },
   "Homepage": {
     "hero": {
