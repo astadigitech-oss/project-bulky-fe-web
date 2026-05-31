@@ -24,6 +24,10 @@ declare const messages: {
     },
     "auth": {
       "login": "Login"
+    },
+    "topBar": {
+      "phone": "0811-833-164",
+      "shippingInfo": "Contact us for deliveries outside Greater Jakarta / outside the island"
     }
   },
   "Login": {
@@ -62,6 +66,54 @@ declare const messages: {
     "privacy": "Privacy Policy",
     "errors": {
       "mustAgree": "Please agree to the Terms & Conditions first."
+    }
+  },
+  "Otp": {
+    "title": "Account Verification",
+    "otpSent": "A 6-digit OTP code has been sent to your WhatsApp number",
+    "otpGuide": "Open WhatsApp and enter the code you received.",
+    "codeValidPrefix": "The code is valid for",
+    "codeValidDuration": "2 minutes",
+    "otpGroupAria": "Enter OTP code",
+    "otpDigitAria": "Digit {index}",
+    "verify": "Verify Code",
+    "verifying": "Verifying...",
+    "resend": "Resend Code",
+    "resending": "Resending...",
+    "noCode": "Didn't receive the code?",
+    "resendIn": "Resend in",
+    "errors": {
+      "incomplete": "Please enter the full 6-digit OTP code.",
+      "failed": "Verification failed. Please try again."
+    }
+  },
+  "RegisterForm": {
+    "title": "Personal Information Form",
+    "heroAlt": "Bulky warehouse",
+    "nameLabel": "Name",
+    "namePlaceholder": "Full name",
+    "phoneLabel": "Phone Number",
+    "verified": "Verified",
+    "phoneVerifiedHint": "This number has been verified via WhatsApp OTP.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "example@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Minimum 8 characters",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "processing": "Processing...",
+    "submit": "Create Account",
+    "termsPrefix": "By registering, I agree to",
+    "terms": "Terms & Conditions",
+    "and": "and",
+    "privacy": "Privacy Policy",
+    "errors": {
+      "nameRequired": "Name is required.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Invalid email format.",
+      "passwordRequired": "Password is required.",
+      "passwordMin": "Password must be at least 8 characters.",
+      "general": "Something went wrong. Please try again."
     }
   },
   "Homepage": {

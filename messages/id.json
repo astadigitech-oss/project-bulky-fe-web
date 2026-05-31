@@ -21,6 +21,10 @@
     },
     "auth": {
       "login": "Masuk"
+    },
+    "topBar": {
+      "phone": "0811-833-164",
+      "shippingInfo": "Hubungi kami untuk pengiriman luar Jabodetabek / Luar pulau"
     }
   },
   "Login": {
@@ -59,6 +63,54 @@
     "privacy": "Kebijakan Privasi",
     "errors": {
       "mustAgree": "Harap setujui Syarat & Ketentuan terlebih dahulu."
+    }
+  },
+  "Otp": {
+    "title": "Verifikasi Akun",
+    "otpSent": "Kode OTP 6 digit telah dikirimkan ke WhatsApp kamu di nomor",
+    "otpGuide": "Buka aplikasi WhatsApp dan masukkan kode yang kamu terima.",
+    "codeValidPrefix": "Kode berlaku selama",
+    "codeValidDuration": "2 menit",
+    "otpGroupAria": "Masukkan kode OTP",
+    "otpDigitAria": "Digit ke-{index}",
+    "verify": "Verifikasi Kode",
+    "verifying": "Memverifikasi...",
+    "resend": "Kirim Ulang Kode",
+    "resending": "Mengirim ulang...",
+    "noCode": "Tidak menerima kode?",
+    "resendIn": "Kirim Ulang dalam",
+    "errors": {
+      "incomplete": "Masukkan 6 digit kode OTP terlebih dahulu.",
+      "failed": "Verifikasi gagal. Coba lagi."
+    }
+  },
+  "RegisterForm": {
+    "title": "Formulir Data Diri",
+    "heroAlt": "Gudang Bulky",
+    "nameLabel": "Nama",
+    "namePlaceholder": "Nama lengkap",
+    "phoneLabel": "Nomor Telepon",
+    "verified": "Terverifikasi",
+    "phoneVerifiedHint": "Nomor ini sudah diverifikasi via WhatsApp OTP.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "contoh@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Minimal 8 karakter",
+    "showPassword": "Tampilkan password",
+    "hidePassword": "Sembunyikan password",
+    "processing": "Memproses...",
+    "submit": "Buat Akun",
+    "termsPrefix": "Dengan Mendaftar, Saya menyetujui",
+    "terms": "Syarat & Ketentuan",
+    "and": "Serta",
+    "privacy": "Kebijakan Privasi",
+    "errors": {
+      "nameRequired": "Nama wajib diisi.",
+      "emailRequired": "Email wajib diisi.",
+      "emailInvalid": "Format email tidak valid.",
+      "passwordRequired": "Password wajib diisi.",
+      "passwordMin": "Password minimal 8 karakter.",
+      "general": "Terjadi kesalahan. Coba lagi."
     }
   },
   "Homepage": {
