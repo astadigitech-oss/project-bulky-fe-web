@@ -21,6 +21,10 @@
     },
     "auth": {
       "login": "Login"
+    },
+    "topBar": {
+      "phone": "0811-833-164",
+      "shippingInfo": "Contact us for deliveries outside Greater Jakarta / outside the island"
     }
   },
   "Login": {
@@ -59,6 +63,25 @@
     "privacy": "Privacy Policy",
     "errors": {
       "mustAgree": "Please agree to the Terms & Conditions first."
+    }
+  },
+  "Otp": {
+    "title": "Account Verification",
+    "otpSent": "A 6-digit OTP code has been sent to your WhatsApp number",
+    "otpGuide": "Open WhatsApp and enter the code you received.",
+    "codeValidPrefix": "The code is valid for",
+    "codeValidDuration": "2 minutes",
+    "otpGroupAria": "Enter OTP code",
+    "otpDigitAria": "Digit {index}",
+    "verify": "Verify Code",
+    "verifying": "Verifying...",
+    "resend": "Resend Code",
+    "resending": "Resending...",
+    "noCode": "Didn't receive the code?",
+    "resendIn": "Resend in",
+    "errors": {
+      "incomplete": "Please enter the full 6-digit OTP code.",
+      "failed": "Verification failed. Please try again."
     }
   },
   "Homepage": {

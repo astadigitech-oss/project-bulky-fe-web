@@ -14,6 +14,7 @@ import { Search } from "./search";
 
 export const Navbar = () => {
   const t = useTranslations("Header.auth");
+  const topBarT = useTranslations("Header.topBar");
 
   // TODO: ganti dengan state auth asli dari store/cookie/session saat integrasi login
   const isLoggedIn = false;
@@ -22,9 +23,9 @@ export const Navbar = () => {
     <header className="sticky -top-10 w-full z-50">
       <div className="flex items-center gap-2 h-10 bg-yellow-400 text-xs px-8 font-medium">
         <Phone className="fill-black size-3" />
-        <p>0811-833-164</p>
+        <p>{topBarT("phone")}</p>
         <p>|</p>
-        <p>Hubungi kami untuk pengiriman luar Jabodetabek / Luar pulau</p>
+        <p>{topBarT("shippingInfo")}</p>
       </div>
       <nav className="px-8 h-16 flex items-center bg-white w-full shadow-lg">
         <div className="xl:max-w-7xl max-w-5xl w-full mx-auto flex items-center justify-between">

@@ -21,6 +21,10 @@
     },
     "auth": {
       "login": "Masuk"
+    },
+    "topBar": {
+      "phone": "0811-833-164",
+      "shippingInfo": "Hubungi kami untuk pengiriman luar Jabodetabek / Luar pulau"
     }
   },
   "Login": {
@@ -59,6 +63,25 @@
     "privacy": "Kebijakan Privasi",
     "errors": {
       "mustAgree": "Harap setujui Syarat & Ketentuan terlebih dahulu."
+    }
+  },
+  "Otp": {
+    "title": "Verifikasi Akun",
+    "otpSent": "Kode OTP 6 digit telah dikirimkan ke WhatsApp kamu di nomor",
+    "otpGuide": "Buka aplikasi WhatsApp dan masukkan kode yang kamu terima.",
+    "codeValidPrefix": "Kode berlaku selama",
+    "codeValidDuration": "2 menit",
+    "otpGroupAria": "Masukkan kode OTP",
+    "otpDigitAria": "Digit ke-{index}",
+    "verify": "Verifikasi Kode",
+    "verifying": "Memverifikasi...",
+    "resend": "Kirim Ulang Kode",
+    "resending": "Mengirim ulang...",
+    "noCode": "Tidak menerima kode?",
+    "resendIn": "Kirim Ulang dalam",
+    "errors": {
+      "incomplete": "Masukkan 6 digit kode OTP terlebih dahulu.",
+      "failed": "Verifikasi gagal. Coba lagi."
     }
   },
   "Homepage": {

@@ -12,8 +12,8 @@ export const Contact = () => {
         <li className="flex gap-2">
           <MapPin className="size-3.5 mt-1 flex-none" />
           <p className="leading-relaxed">
-            Sahid Sudirman Center 40th Floor Jl. Jend. Sudirman No.86, Kota
-            Administrasi Jakarta Pusat - 10220 Indonesia (ID)
+            Jl. Raya Mayor Oking Jaya Atmaja No.62a, Kel Cirimekar, Kec.
+            Cibinong, Kabupaten Bogor, Jawa Barat 16918
           </p>
           <span className="sr-only">{t("address")}</span>
         </li>
