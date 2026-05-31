@@ -262,7 +262,7 @@ export default function LoginPage() {
 
             <div className="mb-[24px] flex justify-end">
               <Link
-                href="/lupa-kata-sandi"
+                href="/forgot-password"
                 className="text-[12px] leading-none font-normal text-[#f90] hover:underline"
               >
                 {t("forgotPassword")}

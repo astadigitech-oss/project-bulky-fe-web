@@ -44,6 +44,40 @@
     "loginWithGoogle": "Masuk dengan Google",
     "loginWithApple": "Masuk dengan Apple"
   },
+  "ForgotPassword": {
+    "title": "Lupa Kata Sandi",
+    "description": "Masukkan nomor telepon yang terdaftar. Kami akan kirimkan kode verifikasi untuk atur ulang kata sandi kamu.",
+    "phoneLabel": "Nomor Telepon",
+    "phonePlaceholder": "No Handphone",
+    "submit": "Kirim Kode Verifikasi",
+    "processing": "Memproses...",
+    "success": "Kode verifikasi telah dikirim. Silakan cek WhatsApp kamu.",
+    "backToLogin": "Kembali ke Masuk",
+    "heroAlt": "Dua orang memegang kardus"
+  },
+  "ForgotPasswordOtp": {
+    "title": "Verifikasi OTP",
+    "description": "Masukkan kode OTP yang dikirim ke nomor terdaftar kamu."
+  },
+  "ForgotPasswordReset": {
+    "title": "Reset Kata Sandi",
+    "phoneLabel": "Nomor Telepon",
+    "passwordLabel": "Kata Sandi Baru",
+    "passwordPlaceholder": "Minimal 8 karakter",
+    "confirmPasswordLabel": "Konfirmasi Kata Sandi",
+    "confirmPasswordPlaceholder": "Ulangi kata sandi baru",
+    "showPassword": "Tampilkan password",
+    "hidePassword": "Sembunyikan password",
+    "submit": "Simpan Kata Sandi Baru",
+    "processing": "Memproses...",
+    "success": "Kata sandi berhasil diubah. Silakan masuk dengan kata sandi baru kamu.",
+    "backToLogin": "Kembali ke Masuk",
+    "heroAlt": "Dua orang memegang kardus",
+    "errors": {
+      "passwordMin": "Password minimal 8 karakter.",
+      "notMatch": "Konfirmasi kata sandi tidak cocok."
+    }
+  },
   "Register": {
     "close": "Tutup",
     "heroAlt": "Staff Bulky di depan kontainer pengiriman",
