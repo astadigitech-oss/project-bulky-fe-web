@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -11,33 +11,40 @@ import {
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 
-const list = [
-  {
-    id: 1,
-    image: "/assets/images/hero-stagging.webp",
-  },
-  {
-    id: 2,
-    image: "/assets/images/event-stagging.webp",
-  },
+type BannerSectionProps = {
+  images?: string[];
+};
+
+const defaultList = [
+  { id: 1, image: "/assets/images/hero-stagging.webp" },
+  { id: 2, image: "/assets/images/event-stagging.webp" },
 ];
 
-export const BannerSection = () => {
+export const BannerSection = ({ images }: BannerSectionProps) => {
+  const list = (
+    images?.length
+      ? images.map((image, idx) => ({ id: idx + 1, image }))
+      : defaultList
+  ) as { id: number; image: string }[];
+
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(true);
   const [api, setApi] = useState<CarouselApi>();
-  const emblaRef = useRef(
-    Autoplay({ delay: 10000, stopOnInteraction: true, stopOnMouseEnter: true }),
+  const autoplay = useMemo(
+    () =>
+      Autoplay({
+        delay: 10000,
+        stopOnInteraction: true,
+        stopOnMouseEnter: true,
+      }),
+    [],
   );
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const delayRef = useRef<number>(0);
 
   useEffect(() => {
-    if (list.length <= 1) {
-      setShowProgress(false);
-      return;
-    }
+    if (list.length <= 1) return;
     if (!api) return;
 
     const autoplay = api.plugins().autoplay;
@@ -86,17 +93,18 @@ export const BannerSection = () => {
       api.off("autoplay:timerstopped", onTimerStopped);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [api, list]);
+  }, [api, list.length]);
+
   return (
     <section className="pt-16 pb-10 px-17 w-full mx-auto xl:max-w-7xl max-w-5xl">
       <div className="flex flex-col w-full gap-4">
         <Carousel
-          plugins={[emblaRef?.current]}
+          plugins={[autoplay]}
           onMouseEnter={() => {
-            if (emblaRef.current && list.length > 1) emblaRef?.current.stop();
+            if (list.length > 1) autoplay.stop();
           }}
           onMouseLeave={() => {
-            if (emblaRef.current && list.length > 1) emblaRef?.current?.play();
+            if (list.length > 1) autoplay.play();
           }}
           opts={{ loop: true }}
           setApi={setApi}
@@ -118,7 +126,7 @@ export const BannerSection = () => {
               ))}
             </CarouselContent>
             <div
-              data-show={showProgress}
+              data-show={showProgress && list.length > 1}
               className="w-full absolute left-0 z-10 data-[show=true]:bottom-2 data-[show=false]:-bottom-5 data-[show=false]:scale-80 duration-500 transition-all"
             >
               <div className="w-1/5 mx-auto rounded-full shadow-md p-0.5 bg-white">

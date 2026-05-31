@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { BannerSection } from "./_section/banner";
 import {
   Accordion,
@@ -50,389 +50,248 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { useApiQuery } from "@/lib/query/use-query";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { useTranslations } from "next-intl";
 
-const brands = [
-  {
-    id: "acf2476c-29b4-4d49-818a-d1c2254f9ec0",
-    nama_en: "Acer",
-    nama_id: "Acer",
-  },
-  {
-    id: "001764d0-5ed4-4b04-87b6-2074c1482d61",
-    nama_en: "Apple",
-    nama_id: "Apple",
-  },
-  {
-    id: "6d1094b8-eedb-4eee-ab61-4a6595d022e6",
-    nama_en: "Asus",
-    nama_id: "Asus",
-  },
-  {
-    id: "aee94486-39e2-428b-b9ba-b10a12e7ba61",
-    nama_en: "Shirt",
-    nama_id: "Baju",
-  },
-  {
-    id: "2ed37325-061f-4475-9fe7-e2af3627442f",
-    nama_en: "Brother",
-    nama_id: "Brother",
-  },
-  {
-    id: "1b07861d-73d3-44fc-937c-e6e51eb5679b",
-    nama_en: "Canon",
-    nama_id: "Canon",
-  },
-  {
-    id: "24de480e-c092-4dde-aa59-d2224575691a",
-    nama_en: "Dell",
-    nama_id: "Dell",
-  },
-  {
-    id: "c95b97a0-db64-4a72-9a8f-061423f1401e",
-    nama_en: "Epson",
-    nama_id: "Epson",
-  },
-  {
-    id: "2164414c-bb7e-49e4-8186-5658424ca264",
-    nama_en: "HP",
-    nama_id: "HP",
-  },
-  {
-    id: "8ca7d9f9-2310-4303-9025-8ee255a20f71",
-    nama_en: "Hyundai",
-    nama_id: "Hyundai",
-  },
-  {
-    id: "4fcbe13b-bca0-488e-8fef-eb854a6a2f99",
-    nama_en: "Mystery Box 2",
-    nama_id: "Kotak Misteri 2",
-  },
-  {
-    id: "8e0c7886-ed65-40da-b573-f05ab73a0f81",
-    nama_en: "Others",
-    nama_id: "Lainnya",
-  },
-  {
-    id: "e3ac6ed3-5313-46d3-aa02-37354296ee6c",
-    nama_en: "Lenovo",
-    nama_id: "Lenovo",
-  },
-  {
-    id: "3fa1b857-f908-44d1-83b4-149ca014c651",
-    nama_en: "LG",
-    nama_id: "LG",
-  },
-  {
-    id: "78fc81e2-b523-4620-bde6-c27474e28d2d",
-    nama_en: "Shirt",
-    nama_id: "Pakaian",
-  },
-  {
-    id: "348e96b0-274e-4bd5-9475-9bbd6910b036",
-    nama_en: "Panasonic",
-    nama_id: "Panasonic",
-  },
-  {
-    id: "579b0ae6-0edd-49dc-8414-33a7b6e29897",
-    nama_en: "Philips",
-    nama_id: "Philips",
-  },
-  {
-    id: "2111b13f-dacc-4740-b4b6-30e07ba7d099",
-    nama_en: "Samsung",
-    nama_id: "Samsung",
-  },
-  {
-    id: "2fb93a2f-969a-4ae5-92f4-48b6c075eb2a",
-    nama_en: "Sony",
-    nama_id: "Sony",
-  },
-  {
-    id: "9a506c6e-6d7c-4f61-903f-78d962efecee",
-    nama_en: "Bag",
-    nama_id: "Tas",
-  },
-  {
-    id: "a3b37703-8427-49ef-8d97-b86110272d10",
-    nama_en: "Xiaomi",
-    nama_id: "Xiaomi",
-  },
-];
+type Locale = "id" | "en";
 
-const categories = [
-  {
-    id: "ef3568ec-5782-411c-b30c-8b912ea077c5",
-    nama: {
-      id: "Elektronik",
-      en: "Electronics",
-    },
-  },
-  {
-    id: "df74f002-31f5-4567-bc58-d156d6c3b994",
-    nama: {
-      id: "Ibu \u0026 Anak",
-      en: "Mother \u0026 Baby",
-    },
-  },
-  {
-    id: "288b8def-ab77-4c94-ad02-a5c40870b21d",
-    nama: {
-      id: "Kosmetik",
-      en: "Cosmetics",
-    },
-  },
-  {
-    id: "da797a7c-7bbc-4eca-9fa1-46a1efda4dad",
-    nama: {
-      id: "Otomotif",
-      en: "Automotive",
-    },
-  },
-  {
-    id: "61438ff6-5265-4170-91e0-2c09a199f9e4",
-    nama: {
-      id: "Alat Rumah Tangga",
-      en: "Household Appliances",
-    },
-  },
-  {
-    id: "28836541-ae31-41d5-b574-4a9803b77f83",
-    nama: {
-      id: "FMCG",
-      en: "FMCG",
-    },
-  },
-  {
-    id: "22cf4008-99ba-4403-b56c-823e8840f6fa",
-    nama: {
-      id: "Tools",
-      en: "Tools",
-    },
-  },
-  {
-    id: "5fe1a602-9b8b-4475-b802-29df76892f07",
-    nama: {
-      id: "Redknot",
-      en: "Redknot",
-    },
-  },
-  {
-    id: "19b08607-e001-49f8-8e33-83bb35f852bf",
-    nama: {
-      id: "Sepatu",
-      en: "Shoes",
-    },
-  },
-  {
-    id: "c741604b-bcee-4906-b101-138072da4db4",
-    nama: {
-      id: "Aksesoris",
-      en: "Accessories",
-    },
-  },
-  {
-    id: "4297b1b7-071f-4340-a4b5-a5c80269903c",
-    nama: {
-      id: "Tas",
-      en: "Bags",
-    },
-  },
-  {
-    id: "be40e4d7-b157-4310-982c-3427304400f9",
-    nama: {
-      id: "Fashion",
-      en: "Fashion",
-    },
-  },
-  {
-    id: "42f80b15-133c-4a07-8707-597ae44f1589",
-    nama: {
-      id: "Fashion \u0026 Tas",
-      en: "Fashion \u0026 Bags",
-    },
-  },
-  {
-    id: "104f5f76-33f4-4d1d-aea8-b3d2f811966f",
-    nama: {
-      id: "Fashion \u0026 Aksesoris",
-      en: "Fashion \u0026 Accessories",
-    },
-  },
-  {
-    id: "be0b9069-1f43-4bcc-bf8a-a61de4eb1ff2",
-    nama: {
-      id: "Kulkas",
-      en: "Refrigerator",
-    },
-  },
-  {
-    id: "22364d27-a5be-434e-9ec3-d3222e8a5f04",
-    nama: {
-      id: "Mesin Cuci",
-      en: "Washing Machine",
-    },
-  },
-  {
-    id: "91c8111c-9709-49bb-a142-5d327b39b616",
-    nama: {
-      id: "TV",
-      en: "TV",
-    },
-  },
-  {
-    id: "fadec949-cf73-40a9-8ab9-33f1d99487d0",
-    nama: {
-      id: "Lainnya",
-      en: "Others",
-    },
-  },
-  {
-    id: "1d1f7804-2e59-44e1-b0a2-d9a406507ea7",
-    nama: {
-      id: "Unggulan",
-      en: "Featured",
-    },
-  },
-  {
-    id: "197d2002-689e-46b7-a564-5cbc10f96b5a",
-    nama: {
-      id: "Toys",
-      en: "Toys",
-    },
-  },
-  {
-    id: "8d2998fa-ecea-46b4-b47c-6431ee1881e1",
-    nama: {
-      id: "Buku",
-      en: "Books",
-    },
-  },
-];
+type FilterOption = { label: string; value: string };
 
-const kondisiPaket = [
-  {
-    id: "f18c5907-864a-472a-baca-d4c531369c0f",
-    nama_en: "Slightly Damaged",
-    nama_id: "Rusak Ringan",
-  },
-  {
-    id: "1f3afd7f-99f8-4e26-a366-43e25d319f87",
-    nama_en: "Good",
-    nama_id: "Baik",
-  },
-  {
-    id: "1463e328-e9d3-4d21-9809-e2cba17d6cfe",
-    nama_en: "Moderately Damaged",
-    nama_id: "Rusak Sedang",
-  },
-  {
-    id: "b9f3b03a-bb34-4fca-84be-67d6acd17369",
-    nama_en: "Heavily Damaged",
-    nama_id: "Rusak Berat",
-  },
-];
+type FilterResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    categories: FilterOption[];
+    sources: FilterOption[];
+    brands: FilterOption[];
+    product_conditions: FilterOption[];
+    package_conditions: FilterOption[];
+    price: { low: number; high: number };
+    banner: string[];
+  };
+};
 
-const kondisiProduk = [
-  {
-    id: "fe394659-ce00-4c18-a90f-2a0a93c7dce4",
-    nama_en: "Like New",
-    nama_id: "Bekas Seperti Baru",
-  },
-  {
-    id: "af1df525-00e6-4813-822d-2dae9759724e",
-    nama_en: "Good Condition",
-    nama_id: "Bekas Baik",
-  },
-  {
-    id: "5aac65a7-39a1-48ef-bc66-cf74c13caa1f",
-    nama_en: "Fair Condition",
-    nama_id: "Bekas Cukup Baik",
-  },
-  {
-    id: "5c87438a-1e64-4a95-9e0c-bcca90ff14f5",
-    nama_en: "Second Grade B",
-    nama_id: "Bekas Grade B",
-  },
-  {
-    id: "44919624-ab6c-42ca-806f-3451eebb259e",
-    nama_en: "Damaged",
-    nama_id: "Rusak",
-  },
-];
+type ProductCard = {
+  name: string;
+  slug: string;
+  price: { old_price: string; current_price: string };
+  image: string;
+  stock: number;
+  warehouse: string;
+};
 
-const sumber = [
-  {
-    id: "3fc862b3-76e7-4740-a13f-236fe3b9f3ee",
-    nama: {
-      id: "Overstock",
-      en: "Overstock",
-    },
-  },
-  {
-    id: "3ff7b524-9120-40bc-b6a0-9a5ca3f1ad94",
-    nama: {
-      id: "Closeout",
-      en: "Closeout",
-    },
-  },
-  {
-    id: "507be3fc-552f-4bb2-831a-67504f576fae",
-    nama: {
-      id: "Liquidasi",
-      en: "Liquidation",
-    },
-  },
-  {
-    id: "1bd762f8-d0f1-4d52-a59c-7ca0e7da7cdf",
-    nama: {
-      id: "Excess",
-      en: "Excess",
-    },
-  },
-  {
-    id: "125c85f4-1188-4d5e-a503-eff20017a92b",
-    nama: {
-      id: "Reject",
-      en: "Reject",
-    },
-  },
-];
+type ProductListResponse = {
+  success: boolean;
+  message: string;
+  data: ProductCard[];
+  meta: {
+    first_page: number;
+    last_page: number;
+    current_page: number;
+    total_items: number;
+    per_page: number;
+  };
+};
+
+const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
+
+const parseRupiahToNumber = (value: string) =>
+  Number(value.replace(/[^\d]/g, "")) || 0;
+
+const getDiscountPercent = (oldPrice: string, currentPrice: string) => {
+  const oldNum = parseRupiahToNumber(oldPrice);
+  const currentNum = parseRupiahToNumber(currentPrice);
+
+  if (oldNum <= 0 || currentNum <= 0 || currentNum >= oldNum) return 0;
+
+  return Math.round(((oldNum - currentNum) / oldNum) * 100);
+};
 
 export const ProductClient = () => {
+  const t = useTranslations("Products");
+  const params = useParams<{ locale: string }>();
+  const router = useRouter();
+  const pathname = `/` + (params?.locale ?? "id") + `/products`;
+  const query = useSearchParams();
+
+  const locale = clampLocale(params?.locale);
+
+  const [page, setPage] = useState(Number(query.get("p") ?? "1") || 1);
+  const [searchInput, setSearchInput] = useState(query.get("q") ?? "");
+  const [debouncedSearch, setDebouncedSearch] = useState(searchInput);
+
+  const initialHasPriceFilter = Boolean(
+    query.get("min-price") || query.get("max-price"),
+  );
+  const initialMinPrice = Number(query.get("min-price") ?? 0);
+  const initialMaxPrice = Number(query.get("max-price") ?? 0);
+
+  const [hasPriceFilter, setHasPriceFilter] = useState(initialHasPriceFilter);
+
   const [showMore, setShowMore] = useState({
     category: false,
     brand: false,
-    warehouse: false,
-    price: false,
     packageCondition: false,
     productCondition: false,
     source: false,
   });
-  const [accordion, setAccordion] = useState({
-    category: true,
-    brand: true,
-    warehouse: true,
-    price: true,
-    packageCondition: true,
-    productCondition: true,
-    source: true,
+
+  const [selected, setSelected] = useState({
+    category: (query.get("category") ?? "") as string,
+    source: (query.get("source") ?? "") as string,
+    packageCondition: (query.get("package-condition") ?? "") as string,
+    productCondition: (query.get("product-condition") ?? "") as string,
+    brands: query.getAll("brand"),
   });
-  const [priceRange, setPriceRange] = useState([1000000, 20000000]);
+
+  const [sortOrder, setSortOrder] = useState<"new" | "cheap" | "expensive">(
+    (query.get("order") as "new" | "cheap" | "expensive") || "new",
+  );
+
+  const filterQuery = useApiQuery<FilterResponse>({
+    key: ["product-filters", locale],
+    endpoint: "/web/products/filters",
+    searchParams: { locale },
+  });
+
+  const defaultPriceRange = useMemo(() => {
+    const low = filterQuery.data?.data.price.low ?? 1_000_000;
+    const high = filterQuery.data?.data.price.high ?? 20_000_000;
+    return [low, high] as [number, number];
+  }, [filterQuery.data?.data.price.low, filterQuery.data?.data.price.high]);
+
+  const initialPriceRange: [number, number] = initialHasPriceFilter
+    ? [
+        initialMinPrice || defaultPriceRange[0],
+        initialMaxPrice || defaultPriceRange[1],
+      ]
+    : defaultPriceRange;
+
+  const [priceRange, setPriceRange] =
+    useState<[number, number]>(initialPriceRange);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  useEffect(() => {
+    const sp = new URLSearchParams();
+
+    if (page > 1) sp.set("p", String(page));
+    if (debouncedSearch.trim()) sp.set("q", debouncedSearch.trim());
+    if (selected.category) sp.set("category", selected.category);
+    if (selected.source) sp.set("source", selected.source);
+    if (selected.packageCondition) {
+      sp.set("package-condition", selected.packageCondition);
+    }
+    if (selected.productCondition) {
+      sp.set("product-condition", selected.productCondition);
+    }
+    if (sortOrder !== "new") sp.set("order", sortOrder);
+    selected.brands.forEach((brand) => sp.append("brand", brand));
+
+    if (hasPriceFilter) {
+      sp.set("min-price", String(priceRange[0]));
+      sp.set("max-price", String(priceRange[1]));
+    }
+
+    const nextQuery = sp.toString();
+    const currentQuery = query.toString();
+
+    if (nextQuery !== currentQuery) {
+      router.replace(`${pathname}${nextQuery ? `?${nextQuery}` : ""}`);
+    }
+  }, [
+    defaultPriceRange,
+    debouncedSearch,
+    page,
+    pathname,
+    priceRange,
+    query,
+    router,
+    selected,
+    sortOrder,
+    hasPriceFilter,
+  ]);
+
+  const productQuery = useApiQuery<ProductListResponse>({
+    key: [
+      "product-list",
+      locale,
+      page,
+      selected,
+      sortOrder,
+      priceRange,
+      debouncedSearch,
+    ],
+    endpoint: "/web/products",
+    searchParams: {
+      local: locale,
+      p: page,
+      category: selected.category || undefined,
+      source: selected.source || undefined,
+      "package-condition": selected.packageCondition || undefined,
+      "product-condition": selected.productCondition || undefined,
+      "min-price": hasPriceFilter ? String(priceRange[0]) : undefined,
+      "max-price": hasPriceFilter ? String(priceRange[1]) : undefined,
+      q: debouncedSearch.trim() || undefined,
+      order: sortOrder,
+      sort: sortOrder === "new" ? "desc" : "asc",
+      brand: selected.brands.length ? selected.brands : undefined,
+    },
+  });
+
+  const updatePage = (next: number) => {
+    setPage(next);
+  };
+
+  const totalApplied =
+    Number(Boolean(selected.category)) +
+    Number(Boolean(selected.source)) +
+    Number(Boolean(selected.packageCondition)) +
+    Number(Boolean(selected.productCondition)) +
+    Number(hasPriceFilter) +
+    Number(Boolean(debouncedSearch.trim())) +
+    selected.brands.length;
+
+  const resetFilter = () => {
+    setSelected({
+      category: "",
+      source: "",
+      packageCondition: "",
+      productCondition: "",
+      brands: [],
+    });
+    setSearchInput("");
+    setDebouncedSearch("");
+    setSortOrder("new");
+    setPriceRange(defaultPriceRange);
+    setHasPriceFilter(false);
+    setPage(1);
+  };
+
+  const meta = productQuery.data?.meta;
 
   return (
     <div className="flex flex-col w-full">
-      <BannerSection />
+      <BannerSection images={filterQuery.data?.data.banner ?? []} />
       <div className="grid grid-cols-4 w-full px-17.5 mx-auto xl:max-w-7xl max-w-5xl gap-6">
         <div className="col-span-1">
           <div className="sticky top-16 pt-5">
             <div className="h-10 w-full bg-white flex items-center justify-between">
               <div className="flex flex-col">
-                <h2 className="font-medium">Filter</h2>
-                <p className="text-xs text-gray-500">3 Filter diterapkan</p>
+                <h2 className="font-medium">{t("filterTitle")}</h2>
+                <p className="text-xs text-gray-500">
+                  {t("filterApplied", { count: String(totalApplied) })}
+                </p>
               </div>
               <Button
                 size={"icon-sm"}
                 className={"bg-yellow-400 hover:bg-yellow-500 text-black"}
+                onClick={resetFilter}
               >
                 <FilterX className="size-3.5" />
               </Button>
@@ -442,52 +301,38 @@ export const ProductClient = () => {
               <div className="h-5 w-full" />
               <Accordion multiple defaultValue={["category"]}>
                 <AccordionItem value={"category"}>
-                  <AccordionTrigger
-                    onClick={() => {
-                      if (accordion.category && showMore.category) {
-                        setShowMore((prev) => ({
-                          ...prev,
-                          category: !prev.category,
-                        }));
-                      }
-                      setAccordion((prev) => ({
-                        ...prev,
-                        category: !prev.category,
-                      }));
-                    }}
-                  >
+                  <AccordionTrigger>
                     <div className="flex items-center gap-2">
                       <LayoutGrid className="size-3.5!" />
-                      <span>Kategori</span>
+                      <span>{t("category")}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    {categories.slice(0, 3).map((category) => (
-                      <Label
-                        key={category.id}
-                        className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                      >
-                        <Checkbox />
-                        <span>{category.nama.id}</span>
-                      </Label>
-                    ))}
-                    {categories.length > 4 && (
+                    {(filterQuery.data?.data.categories ?? [])
+                      .slice(0, showMore.category ? 999 : 3)
+                      .map((item) => (
+                        <Label
+                          key={item.value}
+                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                        >
+                          <Checkbox
+                            checked={selected.category === item.value}
+                            onCheckedChange={(v) => {
+                              setSelected((prev) => ({
+                                ...prev,
+                                category: v ? item.value : "",
+                              }));
+                              setPage(1);
+                            }}
+                          />
+                          <span>{item.label}</span>
+                        </Label>
+                      ))}
+                    {(filterQuery.data?.data.categories?.length ?? 0) > 3 && (
                       <Collapsible>
-                        <CollapsibleContent>
-                          {categories.slice(3).map((category) => (
-                            <Label
-                              key={category.id}
-                              className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                            >
-                              <Checkbox />
-                              <span>{category.nama.id}</span>
-                            </Label>
-                          ))}
-                        </CollapsibleContent>
+                        <CollapsibleContent />
                         <CollapsibleTrigger
-                          className={
-                            "text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
-                          }
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -496,7 +341,7 @@ export const ProductClient = () => {
                           }
                         >
                           <span className="whitespace-nowrap">
-                            {showMore.category ? "Less More" : "Show More"}
+                            {showMore.category ? t("showLess") : t("showMore")}
                           </span>
                           <ChevronDown
                             className={cn(
@@ -509,53 +354,42 @@ export const ProductClient = () => {
                     )}
                   </AccordionContent>
                 </AccordionItem>
+
                 <AccordionItem value={"brand"}>
-                  <AccordionTrigger
-                    onClick={() => {
-                      if (accordion.brand && showMore.brand) {
-                        setShowMore((prev) => ({
-                          ...prev,
-                          brand: !prev.brand,
-                        }));
-                      }
-                      setAccordion((prev) => ({
-                        ...prev,
-                        brand: !prev.brand,
-                      }));
-                    }}
-                  >
+                  <AccordionTrigger>
                     <div className="flex items-center gap-2">
                       <Hexagon className="size-3.5!" />
-                      <span>Brand</span>
+                      <span>{t("brand")}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    {brands.slice(0, 3).map((brand) => (
-                      <Label
-                        key={brand.id}
-                        className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                      >
-                        <Checkbox />
-                        <span>{brand.nama_id}</span>
-                      </Label>
-                    ))}
-                    {brands.length > 3 && (
+                    {(filterQuery.data?.data.brands ?? [])
+                      .slice(0, showMore.brand ? 999 : 3)
+                      .map((item) => (
+                        <Label
+                          key={item.value}
+                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                        >
+                          <Checkbox
+                            checked={selected.brands.includes(item.value)}
+                            onCheckedChange={(v) => {
+                              setSelected((prev) => ({
+                                ...prev,
+                                brands: v
+                                  ? [...prev.brands, item.value]
+                                  : prev.brands.filter((b) => b !== item.value),
+                              }));
+                              setPage(1);
+                            }}
+                          />
+                          <span>{item.label}</span>
+                        </Label>
+                      ))}
+                    {(filterQuery.data?.data.brands?.length ?? 0) > 3 && (
                       <Collapsible>
-                        <CollapsibleContent>
-                          {brands.slice(3).map((brand) => (
-                            <Label
-                              key={brand.id}
-                              className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                            >
-                              <Checkbox />
-                              <span>{brand.nama_id}</span>
-                            </Label>
-                          ))}
-                        </CollapsibleContent>
+                        <CollapsibleContent />
                         <CollapsibleTrigger
-                          className={
-                            "text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
-                          }
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -564,7 +398,7 @@ export const ProductClient = () => {
                           }
                         >
                           <span className="whitespace-nowrap">
-                            {showMore.brand ? "Less More" : "Show More"}
+                            {showMore.brand ? t("showLess") : t("showMore")}
                           </span>
                           <ChevronDown
                             className={cn(
@@ -577,20 +411,25 @@ export const ProductClient = () => {
                     )}
                   </AccordionContent>
                 </AccordionItem>
+
                 <AccordionItem value={"price"}>
                   <AccordionTrigger>
                     <div className="flex items-center gap-2">
                       <Banknote className="size-3.5!" />
-                      <span>Harga</span>
+                      <span>{t("price")}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="flex flex-col gap-6 my-2 pt-6 border p-2 rounded-xl border-yellow-500">
                       <Slider
                         value={priceRange}
-                        onValueChange={(v) => setPriceRange(v as number[])}
-                        min={1000000}
-                        max={20000000}
+                        onValueChange={(v) => {
+                          setPriceRange(v as [number, number]);
+                          setHasPriceFilter(true);
+                          setPage(1);
+                        }}
+                        min={defaultPriceRange[0]}
+                        max={defaultPriceRange[1]}
                       />
                       <div className="flex flex-col gap-2">
                         <InputGroup>
@@ -617,67 +456,45 @@ export const ProductClient = () => {
                             </InputGroupText>
                           </InputGroupAddon>
                         </InputGroup>
-                        <Button
-                          className={
-                            "text-xs bg-yellow-400 text-black hover:bg-yellow-500"
-                          }
-                        >
-                          Terapkan Filter Harga
-                        </Button>
                       </div>
                     </div>
                   </AccordionContent>
                 </AccordionItem>
+
                 <AccordionItem value={"package-condition"}>
-                  <AccordionTrigger
-                    onClick={() => {
-                      if (
-                        accordion.packageCondition &&
-                        showMore.packageCondition
-                      ) {
-                        setShowMore((prev) => ({
-                          ...prev,
-                          packageCondition: !prev.packageCondition,
-                        }));
-                      }
-                      setAccordion((prev) => ({
-                        ...prev,
-                        packageCondition: !prev.packageCondition,
-                      }));
-                    }}
-                  >
+                  <AccordionTrigger>
                     <div className="flex items-center gap-2">
                       <Package className="size-3.5!" />
-                      <span>Kondisi Paket</span>
+                      <span>{t("packageCondition")}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    {kondisiPaket.slice(0, 3).map((packageCondition) => (
-                      <Label
-                        key={packageCondition.id}
-                        className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                      >
-                        <Checkbox />
-                        <span>{packageCondition.nama_id}</span>
-                      </Label>
-                    ))}
-                    {kondisiPaket.length > 3 && (
+                    {(filterQuery.data?.data.package_conditions ?? [])
+                      .slice(0, showMore.packageCondition ? 999 : 3)
+                      .map((item) => (
+                        <Label
+                          key={item.value}
+                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                        >
+                          <Checkbox
+                            checked={selected.packageCondition === item.value}
+                            onCheckedChange={(v) => {
+                              setSelected((prev) => ({
+                                ...prev,
+                                packageCondition: v ? item.value : "",
+                              }));
+                              setPage(1);
+                            }}
+                          />
+                          <span>{item.label}</span>
+                        </Label>
+                      ))}
+                    {(filterQuery.data?.data.package_conditions?.length ?? 0) >
+                      3 && (
                       <Collapsible>
-                        <CollapsibleContent>
-                          {kondisiPaket.slice(3).map((packageCondition) => (
-                            <Label
-                              key={packageCondition.id}
-                              className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                            >
-                              <Checkbox />
-                              <span>{packageCondition.nama_id}</span>
-                            </Label>
-                          ))}
-                        </CollapsibleContent>
+                        <CollapsibleContent />
                         <CollapsibleTrigger
-                          className={
-                            "text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
-                          }
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -687,8 +504,8 @@ export const ProductClient = () => {
                         >
                           <span className="whitespace-nowrap">
                             {showMore.packageCondition
-                              ? "Less More"
-                              : "Show More"}
+                              ? t("showLess")
+                              : t("showMore")}
                           </span>
                           <ChevronDown
                             className={cn(
@@ -701,56 +518,41 @@ export const ProductClient = () => {
                     )}
                   </AccordionContent>
                 </AccordionItem>
+
                 <AccordionItem value={"product-condition"}>
-                  <AccordionTrigger
-                    onClick={() => {
-                      if (
-                        accordion.productCondition &&
-                        showMore.productCondition
-                      ) {
-                        setShowMore((prev) => ({
-                          ...prev,
-                          productCondition: !prev.productCondition,
-                        }));
-                      }
-                      setAccordion((prev) => ({
-                        ...prev,
-                        productCondition: !prev.productCondition,
-                      }));
-                    }}
-                  >
+                  <AccordionTrigger>
                     <div className="flex items-center gap-2">
                       <SwatchBook className="size-3.5!" />
-                      <span>Kondisi Produk</span>
+                      <span>{t("productCondition")}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    {kondisiProduk.slice(0, 3).map((productCondition) => (
-                      <Label
-                        key={productCondition.id}
-                        className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                      >
-                        <Checkbox />
-                        <span>{productCondition.nama_id}</span>
-                      </Label>
-                    ))}
-                    {kondisiProduk.length > 3 && (
+                    {(filterQuery.data?.data.product_conditions ?? [])
+                      .slice(0, showMore.productCondition ? 999 : 3)
+                      .map((item) => (
+                        <Label
+                          key={item.value}
+                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                        >
+                          <Checkbox
+                            checked={selected.productCondition === item.value}
+                            onCheckedChange={(v) => {
+                              setSelected((prev) => ({
+                                ...prev,
+                                productCondition: v ? item.value : "",
+                              }));
+                              setPage(1);
+                            }}
+                          />
+                          <span>{item.label}</span>
+                        </Label>
+                      ))}
+                    {(filterQuery.data?.data.product_conditions?.length ?? 0) >
+                      3 && (
                       <Collapsible>
-                        <CollapsibleContent>
-                          {kondisiProduk.slice(3).map((productCondition) => (
-                            <Label
-                              key={productCondition.id}
-                              className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                            >
-                              <Checkbox />
-                              <span>{productCondition.nama_id}</span>
-                            </Label>
-                          ))}
-                        </CollapsibleContent>
+                        <CollapsibleContent />
                         <CollapsibleTrigger
-                          className={
-                            "text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
-                          }
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -760,8 +562,8 @@ export const ProductClient = () => {
                         >
                           <span className="whitespace-nowrap">
                             {showMore.productCondition
-                              ? "Less More"
-                              : "Show More"}
+                              ? t("showLess")
+                              : t("showMore")}
                           </span>
                           <ChevronDown
                             className={cn(
@@ -774,53 +576,40 @@ export const ProductClient = () => {
                     )}
                   </AccordionContent>
                 </AccordionItem>
+
                 <AccordionItem value={"source"}>
-                  <AccordionTrigger
-                    onClick={() => {
-                      if (accordion.source && showMore.source) {
-                        setShowMore((prev) => ({
-                          ...prev,
-                          source: !prev.source,
-                        }));
-                      }
-                      setAccordion((prev) => ({
-                        ...prev,
-                        source: !prev.source,
-                      }));
-                    }}
-                  >
+                  <AccordionTrigger>
                     <div className="flex items-center gap-2">
                       <Blend className="size-3.5!" />
-                      <span>Sumber</span>
+                      <span>{t("source")}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    {sumber.slice(0, 3).map((source) => (
-                      <Label
-                        key={source.id}
-                        className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                      >
-                        <Checkbox />
-                        <span>{source.nama.id}</span>
-                      </Label>
-                    ))}
-                    {sumber.length > 3 && (
+                    {(filterQuery.data?.data.sources ?? [])
+                      .slice(0, showMore.source ? 999 : 3)
+                      .map((item) => (
+                        <Label
+                          key={item.value}
+                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                        >
+                          <Checkbox
+                            checked={selected.source === item.value}
+                            onCheckedChange={(v) => {
+                              setSelected((prev) => ({
+                                ...prev,
+                                source: v ? item.value : "",
+                              }));
+                              setPage(1);
+                            }}
+                          />
+                          <span>{item.label}</span>
+                        </Label>
+                      ))}
+                    {(filterQuery.data?.data.sources?.length ?? 0) > 3 && (
                       <Collapsible>
-                        <CollapsibleContent>
-                          {sumber.slice(3).map((source) => (
-                            <Label
-                              key={source.id}
-                              className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
-                            >
-                              <Checkbox />
-                              <span>{source.nama.id}</span>
-                            </Label>
-                          ))}
-                        </CollapsibleContent>
+                        <CollapsibleContent />
                         <CollapsibleTrigger
-                          className={
-                            "text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
-                          }
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -829,7 +618,7 @@ export const ProductClient = () => {
                           }
                         >
                           <span className="whitespace-nowrap">
-                            {showMore.source ? "Less More" : "Show More"}
+                            {showMore.source ? t("showLess") : t("showMore")}
                           </span>
                           <ChevronDown
                             className={cn(
@@ -843,108 +632,204 @@ export const ProductClient = () => {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-              <div className="h-10 w-full" />
-              <div className="h-10 bg-linear-to-t from-white via-white/80 to-white/50 absolute bottom-0 left-0 w-full z-10 " />
             </div>
           </div>
         </div>
+
         <div className="col-span-3">
           <div className="min-h-[calc(100svh-64px-32px-20px)] pt-5 flex flex-col gap-4">
+            <Input
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+                setPage(1);
+              }}
+              placeholder={t("searchPlaceholder")}
+              className="h-10"
+            />
+
             <div className="h-10 bg-yellow-400 rounded-xl flex items-center pl-4 pr-2 justify-between">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-bold">Palet Tersedia</p>
-                <p className="text-xs font-light">(30 Palet)</p>
+                <p className="text-sm font-bold">{t("availablePallet")}</p>
+                <p className="text-xs font-light">
+                  ({meta?.total_items ?? 0} {t("palletUnit")})
+                </p>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
                     <Button
                       size={"sm"}
-                      className={
-                        "rounded-lg bg-white hover:bg-gray-100 text-black"
-                      }
+                      className="rounded-lg bg-white hover:bg-gray-100 text-black"
                     >
                       <ArrowDownWideNarrow className="size-3.5" />
-                      Terbaru
+                      {sortOrder === "new"
+                        ? t("sortNewest")
+                        : sortOrder === "cheap"
+                          ? t("sortCheapest")
+                          : t("sortExpensive")}
                     </Button>
                   }
                 />
                 <DropdownMenuContent align="end" sideOffset={8}>
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortOrder("new");
+                        setPage(1);
+                      }}
+                    >
                       <CalendarDays className="size-3.5 stroke-[1.5]" />
-                      Terbaru
+                      {t("sortNewest")}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortOrder("cheap");
+                        setPage(1);
+                      }}
+                    >
                       <TicketPercent className="size-3.5 stroke-[1.5]" />
-                      Termurah
+                      {t("sortCheapest")}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortOrder("expensive");
+                        setPage(1);
+                      }}
+                    >
                       <Gem className="size-3.5 stroke-[1.5]" />
-                      Termahal
+                      {t("sortExpensive")}
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="grid grid-cols-4 gap-4">
-              {Array.from({ length: 16 }, (_, index) => (
-                <Link key={index} href={`/products/${index + 1}`}>
-                  <div className="w-full border flex flex-col rounded-xl overflow-hidden border-gray-300 h-fit">
-                    <div className="aspect-square flex-none bg-gray-200 w-full relative overflow-hidden">
-                      <Image
-                        src={"https://github.com/shadcn.png"}
-                        alt="sa"
-                        fill
-                        sizes="20vw"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="flex-none bg-white w-full px-2.5 py-1.5 flex flex-col gap-4">
-                      <p className="font-medium line-clamp-2 text-sm">
-                        Palet Sepatu Olahraga lorem ipsum dolor sit amet
-                        consectetur adipisicing elit. Quisquam, voluptatum.
-                      </p>
-                      <div className="flex flex-col">
-                        <p className="text-[11px] line-through font-light leading-tight text-gray-600">
-                          {formatRupiah(5000000)}
-                        </p>
-                        <p className="font-semibold text-yellow-600 leading-tight">
-                          {formatRupiah(5000000)}
-                        </p>
+
+            {productQuery.isLoading ? (
+              <div className="grid grid-cols-4 gap-4">
+                {Array.from({ length: 8 }, (_, i) => (
+                  <div
+                    key={i}
+                    className="w-full aspect-3/4 rounded-xl bg-gray-100 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : productQuery.isError ? (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+                {t("listError")}
+              </div>
+            ) : (
+              <div className="grid grid-cols-4 gap-4">
+                {(productQuery.data?.data ?? []).map((item) => {
+                  const discountPercent = getDiscountPercent(
+                    item.price.old_price,
+                    item.price.current_price,
+                  );
+
+                  return (
+                    <Link key={item.slug} href={`/products/${item.slug}`}>
+                      <div className="w-full border border-gray-300 rounded-3xl overflow-hidden bg-white">
+                        <div className="aspect-square w-full relative bg-[#e9e9e9]">
+                          {discountPercent > 0 && (
+                            <div className="absolute top-2 left-0 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded-r-sm">
+                              {discountPercent}%
+                            </div>
+                          )}
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fill
+                            sizes="20vw"
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="w-full px-3 py-2.5 flex flex-col gap-2">
+                          <p className="font-medium line-clamp-1 text-sm leading-tight text-gray-900">
+                            {item.name}
+                          </p>
+                          <div className="flex flex-col gap-0.5">
+                            <p className="font-bold text-orange-500 text-xl leading-tight whitespace-nowrap">
+                              {item.price.current_price}
+                            </p>
+                            <p className="text-[11px] line-through text-gray-400 leading-none whitespace-nowrap">
+                              {item.price.old_price}
+                            </p>
+                          </div>
+                          <p className="text-[11px] text-gray-400 leading-none line-clamp-1">
+                            {item.stock} pcs <span className="mx-1">/</span>
+                            {item.warehouse}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+
             <div className="w-full justify-center flex items-center mt-6 gap-2">
-              <Button size={"icon"} variant={"ghost"}>
+              <Button
+                size={"icon"}
+                variant={"ghost"}
+                disabled={!meta || meta.current_page <= 1}
+                onClick={() => updatePage((meta?.current_page ?? 1) - 1)}
+              >
                 <ChevronLeft />
               </Button>
-              <Button size={"icon"} variant={"ghost"}>
-                1
-              </Button>
-              <Button size={"icon"} variant={"ghost"} disabled>
-                <MoreHorizontal />
-              </Button>
-              {Array.from({ length: 3 }, (_, i) => (
-                <Button
-                  size={"icon"}
-                  key={i}
-                  variant={i === 1 ? "default" : "ghost"}
-                  className={cn(i === 1 && "bg-yellow-400 text-black")}
-                >
-                  {i + 5}
-                </Button>
-              ))}
-              <Button size={"icon"} variant={"ghost"} disabled>
-                <MoreHorizontal />
-              </Button>
-              <Button size={"icon"} variant={"ghost"}>
-                10
-              </Button>
-              <Button size={"icon"} variant={"ghost"}>
+
+              {meta && (
+                <>
+                  <Button
+                    size={"icon"}
+                    variant={meta.current_page === 1 ? "default" : "ghost"}
+                    onClick={() => updatePage(1)}
+                  >
+                    1
+                  </Button>
+                  {meta.last_page > 5 && (
+                    <Button size={"icon"} variant={"ghost"} disabled>
+                      <MoreHorizontal />
+                    </Button>
+                  )}
+                  {Array.from(
+                    { length: Math.min(3, Math.max(0, meta.last_page - 2)) },
+                    (_, i) => i + 2,
+                  ).map((page) => (
+                    <Button
+                      key={page}
+                      size={"icon"}
+                      variant={meta.current_page === page ? "default" : "ghost"}
+                      className={cn(
+                        meta.current_page === page &&
+                          "bg-yellow-400 text-black",
+                      )}
+                      onClick={() => updatePage(page)}
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                  {meta.last_page > 4 && (
+                    <Button
+                      size={"icon"}
+                      variant={
+                        meta.current_page === meta.last_page
+                          ? "default"
+                          : "ghost"
+                      }
+                      onClick={() => updatePage(meta.last_page)}
+                    >
+                      {meta.last_page}
+                    </Button>
+                  )}
+                </>
+              )}
+
+              <Button
+                size={"icon"}
+                variant={"ghost"}
+                disabled={!meta || meta.current_page >= meta.last_page}
+                onClick={() => updatePage((meta?.current_page ?? 1) + 1)}
+              >
                 <ChevronRight />
               </Button>
             </div>

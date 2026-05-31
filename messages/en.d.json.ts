@@ -150,6 +150,26 @@ declare const messages: {
       "general": "Something went wrong. Please try again."
     }
   },
+  "Products": {
+    "metaTitle": "Products",
+    "searchPlaceholder": "Search product...",
+    "filterTitle": "Filter",
+    "filterApplied": "{count} filters applied",
+    "category": "Category",
+    "brand": "Brand",
+    "price": "Price",
+    "packageCondition": "Package Condition",
+    "productCondition": "Product Condition",
+    "source": "Source",
+    "showMore": "Show More",
+    "showLess": "Show Less",
+    "availablePallet": "Available Pallets",
+    "palletUnit": "Pallet",
+    "sortNewest": "Newest",
+    "sortCheapest": "Cheapest",
+    "sortExpensive": "Most Expensive",
+    "listError": "Failed to fetch product list."
+  },
   "Homepage": {
     "hero": {
       "title": "Build Your Future with Bulky.id",

@@ -147,6 +147,26 @@
       "general": "Terjadi kesalahan. Coba lagi."
     }
   },
+  "Products": {
+    "metaTitle": "Produk",
+    "searchPlaceholder": "Cari produk...",
+    "filterTitle": "Filter",
+    "filterApplied": "{count} filter diterapkan",
+    "category": "Kategori",
+    "brand": "Brand",
+    "price": "Harga",
+    "packageCondition": "Kondisi Paket",
+    "productCondition": "Kondisi Produk",
+    "source": "Sumber",
+    "showMore": "Tampilkan Lebih Banyak",
+    "showLess": "Lebih Sedikit",
+    "availablePallet": "Palet Tersedia",
+    "palletUnit": "Palet",
+    "sortNewest": "Terbaru",
+    "sortCheapest": "Termurah",
+    "sortExpensive": "Termahal",
+    "listError": "Gagal mengambil data produk."
+  },
   "Homepage": {
     "hero": {
       "title": "Bangun Masa Depan Di Bulky.id",
