@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "@/i18n/navigation";
 import OtpVerificationPage from "./otp-verification-page";
 
 type OtpPageClientProps = {
@@ -7,5 +8,17 @@ type OtpPageClientProps = {
 };
 
 export default function OtpPageClient({ phoneNumber }: OtpPageClientProps) {
-  return <OtpVerificationPage phoneNumber={phoneNumber} />;
+  const router = useRouter();
+
+  return (
+    <OtpVerificationPage
+      phoneNumber={phoneNumber}
+      onSuccess={() => {
+        const query = phoneNumber
+          ? `?phone=${encodeURIComponent(phoneNumber)}`
+          : "";
+        router.push(`/register-form${query}`);
+      }}
+    />
+  );
 }

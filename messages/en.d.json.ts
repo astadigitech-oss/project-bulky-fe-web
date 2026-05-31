@@ -87,6 +87,35 @@ declare const messages: {
       "failed": "Verification failed. Please try again."
     }
   },
+  "RegisterForm": {
+    "title": "Personal Information Form",
+    "heroAlt": "Bulky warehouse",
+    "nameLabel": "Name",
+    "namePlaceholder": "Full name",
+    "phoneLabel": "Phone Number",
+    "verified": "Verified",
+    "phoneVerifiedHint": "This number has been verified via WhatsApp OTP.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "example@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Minimum 8 characters",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "processing": "Processing...",
+    "submit": "Create Account",
+    "termsPrefix": "By registering, I agree to",
+    "terms": "Terms & Conditions",
+    "and": "and",
+    "privacy": "Privacy Policy",
+    "errors": {
+      "nameRequired": "Name is required.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Invalid email format.",
+      "passwordRequired": "Password is required.",
+      "passwordMin": "Password must be at least 8 characters.",
+      "general": "Something went wrong. Please try again."
+    }
+  },
   "Homepage": {
     "hero": {
       "title": "Build Your Future with Bulky.id",

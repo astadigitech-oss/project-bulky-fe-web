@@ -84,6 +84,35 @@
       "failed": "Verifikasi gagal. Coba lagi."
     }
   },
+  "RegisterForm": {
+    "title": "Formulir Data Diri",
+    "heroAlt": "Gudang Bulky",
+    "nameLabel": "Nama",
+    "namePlaceholder": "Nama lengkap",
+    "phoneLabel": "Nomor Telepon",
+    "verified": "Terverifikasi",
+    "phoneVerifiedHint": "Nomor ini sudah diverifikasi via WhatsApp OTP.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "contoh@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Minimal 8 karakter",
+    "showPassword": "Tampilkan password",
+    "hidePassword": "Sembunyikan password",
+    "processing": "Memproses...",
+    "submit": "Buat Akun",
+    "termsPrefix": "Dengan Mendaftar, Saya menyetujui",
+    "terms": "Syarat & Ketentuan",
+    "and": "Serta",
+    "privacy": "Kebijakan Privasi",
+    "errors": {
+      "nameRequired": "Nama wajib diisi.",
+      "emailRequired": "Email wajib diisi.",
+      "emailInvalid": "Format email tidak valid.",
+      "passwordRequired": "Password wajib diisi.",
+      "passwordMin": "Password minimal 8 karakter.",
+      "general": "Terjadi kesalahan. Coba lagi."
+    }
+  },
   "Homepage": {
     "hero": {
       "title": "Bangun Masa Depan Di Bulky.id",
