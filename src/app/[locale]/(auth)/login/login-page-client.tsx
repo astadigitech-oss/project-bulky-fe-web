@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -115,11 +116,22 @@ function SocialButton({
 
 export default function LoginPage() {
   const t = useTranslations("Login");
+  const searchParams = useSearchParams();
 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const loginReason = searchParams.get("reason");
+  const action = searchParams.get("action");
+
+  const loginMessage =
+    loginReason === "auth-required"
+      ? action === "buy-now"
+        ? t("authRequiredBuyNow")
+        : t("authRequiredAddToCart")
+      : null;
 
   const assets = useMemo(
     () => ({
@@ -208,6 +220,12 @@ export default function LoginPage() {
               {t("register")}
             </Link>
           </div>
+
+          {loginMessage && (
+            <div className="mb-4 w-full rounded-md border border-yellow-300 bg-yellow-50 px-3 py-2 text-xs text-yellow-800">
+              {loginMessage}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="flex w-full flex-col">
             <div className="mb-[20px] flex flex-col gap-[6px]">
