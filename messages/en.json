@@ -285,5 +285,62 @@
       "altXendit": "powered_by_xendit"
     },
     "copyright": "Copyright © {date} <Link>Bulky.id</Link>. All Rights Reserved."
+  },
+  "AboutUs": {
+    "pageTitle": "About Us - Bulky.id",
+    "section1": {
+      "heading": "About Us",
+      "card1": "We are committed to creating a sustainable, transparent, and mutually beneficial business ecosystem, connecting retailers, logistics partners, and resellers across Indonesia.",
+      "card2": "<b>Bulky.id</b> is Indonesia's first online retail liquidation company, helping businesses efficiently manage excess stock, returned goods, and failed delivery products.",
+      "card3": "We deliver innovative stock management solutions so every product retains its value and creates new profit opportunities for business owners."
+    },
+    "section2": {
+      "heading": "We Provide Efficient",
+      "headingLine2": "Business Solutions"
+    },
+    "section3": {
+      "heading": "We are here to support entrepreneurs, resellers, and SMEs",
+      "p1": "Through Bulky.id, business owners can access quality wholesale stock at more affordable prices, while also having the opportunity to start a business without large capital.",
+      "p2": "We also help partners increase profits through a transparent, efficient, and trusted distribution system."
+    },
+    "section4": {
+      "heading": "Bulky.id Ecosystem",
+      "p1": "We collaborate with major retailers, distributors, and logistics partners across Indonesia. From collection, sorting, to distribution — all driven by a fast and reliable digital system.",
+      "p2": "Turning excess stock into new opportunities for business and sustainability."
+    },
+    "section5": {
+      "heading": "Bulky News",
+      "featuredTitle": "Thousands of Business Owners Use Bulky.id to Get Affordable Stock",
+      "featuredDate": "August 12, 2025",
+      "news": [
+        {
+          "title": "Bulky.id Opens New Warehouse",
+          "excerpt": "Bulky.id officially opens a new warehouse to accelerate distribution across various regions.",
+          "date": "August 12, 2025"
+        },
+        {
+          "title": "Logistics Partnership Expanded",
+          "excerpt": "New collaborations strengthen the supply chain and improve delivery efficiency.",
+          "date": "August 10, 2025"
+        },
+        {
+          "title": "SME Resellers Growing",
+          "excerpt": "Thousands of business owners leverage liquidation stock to grow their businesses.",
+          "date": "August 8, 2025"
+        },
+        {
+          "title": "Sorting Technology Gets Faster",
+          "excerpt": "Bulky continues to improve accuracy and speed of the warehouse sorting process.",
+          "date": "August 5, 2025"
+        }
+      ]
+    },
+    "section6": {
+      "heading": "At Bulky.id, every container and pallet is packed with care",
+      "p": "As Indonesia's first online retail liquidation platform, <b>Bulky.id</b> is here to help business owners get the best stock, turning surplus goods into new profitable and sustainable business opportunities.",
+      "badge1": "Secure",
+      "badge2": "Fast",
+      "badge3": "24/7 Support"
+    }
   }
 }

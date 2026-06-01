@@ -285,5 +285,62 @@
       "altXendit": "didukung_oleh_xendit"
     },
     "copyright": "Hak Cipta © {date} <Link>Bulky.id</Link>. Seluruh Hak Dilindungi."
+  },
+  "AboutUs": {
+    "pageTitle": "Tentang Kami - Bulky.id",
+    "section1": {
+      "heading": "Tentang Kami",
+      "card1": "Kami berkomitmen menciptakan ekosistem bisnis yang berkelanjutan, transparan, dan saling menguntungkan, antara ritel, mitra logistik, dan reseller di seluruh Indonesia.",
+      "card2": "<b>Bulky.id</b> adalah perusahaan likuidasi ritel online pertama di Indonesia yang membantu bisnis mengelola kelebihan stok, barang retur, dan produk gagal kirim secara efisien.",
+      "card3": "Kami menghadirkan solusi inovatif dalam pengelolaan stok agar setiap produk tetap memiliki nilai jual dan peluang keuntungan baru bagi pelaku usaha."
+    },
+    "section2": {
+      "heading": "Kami Menyediakan Solusi",
+      "headingLine2": "Bisnis yang Efisien"
+    },
+    "section3": {
+      "heading": "Kami hadir untuk mendukung pelaku usaha, reseller, dan UMKM",
+      "p1": "Melalui Bulky.id, pelaku usaha dapat mendapatkan stok grosir berkualitas dengan harga lebih hemat, sekaligus memiliki kesempatan memulai bisnis tanpa modal besar.",
+      "p2": "Kami juga membantu mitra meningkatkan keuntungan melalui sistem distribusi yang transparan, efisien, dan terpercaya."
+    },
+    "section4": {
+      "heading": "Ekosistem Bulky.id",
+      "p1": "Kami bekerja sama dengan ritel besar, distributor, dan mitra logistik di seluruh Indonesia. Dari proses pengumpulan, sortir, hingga distribusi, semuanya kami jalankan dengan sistem digital yang cepat dan terpercaya.",
+      "p2": "Dari stok berlebih menjadi peluang baru untuk bisnis dan keberlanjutan."
+    },
+    "section5": {
+      "heading": "Berita Bulky",
+      "featuredTitle": "Ribuan Pelaku Usaha Manfaatkan Bulky.id untuk Dapatkan Stok Murah",
+      "featuredDate": "12 Agustus 2025",
+      "news": [
+        {
+          "title": "Bulky.id Buka Gudang Baru",
+          "excerpt": "Bulky.id resmi membuka gudang baru untuk mempercepat distribusi ke berbagai wilayah.",
+          "date": "12 Agustus 2025"
+        },
+        {
+          "title": "Kemitraan Logistik Diperluas",
+          "excerpt": "Kolaborasi baru memperkuat rantai pasok dan meningkatkan efisiensi pengiriman.",
+          "date": "10 Agustus 2025"
+        },
+        {
+          "title": "Reseller UMKM Bertumbuh",
+          "excerpt": "Ribuan pelaku usaha memanfaatkan stok likuidasi untuk memperbesar bisnisnya.",
+          "date": "08 Agustus 2025"
+        },
+        {
+          "title": "Teknologi Sortir Makin Cepat",
+          "excerpt": "Bulky terus meningkatkan akurasi dan kecepatan proses sortir di gudang.",
+          "date": "05 Agustus 2025"
+        }
+      ]
+    },
+    "section6": {
+      "heading": "Di Bulky.id, setiap kontainer dan palet kami kemas dengan hati-hati",
+      "p": "Sebagai platform likuidasi ritel online pertama di Indonesia, <b>Bulky.id</b> hadir untuk membantu pelaku usaha mendapatkan stok terbaik mengubah kelebihan barang menjadi peluang bisnis baru yang menguntungkan dan berkelanjutan.",
+      "badge1": "Aman",
+      "badge2": "Cepat",
+      "badge3": "24/7 Dukungan"
+    }
   }
 }
