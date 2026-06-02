@@ -342,5 +342,48 @@
       "badge2": "Cepat",
       "badge3": "24/7 Dukungan"
     }
+  },
+  "ContactUs": {
+    "pageTitle": "Hubungi Kami - Bulky.id",
+    "hero": {
+      "heading": "Layanan Bantuan?",
+      "subheading": "Pertanyaan? Pesan 24/7",
+      "cta": "Tanya Sekarang"
+    },
+    "form": {
+      "firstName": "Nama Depan",
+      "firstNamePlaceholder": "Masukkan nama depan",
+      "lastName": "Nama Belakang",
+      "lastNamePlaceholder": "Masukkan nama belakang",
+      "email": "Email",
+      "emailPlaceholder": "Masukkan alamat email",
+      "phone": "Nomor Telepon",
+      "phonePlaceholder": "Masukkan nomor telepon",
+      "message": "Pesan",
+      "messagePlaceholder": "Tulis pesan",
+      "sending": "Mengirim...",
+      "submit": "Kirim Pesan",
+      "successMessage": "\u2713 Pesan kamu sudah terkirim. Tim kami akan menghubungi kamu segera."
+    },
+    "sidebar": {
+      "greeting": "Hi, Kami selalu ada disini untuk membantu kamu",
+      "contact": "Kontak",
+      "smsWa": "SMS/Wa",
+      "phone": "Telepon",
+      "email": "Email",
+      "address": "Alamat",
+      "officeHours": "Jam Operasi Kantor",
+      "monFri": "Senin\u2013Jumat",
+      "satSun": "Sabtu\u2013Minggu",
+      "socialMedia": "Sosial Media Kami"
+    },
+    "map": {
+      "openMaps": "Buka di Google Maps \u2192"
+    },
+    "points": {
+      "shipping": "Pengiriman kargo (ambil sendiri) atau layanan pengiriman",
+      "payment": "Pembayaran Terjamin 100% Aman",
+      "support": "Dukungan Khusus 24 Jam"
+    }
   }
 }
