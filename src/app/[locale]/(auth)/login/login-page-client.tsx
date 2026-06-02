@@ -140,7 +140,6 @@ export default function LoginPage() {
       looperLeft: "/assets/images/Looper-kiri.svg",
       looperRight: "/assets/images/Looper-kanan.svg",
       google: "/assets/images/login-google.svg",
-      apple: "/assets/images/login-apple.svg",
     }),
     [],
   );
@@ -191,7 +190,7 @@ export default function LoginPage() {
           />
         </div>
 
-        <div className="relative flex min-h-[599px] w-full max-w-[365px] flex-col items-center rounded-[20px] bg-white px-[26px] pb-[40px] pt-[36px] shadow-sm [font-family:Roboto,Arial,sans-serif]">
+        <div className="relative flex w-full max-w-[365px] flex-col items-center rounded-[20px] bg-white px-[26px] pb-[40px] pt-[36px] shadow-sm [font-family:Roboto,Arial,sans-serif]">
           <Link
             href="/"
             className="absolute right-[22px] top-[25px]"
@@ -307,13 +306,6 @@ export default function LoginPage() {
                 onClick={() => console.log("Google login")}
               />
             </div>
-
-            <SocialButton
-              iconSrc={assets.apple}
-              iconAlt="Apple"
-              label={t("loginWithApple")}
-              onClick={() => console.log("Apple login")}
-            />
           </form>
         </div>
       </section>

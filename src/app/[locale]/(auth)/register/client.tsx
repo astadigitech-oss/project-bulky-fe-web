@@ -118,7 +118,6 @@ export default function RegisterPage() {
       looperLeft: "/assets/images/Looper-kiri.svg",
       looperRight: "/assets/images/Looper-kanan.svg",
       google: "/assets/images/login-google.svg",
-      apple: "/assets/images/login-apple.svg",
     }),
     [],
   );
@@ -226,12 +225,7 @@ export default function RegisterPage() {
               label={t("registerWithGoogle")}
               onClick={() => console.log("Google OAuth")}
             />
-            <SocialButton
-              iconSrc={assets.apple}
-              iconAlt="Apple"
-              label={t("registerWithApple")}
-              onClick={() => console.log("Apple OAuth")}
-            />
+
           </div>
 
           <div className="mb-[16px] w-full">
