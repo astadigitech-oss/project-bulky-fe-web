@@ -345,6 +345,49 @@ declare const messages: {
       "badge2": "Fast",
       "badge3": "24/7 Support"
     }
+  },
+  "ContactUs": {
+    "pageTitle": "Contact Us - Bulky.id",
+    "hero": {
+      "heading": "Need Help?",
+      "subheading": "Questions? Message 24/7",
+      "cta": "Ask Now"
+    },
+    "form": {
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter last name",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number",
+      "message": "Message",
+      "messagePlaceholder": "Write a message",
+      "sending": "Sending...",
+      "submit": "Send Message",
+      "successMessage": "\u2713 Your message has been sent. Our team will contact you shortly."
+    },
+    "sidebar": {
+      "greeting": "Hi, we are always here to help you",
+      "contact": "Contact",
+      "smsWa": "SMS/WhatsApp",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "officeHours": "Office Hours",
+      "monFri": "Mon\u2013Fri",
+      "satSun": "Sat\u2013Sun",
+      "socialMedia": "Our Social Media"
+    },
+    "map": {
+      "openMaps": "Open in Google Maps \u2192"
+    },
+    "points": {
+      "shipping": "Cargo shipping (self-pickup) or delivery service",
+      "payment": "100% Secure Payment Guaranteed",
+      "support": "24/7 Dedicated Support"
+    }
   }
 };
 export default messages;
