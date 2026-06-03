@@ -1,10 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { Eye, EyeOff } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { setCookie } from "cookies-next/client";
+
+import { useMutate } from "@/lib/query";
+import { cookiesKey } from "@/config";
+import type { RegisterBody, RegisterResponse } from "@/services/auth/types";
 
 interface FormFieldProps {
   id: string;
@@ -31,6 +37,8 @@ export default function RegisterFormPage({
   verifiedPhone = "",
 }: RegisterFormPageProps) {
   const t = useTranslations("RegisterForm");
+  const router = useRouter();
+  const { locale } = useParams<{ locale: string }>();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,7 +46,7 @@ export default function RegisterFormPage({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [regToken, setRegToken] = useState("");
 
   const [errors, setErrors] = useState<{
     name?: string;
@@ -58,6 +66,31 @@ export default function RegisterFormPage({
     }),
     [],
   );
+
+  // Read OTP token from sessionStorage (set after verify-otp)
+  useEffect(() => {
+    const token = sessionStorage.getItem("bulky_reg_token");
+    if (!token) {
+      router.replace("/register");
+      return;
+    }
+    setRegToken(token);
+  }, [router]);
+
+  const registerMutation = useMutate<RegisterResponse, RegisterBody>({
+    endpoint: "/auth/register",
+    method: "post",
+    isPublic: true,
+    onSuccess: (data) => {
+      const authToken = data.data.data?.token;
+      if (authToken) {
+        setCookie(cookiesKey, authToken, { path: "/" });
+        sessionStorage.removeItem("bulky_reg_token");
+        window.location.href = `/${locale}`;
+      }
+    },
+    onError: { title: "REGISTER" },
+  });
 
   function validateEmail(value: string): string | null {
     if (!value) return null;
@@ -94,27 +127,20 @@ export default function RegisterFormPage({
     return Object.keys(next).length === 0;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
 
     setErrors({});
-    setLoading(true);
-
-    try {
-      console.log("Complete Register:", {
+    registerMutation.mutate({
+      body: {
         name,
-        phone: verifiedPhone,
-        email,
+        token: regToken,
         password,
-      });
-    } catch (err) {
-      setErrors({
-        general: err instanceof Error ? err.message : t("errors.general"),
-      });
-    } finally {
-      setLoading(false);
-    }
+        confirm_password: confirmPassword,
+        email: email || undefined,
+      },
+    });
   }
 
   return (
@@ -366,10 +392,10 @@ export default function RegisterFormPage({
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={registerMutation.isPending}
               className="h-[39px] min-h-[39px] w-full shrink-0 rounded-[4px] bg-[#ffcf02] text-[14px] font-bold text-black transition-colors hover:bg-[#f5c800] active:bg-[#e8bb00] disabled:opacity-60"
             >
-              {loading ? t("processing") : t("submit")}
+              {registerMutation.isPending ? t("processing") : t("submit")}
             </button>
 
             <p className="shrink-0 text-center text-[11px] leading-[18px] text-black">

@@ -1,23 +1,42 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@ui/button";
-import { Phone } from "lucide-react";
+import { Phone, LogOut, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@i18n/navigation";
 import { CartMyIcon } from "@svg/cart-icon";
-import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
+import { Avatar, AvatarFallback } from "@ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@ui/dropdown-menu";
 import { LocaleSwitcher } from "@components/navbar/locale-switcher";
 import { Navigation } from "./navigation";
 import { Search } from "./search";
+import { useSession } from "@/providers/session-provider";
+
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+}
 
 export const Navbar = () => {
   const t = useTranslations("Header.auth");
   const topBarT = useTranslations("Header.topBar");
-
-  // TODO: ganti dengan state auth asli dari store/cookie/session saat integrasi login
-  const isLoggedIn = false;
+  const { user, isAuthenticated, isLoading, logout } = useSession();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <header className="sticky -top-10 w-full z-50">
@@ -54,20 +73,45 @@ export const Navbar = () => {
               </Button>
             </Link>
 
-            {isLoggedIn ? (
-              <Button
-                size={"icon"}
-                variant={"ghost"}
-                className={"rounded-full"}
-              >
-                <Avatar className={"size-8"}>
-                  <AvatarFallback>AF</AvatarFallback>
-                  <AvatarImage
-                    src={"/assets/images/logo-bulky.webp"}
-                    alt="user_profile"
-                  />
-                </Avatar>
-              </Button>
+            {!mounted || isLoading ? (
+              <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
+            ) : isAuthenticated && user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffcf02]">
+                  <Avatar className={"size-8"}>
+                    <AvatarFallback className="bg-[#ffcf02] text-black text-xs font-bold">
+                      {getInitials(user.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="flex flex-col gap-0.5">
+                      <span className="text-sm font-semibold">{user.name}</span>
+                      <span className="text-xs text-muted-foreground font-normal">
+                        {user.phone}
+                      </span>
+                    </DropdownMenuLabel>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem render={<Link href="/profile" />}>
+                      <User className="mr-2 h-4 w-4" />
+                      {t("profile")}
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      onClick={logout}
+                      className="text-red-600 cursor-pointer focus:text-red-600"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      {t("logout")}
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Link href={"/login"}>
                 <Button className="h-10 rounded-lg bg-[#ffcf02] px-8 text-base font-bold text-black hover:bg-[#f5c800]">

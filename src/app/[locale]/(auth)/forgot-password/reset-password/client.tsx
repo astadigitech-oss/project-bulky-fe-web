@@ -1,25 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { Eye, EyeOff } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useMutate } from "@/lib/query";
+import type { ResetPasswordBody, ResetPasswordResponse } from "@/services/auth/types";
 
 type Props = { phone?: string };
 
 export default function ResetPasswordClient({ phone }: Props) {
   const t = useTranslations("ForgotPasswordReset");
+  const router = useRouter();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [resetToken, setResetToken] = useState("");
 
   const assets = useMemo(
     () => ({
@@ -31,7 +35,29 @@ export default function ResetPasswordClient({ phone }: Props) {
     [],
   );
 
-  async function handleSubmit(e: React.FormEvent) {
+  // Read reset token from sessionStorage (set after forgot-password verify-otp)
+  useEffect(() => {
+    const token = sessionStorage.getItem("bulky_fp_token");
+    if (!token) {
+      router.replace("/forgot-password");
+      return;
+    }
+    setResetToken(token);
+  }, [router]);
+
+  const resetMutation = useMutate<ResetPasswordResponse, ResetPasswordBody>({
+    endpoint: "/auth/forgot-password/reset-password",
+    method: "post",
+    isPublic: true,
+    onSuccess: () => {
+      sessionStorage.removeItem("bulky_fp_token");
+      setSuccess(true);
+      setTimeout(() => router.push("/login"), 2000);
+    },
+    onError: { title: "RESET_PASSWORD" },
+  });
+
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (password.length < 8) {
       setError(t("errors.passwordMin"));
@@ -41,15 +67,14 @@ export default function ResetPasswordClient({ phone }: Props) {
       setError(t("errors.notMatch"));
       return;
     }
-
     setError(null);
-    setLoading(true);
-    try {
-      console.log("Reset password:", { phone, password });
-      setSuccess(true);
-    } finally {
-      setLoading(false);
-    }
+    resetMutation.mutate({
+      body: {
+        new_password: password,
+        confirm_new_password: confirmPassword,
+        token: resetToken,
+      },
+    });
   }
 
   return (
@@ -91,8 +116,8 @@ export default function ResetPasswordClient({ phone }: Props) {
             {error && <p className="mb-[12px] text-[12px] text-red-500">{error}</p>}
             {success && <p className="mb-[12px] rounded-md bg-green-50 px-3 py-2 text-[12px] text-green-700">{t("success")}</p>}
 
-            <Button type="submit" disabled={loading} className="mb-[16px] h-[39px] w-full rounded-lg bg-[#ffcf02] text-[14px] font-bold text-black hover:bg-[#f5c800]">
-              {loading ? t("processing") : t("submit")}
+            <Button type="submit" disabled={resetMutation.isPending || success} className="mb-[16px] h-[39px] w-full rounded-lg bg-[#ffcf02] text-[14px] font-bold text-black hover:bg-[#f5c800]">
+              {resetMutation.isPending ? t("processing") : t("submit")}
             </Button>
 
             <Link href="/login" className="text-center text-[13px] text-[#f90] hover:underline">{t("backToLogin")}</Link>

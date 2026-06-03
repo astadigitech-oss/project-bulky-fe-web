@@ -144,26 +144,20 @@ export const ProductIdClient = () => {
     return false;
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!product?.id) return;
     if (!handleRequireLogin("cart")) return;
 
-    await addToCart.mutateAsync({
-      body: { product_id: product.id },
-      searchParams: { locale },
-    });
-    setAdded(true);
+    // TODO: integrasi endpoint add-to-cart
+    toast.info("Fitur keranjang sedang dalam pengembangan.");
   };
 
-  const handleBuyNow = async () => {
+  const handleBuyNow = () => {
     if (!product?.id) return;
     if (!handleRequireLogin("buy-now")) return;
 
-    await addToCart.mutateAsync({
-      body: { product_id: product.id },
-      searchParams: { locale },
-    });
-    router.push("/cart");
+    // TODO: integrasi endpoint beli langsung
+    toast.info("Fitur beli langsung sedang dalam pengembangan.");
   };
 
   const handlePrevImage = () => {

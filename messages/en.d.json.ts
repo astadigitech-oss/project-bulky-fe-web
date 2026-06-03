@@ -23,7 +23,9 @@ declare const messages: {
       "contact": "Contact Us"
     },
     "auth": {
-      "login": "Login"
+      "login": "Login",
+      "profile": "My Profile",
+      "logout": "Logout"
     },
     "topBar": {
       "phone": "0811-833-164",
@@ -150,6 +152,34 @@ declare const messages: {
       "passwordRequired": "Password is required.",
       "passwordMin": "Password must be at least 8 characters.",
       "general": "Something went wrong. Please try again."
+    }
+  },
+  "OAuthAddPhone": {
+    "title": "One More Step!",
+    "description": "Your Google account is connected. Add your phone number so we can verify your identity and keep your account secure.",
+    "heroAlt": "Bulky staff in front of shipping containers",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "08xxxxxxxxxx",
+    "submit": "Send OTP",
+    "processing": "Sending OTP...",
+    "errorDefault": "Failed to send OTP. Please try again."
+  },
+  "OAuthVerifyOtp": {
+    "title": "OTP Verification",
+    "sentTo": "OTP code has been sent to",
+    "guide": "Enter the code from your SMS.",
+    "codeValidPrefix": "Code valid for",
+    "codeValidDuration": "5 minutes",
+    "verify": "Verify",
+    "verifying": "Verifying...",
+    "noCode": "Didn't receive the code?",
+    "resendIn": "Resend in",
+    "resend": "Resend OTP",
+    "resending": "Resending...",
+    "errors": {
+      "incomplete": "Please enter the full 6-digit OTP code.",
+      "failed": "Invalid OTP code. Please try again.",
+      "resend": "Failed to resend OTP."
     }
   },
   "Products": {

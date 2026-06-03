@@ -20,7 +20,9 @@
       "contact": "Hubungi Kami"
     },
     "auth": {
-      "login": "Masuk"
+      "login": "Masuk",
+      "profile": "Profil Saya",
+      "logout": "Keluar"
     },
     "topBar": {
       "phone": "0811-833-164",
@@ -147,6 +149,34 @@
       "passwordRequired": "Password wajib diisi.",
       "passwordMin": "Password minimal 8 karakter.",
       "general": "Terjadi kesalahan. Coba lagi."
+    }
+  },
+  "OAuthAddPhone": {
+    "title": "Satu Langkah Lagi!",
+    "description": "Akun Google kamu sudah terhubung. Tambahkan nomor HP untuk verifikasi identitas dan menjaga keamanan akunmu.",
+    "heroAlt": "Staf Bulky di depan kontainer pengiriman",
+    "phoneLabel": "Nomor Telepon",
+    "phonePlaceholder": "08xxxxxxxxxx",
+    "submit": "Kirim OTP",
+    "processing": "Mengirim OTP...",
+    "errorDefault": "Gagal mengirim OTP. Silakan coba lagi."
+  },
+  "OAuthVerifyOtp": {
+    "title": "Verifikasi OTP",
+    "sentTo": "Kode OTP telah dikirim ke",
+    "guide": "Masukkan kode yang tertera pada SMS kamu.",
+    "codeValidPrefix": "Kode berlaku selama",
+    "codeValidDuration": "5 menit",
+    "verify": "Verifikasi",
+    "verifying": "Memverifikasi...",
+    "noCode": "Belum terima kode?",
+    "resendIn": "Kirim ulang dalam",
+    "resend": "Kirim Ulang OTP",
+    "resending": "Mengirim ulang...",
+    "errors": {
+      "incomplete": "Masukkan 6 digit kode OTP terlebih dahulu.",
+      "failed": "Kode OTP tidak valid. Silakan coba lagi.",
+      "resend": "Gagal mengirim ulang OTP."
     }
   },
   "Products": {
