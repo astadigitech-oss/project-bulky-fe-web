@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useMemo, useState } from "react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useMutate } from "@/lib/query";
+import type { RegisterRequestOtpBody, RegisterRequestOtpResponse } from "@/services/auth/types";
 
 type AssetWithFallbackProps = {
   src: string;
@@ -104,10 +106,10 @@ function SocialButton({ iconSrc, iconAlt, label, onClick }: SocialButtonProps) {
 
 export default function RegisterPage() {
   const t = useTranslations("Register");
+  const router = useRouter();
 
   const [phone, setPhone] = useState("");
   const [agreed, setAgreed] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const assets = useMemo(
@@ -118,26 +120,45 @@ export default function RegisterPage() {
       looperLeft: "/assets/images/Looper-kiri.svg",
       looperRight: "/assets/images/Looper-kanan.svg",
       google: "/assets/images/login-google.svg",
-      apple: "/assets/images/login-apple.svg",
     }),
     [],
   );
 
-  async function handleSubmit(e: React.FormEvent) {
+  const requestOtpMutation = useMutate<RegisterRequestOtpResponse, RegisterRequestOtpBody>({
+    endpoint: "/auth/register/request-otp",
+    method: "post",
+    isPublic: true,
+    onSuccess: () => {
+      sessionStorage.setItem("bulky_otp_phone", phone);
+      const query = phone ? `?phone=${encodeURIComponent(phone)}` : "";
+      router.push(`/otp${query}`);
+    },
+    onError: { title: "REGISTER_REQUEST_OTP" },
+  });
+
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!agreed) {
       setError(t("errors.mustAgree"));
       return;
     }
-
     setError(null);
-    setLoading(true);
+    requestOtpMutation.mutate({ body: { phone } });
+  }
 
-    try {
-      console.log("Register:", { phone });
-    } finally {
-      setLoading(false);
-    }
+  function handleGoogleRegister() {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!clientId) return;
+    const redirectUri = `${window.location.origin}/oauth/google/callback`;
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: "code",
+      scope: "email profile",
+      access_type: "offline",
+      prompt: "consent",
+    });
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
   }
 
   return (
@@ -224,13 +245,7 @@ export default function RegisterPage() {
               iconSrc={assets.google}
               iconAlt="Google"
               label={t("registerWithGoogle")}
-              onClick={() => console.log("Google OAuth")}
-            />
-            <SocialButton
-              iconSrc={assets.apple}
-              iconAlt="Apple"
-              label={t("registerWithApple")}
-              onClick={() => console.log("Apple OAuth")}
+              onClick={handleGoogleRegister}
             />
           </div>
 
@@ -263,10 +278,10 @@ export default function RegisterPage() {
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={requestOtpMutation.isPending}
               className="mb-[16px] h-[39px] w-full rounded-lg bg-[#ffcf02] text-[14px] leading-none font-bold text-black hover:bg-[#f5c800] active:bg-[#e8bb00]"
             >
-              {loading ? t("processing") : t("submit")}
+              {requestOtpMutation.isPending ? t("processing") : t("submit")}
             </Button>
 
             <label className="flex cursor-pointer items-start gap-[8px]">

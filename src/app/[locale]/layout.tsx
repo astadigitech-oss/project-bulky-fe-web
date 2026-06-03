@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import React, { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import QueryProviders from "@/providers/query-provider";
+import { SessionProvider } from "@/providers/session-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ToastProvider } from "@/providers/toast-provider";
 import type { Metadata } from "next";
@@ -48,8 +49,10 @@ const LocaleLayout = async ({
         <QueryProviders>
           <NuqsAdapter>
             <NextIntlClientProvider>
-              <ToastProvider />
-              {children}
+              <SessionProvider>
+                <ToastProvider />
+                {children}
+              </SessionProvider>
             </NextIntlClientProvider>
           </NuqsAdapter>
         </QueryProviders>

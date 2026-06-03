@@ -1,14 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams, useParams } from "next/navigation";
 import { Eye, EyeOff, X } from "lucide-react";
+import { setCookie } from "cookies-next/client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
+import { useMutate } from "@/lib/query";
+import { cookiesKey } from "@/config";
+import type { LoginBody, LoginResponse } from "@/services/auth/types";
+import { useSession } from "@/providers/session-provider";
 
 type AssetWithFallbackProps = {
   src: string;
@@ -116,12 +121,34 @@ function SocialButton({
 
 export default function LoginPage() {
   const t = useTranslations("Login");
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const { locale } = useParams<{ locale: string }>();
 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  const { isAuthenticated } = useSession();
+
+  // Redirect to home if already logged in
+  useEffect(() => {
+    if (isAuthenticated) router.replace("/");
+  }, [isAuthenticated, router]);
+
+  const loginMutation = useMutate<LoginResponse, LoginBody>({
+    endpoint: "/auth/login",
+    method: "post",
+    isPublic: true,
+    onSuccess: (data) => {
+      const token = data.data.data?.token;
+      if (token) {
+        setCookie(cookiesKey, token, { path: "/" });
+        window.location.href = `/${locale}`;
+      }
+    },
+    onError: { title: "LOGIN" },
+  });
 
   const loginReason = searchParams.get("reason");
   const action = searchParams.get("action");
@@ -140,21 +167,28 @@ export default function LoginPage() {
       looperLeft: "/assets/images/Looper-kiri.svg",
       looperRight: "/assets/images/Looper-kanan.svg",
       google: "/assets/images/login-google.svg",
-      apple: "/assets/images/login-apple.svg",
     }),
     [],
   );
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    loginMutation.mutate({ body: { phone, password, remember_me: true } });
+  }
 
-    try {
-      // TODO: Integrasi login API
-      console.log("Login:", { phone, password });
-    } finally {
-      setLoading(false);
-    }
+  function handleGoogleLogin() {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!clientId) return;
+    const redirectUri = `${window.location.origin}/oauth/google/callback`;
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: "code",
+      scope: "email profile",
+      access_type: "offline",
+      prompt: "consent",
+    });
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
   }
 
   return (
@@ -191,7 +225,7 @@ export default function LoginPage() {
           />
         </div>
 
-        <div className="relative flex min-h-[599px] w-full max-w-[365px] flex-col items-center rounded-[20px] bg-white px-[26px] pb-[40px] pt-[36px] shadow-sm [font-family:Roboto,Arial,sans-serif]">
+        <div className="relative flex w-full max-w-[365px] flex-col items-center rounded-[20px] bg-white px-[26px] pb-[40px] pt-[36px] shadow-sm [font-family:Roboto,Arial,sans-serif]">
           <Link
             href="/"
             className="absolute right-[22px] top-[25px]"
@@ -289,10 +323,10 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={loginMutation.isPending}
               className="mb-[16px] h-[39px] w-full rounded-lg bg-[#ffcf02] text-[14px] leading-none font-bold text-black hover:bg-[#f5c800] active:bg-[#e8bb00]"
             >
-              {loading ? t("processing") : t("submit")}
+              {loginMutation.isPending ? t("processing") : t("submit")}
             </Button>
 
             <div className="mb-[16px]">
@@ -304,16 +338,9 @@ export default function LoginPage() {
                 iconSrc={assets.google}
                 iconAlt="Google"
                 label={t("loginWithGoogle")}
-                onClick={() => console.log("Google login")}
+                onClick={handleGoogleLogin}
               />
             </div>
-
-            <SocialButton
-              iconSrc={assets.apple}
-              iconAlt="Apple"
-              label={t("loginWithApple")}
-              onClick={() => console.log("Apple login")}
-            />
           </form>
         </div>
       </section>
