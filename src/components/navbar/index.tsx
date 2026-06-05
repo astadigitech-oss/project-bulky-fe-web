@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import { Button } from "@ui/button";
 import { Phone, LogOut, User } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -35,8 +35,11 @@ export const Navbar = () => {
   const t = useTranslations("Header.auth");
   const topBarT = useTranslations("Header.topBar");
   const { user, isAuthenticated, isLoading, logout } = useSession();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const mounted = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
 
   return (
     <header className="sticky -top-10 w-full z-50">
@@ -95,7 +98,7 @@ export const Navbar = () => {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem render={<Link href="/profile" />}>
+                    <DropdownMenuItem render={<Link href="/profil" />}>
                       <User className="mr-2 h-4 w-4" />
                       {t("profile")}
                     </DropdownMenuItem>

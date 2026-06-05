@@ -1,0 +1,463 @@
+import React from "react";
+export default (props) => {
+	return (
+		<div className="flex flex-col bg-white">
+			<div className="self-stretch bg-white">
+				<div className="self-stretch">
+					<div className="flex items-center self-stretch bg-[#FFCF02] py-1.5 pl-[18px] border border-solid border-[#00000012]">
+						<img
+							src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/di1lwrf9_expires_30_days.png"} 
+							className="w-[13px] h-[13px] mr-[9px] object-fill"
+						/>
+						<span className="text-black text-[13px] mr-[19px]" >
+							{"0811-833-164"}
+						</span>
+						<span className="text-black text-[13px]" >
+							{"Hubungi kami untuk pengiriman luar Jabodetabek / Luar pulau"}
+						</span>
+					</div>
+					<div className="flex items-start self-stretch bg-white px-[25px]">
+						<img
+							src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/bf1qm0tl_expires_30_days.png"} 
+							className="w-[171px] h-[61px] my-[9px] object-fill"
+						/>
+						<div className="flex-1 self-stretch">
+						</div>
+						<span className="text-[#434343] text-xl mt-6 mr-[31px]" >
+							{"Beranda"}
+						</span>
+						<span className="text-[#434343] text-xl mt-6 mr-[31px]" >
+							{"Produk"}
+						</span>
+						<span className="text-[#434343] text-xl mt-6 mr-[31px]" >
+							{"Tentang Kami"}
+						</span>
+						<span className="text-[#434343] text-xl mt-6 mr-8" >
+							{"Hubungi Kami"}
+						</span>
+						<div className="flex flex-col shrink-0 items-center bg-white pb-[17px] mt-[21px] mr-1 rounded-sm border border-solid border-[#727272CC]">
+							<div className="bg-[#FF0000] w-[46px] h-[18px] rounded-tl-sm rounded-tr-sm">
+							</div>
+						</div>
+						<span className="text-[#434343] text-xl mt-6 mr-1.5" >
+							{"ID"}
+						</span>
+						<img
+							src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/aea2azik_expires_30_days.png"} 
+							className="w-[9px] h-[5px] mt-9 mr-6 object-fill"
+						/>
+						<div className="flex shrink-0 items-center py-[7px] mt-[17px] mr-[46px] rounded-[50px] border border-solid border-[#434343]">
+							<img
+								src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/ca6k93wu_expires_30_days.png"} 
+								className="w-[18px] h-[18px] ml-4 mr-[18px] rounded-[50px] object-fill"
+							/>
+							<span className="text-[#434343] text-xl mr-14" >
+								{"Pencarian"}
+							</span>
+						</div>
+						<img
+							src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/954a6mka_expires_30_days.png"} 
+							className="w-[43px] h-11 mt-[9px] object-fill"
+						/>
+						<div className="flex-1 self-stretch">
+						</div>
+						<img
+							src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/we4ygt3p_expires_30_days.png"} 
+							className="w-[45px] h-[45px] mt-3 object-fill"
+						/>
+					</div>
+				</div>
+				<div className="flex flex-col self-stretch bg-[#F0F0F0] pt-[13px] gap-[18px]">
+					<div className="flex items-start self-stretch ml-[66px] mr-3.5 gap-3.5">
+						<div className="flex flex-1 items-center gap-[19px]">
+							<div className="flex flex-col shrink-0 items-center bg-[#FFCF02] pt-[29px] px-[30px] rounded-lg">
+								<span className="text-black text-2xl font-bold mb-[29px]" >
+									{"Bio Data"}
+								</span>
+								<img
+									src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/dp3iekhn_expires_30_days.png"} 
+									className="w-[124px] h-[124px] mb-3 rounded-lg object-fill"
+								/>
+								<div className="flex flex-col items-center mb-[483px]">
+									<span className="text-black text-base font-bold" >
+										{"Ahyar Sihono Widodo"}
+									</span>
+									<span className="text-black text-base" >
+										{"ahyarsihonowdd@gmail.com"}
+									</span>
+									<span className="text-black text-base" >
+										{"08222 123 123"}
+									</span>
+									<span className="text-black text-base" >
+										{"Laki-Laki"}
+									</span>
+								</div>
+							</div>
+							<div className="flex-1 bg-white pt-[26px] rounded-[9px]">
+								<div className="flex items-center self-stretch mb-[22px] ml-[26px] mr-[60px] gap-5">
+									<button className="flex flex-1 flex-col items-center bg-[#EFEFEF] text-left py-[5px] rounded-lg border-0"
+										onClick={()=>alert("Pressed!")}>
+										<span className="text-black text-base" >
+											{"Pembayaran"}
+										</span>
+									</button>
+									<button className="flex flex-1 flex-col items-center bg-[#FFCF02] text-left py-[5px] rounded-lg border-0"
+										onClick={()=>alert("Pressed!")}>
+										<span className="text-black text-base font-bold" >
+											{"Pesanan"}
+										</span>
+									</button>
+									<button className="flex flex-1 flex-col items-center bg-[#EFEFEF] text-left py-[5px] rounded-lg border-0"
+										onClick={()=>alert("Pressed!")}>
+										<span className="text-black text-base" >
+											{"Patungan"}
+										</span>
+									</button>
+									<button className="flex flex-1 flex-col items-center bg-[#EFEFEF] text-left py-[5px] rounded-lg border-0"
+										onClick={()=>alert("Pressed!")}>
+										<span className="text-black text-base" >
+											{"Edit Profil"}
+										</span>
+									</button>
+								</div>
+								<div className="flex flex-col items-start self-stretch mb-[270px]">
+									<div className="flex items-center mb-4 ml-[26px] gap-[9px]">
+										<img
+											src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/mnmdewxq_expires_30_days.png"} 
+											className="w-[22px] h-5 object-fill"
+										/>
+										<span className="text-[#727272] text-sm" >
+											{"Kembali"}
+										</span>
+									</div>
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/tdntoqiv_expires_30_days.png"} 
+										className="self-stretch h-[1px] mb-2 object-fill"
+									/>
+									<div className="flex items-start self-stretch mb-[34px] ml-[26px] mr-[62px]">
+										<span className="text-black text-base mt-[11px] mr-[19px]" >
+											{"Lacak Pesanan"}
+										</span>
+										<span className="text-[#01798A] text-sm mt-[11px]" >
+											{"Palet Sepatu Olahraga"}
+										</span>
+										<div className="flex-1 self-stretch">
+										</div>
+										<span className="text-[#727272] text-sm" >
+											{"Order ID. 22312938123"}
+										</span>
+									</div>
+									<div className="flex flex-col items-center self-stretch mb-5">
+										<div className="flex flex-col items-start">
+											<div className="flex items-center mb-3 ml-[31px]">
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/97kzexe7_expires_30_days.png"} 
+													className="w-10 h-[37px] mr-[158px] object-fill"
+												/>
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/27x0o3d3_expires_30_days.png"} 
+													className="w-[41px] h-10 mr-[156px] object-fill"
+												/>
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/qe8ddtlz_expires_30_days.png"} 
+													className="w-[41px] h-8 mr-[161px] object-fill"
+												/>
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/hhor8hqs_expires_30_days.png"} 
+													className="w-[38px] h-[38px] object-fill"
+												/>
+											</div>
+											<div className="flex items-center relative px-[43px] mb-1.5">
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/3idg5g7l_expires_30_days.png"} 
+													className="w-[15px] h-[15px] mr-[184px] object-fill"
+												/>
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/rppuh52t_expires_30_days.png"} 
+													className="w-[15px] h-[15px] mr-[182px] object-fill"
+												/>
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/f1ao1wqn_expires_30_days.png"} 
+													className="w-[15px] h-[15px] mr-[185px] object-fill"
+												/>
+												<img
+													src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/ha07veyw_expires_30_days.png"} 
+													className="w-[15px] h-[15px] object-fill"
+												/>
+												<div className="bg-[#FFCF02] w-[343px] h-[3px] absolute top-1.5 left-0 rounded-[50px]">
+												</div>
+												<div className="bg-[#727272CC] w-[514px] h-[3px] absolute top-1.5 right-0 rounded-[50px]">
+												</div>
+											</div>
+											<div className="flex items-center ml-1">
+												<div className="flex flex-col shrink-0 items-center mr-[106px]">
+													<div className="flex flex-col items-center">
+														<span className="text-black text-base" >
+															{"Pesanan"}
+														</span>
+														<span className="text-black text-[13px]" >
+															{"15 Oktober 2025\n12:00 wib"}
+														</span>
+													</div>
+												</div>
+												<div className="flex flex-col shrink-0 items-center">
+													<div className="flex flex-col items-center">
+														<span className="text-black text-base" >
+															{"Dikemas"}
+														</span>
+														<span className="text-black text-[13px]" >
+															{"15 Oktober 2025\n15:00 wib"}
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<img
+										src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/m2xck8t8_expires_30_days.png"} 
+										className="self-stretch h-[1px] mb-[19px] object-fill"
+									/>
+									<span className="text-black text-base mb-[3px] ml-[26px]" >
+										{"Keterangan"}
+									</span>
+									<div className="flex items-center mb-0.5 ml-[26px]">
+										<img
+											src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/ywa7uk3s_expires_30_days.png"} 
+											className="w-3 h-[15px] mr-1.5 object-fill"
+										/>
+										<span className="text-black text-sm mr-[322px]" >
+											{"Alamat Kirim"}
+										</span>
+										<span className="text-black text-base" >
+											{"Status"}
+										</span>
+									</div>
+									<div className="flex items-start ml-11">
+										<span className="text-black text-sm w-[317px] mr-[85px]" >
+											{"Andi Santoso — Jl. Melati No. 45, RT 05/RW 02, Kel. \nCempaka Putih, Jakarta Pusat, DKI Jakarta 10310"}
+										</span>
+										<div className="flex flex-col shrink-0 items-center mr-3 gap-[9px]">
+											<div className="flex flex-col items-start">
+												<span className="text-[#01798A] text-xs" >
+													{"15 Okt 2025"}
+												</span>
+												<span className="text-[#01798A] text-xs mr-[13px]" >
+													{"15:00 wib"}
+												</span>
+											</div>
+											<div className="flex flex-col items-start">
+												<span className="text-[#9DB2CE] text-xs" >
+													{"15 Okt 2025"}
+												</span>
+												<span className="text-[#9DB2CE] text-xs mr-[13px]" >
+													{"12:00 wib"}
+												</span>
+											</div>
+										</div>
+										<div className="flex flex-col shrink-0 items-center mr-2.5 gap-[50px]">
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/yt44efdl_expires_30_days.png"} 
+												className="w-[5px] h-[5px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/f6jjmdq7_expires_30_days.png"} 
+												className="w-[5px] h-[5px] object-fill"
+											/>
+										</div>
+										<div className="flex flex-col shrink-0 items-start gap-[27px]">
+											<span className="text-[#01798A] text-xs" >
+												{"Paket sedang dikemas di Gudang Warehouse Depok"}
+											</span>
+											<span className="text-[#9DB2CE] text-xs mr-[195px]" >
+												{"Pesanan dibuat"}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<img
+							src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/80bayj0l_expires_30_days.png"} 
+							className="w-10 h-10 mt-[588px] object-fill"
+						/>
+					</div>
+					<div className="flex flex-col items-start self-stretch bg-white pt-[89px]">
+						<div className="flex items-start self-stretch max-w-[1200px] mb-5 ml-[68px] mr-[98px]">
+							<img
+								src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/fo5pr64y_expires_30_days.png"} 
+								className="w-[126px] h-[45px] mr-[140px] object-fill"
+							/>
+							<span className="text-black text-base font-bold mt-[18px]" >
+								{"Hubungi Kami"}
+							</span>
+							<div className="flex-1 self-stretch">
+							</div>
+							<span className="text-black text-base font-bold mt-[18px] mr-[113px]" >
+								{"Hubungi Kami"}
+							</span>
+							<span className="text-black text-base font-bold mt-[18px]" >
+								{"Layanan"}
+							</span>
+							<div className="flex-1 self-stretch">
+							</div>
+							<span className="text-black text-base font-bold mt-[18px]" >
+								{"Metode Pembayaran"}
+							</span>
+						</div>
+						<div className="flex items-start self-stretch mb-[30px] mx-[68px]">
+							<div className="flex flex-col shrink-0 items-start mr-[65px] gap-3">
+								<span className="text-black text-base" >
+									{"Platform Recommerce Antar \nBisnis Pertama di Indonesia"}
+								</span>
+								<img
+									src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/0umg2phs_expires_30_days.png"} 
+									className="w-[111px] h-[33px] mr-[90px] object-fill"
+								/>
+							</div>
+							<div className="flex flex-col shrink-0 items-center mr-2">
+								<img
+									src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/zt1fyrom_expires_30_days.png"} 
+									className="w-3 h-[15px] mb-[101px] object-fill"
+								/>
+								<img
+									src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/1mlqkqub_expires_30_days.png"} 
+									className="w-[13px] h-[13px] mb-[15px] object-fill"
+								/>
+								<img
+									src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/kp5g1dtj_expires_30_days.png"} 
+									className="w-[15px] h-3 object-fill"
+								/>
+							</div>
+							<div className="flex flex-col shrink-0 items-start mr-[63px] gap-[3px]">
+								<span className="text-black text-base w-[248px]" >
+									{"Sahid Sudirman Center 40th Floor\nJl. Jend. Sudirman No.86, Kota\nAdministrasi Jakarta Pusat - 10220\nIndonesia (ID)"}
+								</span>
+								<span className="text-black text-base mr-[141px]" >
+									{"0811-833-164"}
+								</span>
+							</div>
+							<span className="text-black text-base w-[150px] mr-[62px]" >
+								{"Tentang Kami\nCara Membeli\nTentang Pembayaran\nSering Ditanyakan\nSyarat dan Ketentuan\nKebijakan Privasi"}
+							</span>
+							<div className="flex flex-1 flex-col items-start">
+								<div className="flex justify-between items-start self-stretch mb-[9px]">
+									<span className="text-black text-base w-[179px]" >
+										{"Produk Lainnya\nPesanan & Pengembalian\nProfil Pengguna"}
+									</span>
+									<div className="flex flex-col shrink-0 items-center gap-2.5">
+										<div className="flex items-center gap-[7px]">
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/tmyclgdb_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/63bqo69b_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/3deigprv_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+										</div>
+										<div className="flex items-center gap-[7px]">
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/3fkapzkh_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/6lnt3laj_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/gyuubmoo_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+										</div>
+										<div className="flex items-center gap-[7px]">
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/fbjnw6lm_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/0p3xpa1i_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/ztsf0sx4_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+										</div>
+										<div className="flex items-center gap-[7px]">
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/xa1jhts0_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/d0vjzkjw_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/bz4v529b_expires_30_days.png"} 
+												className="w-[54px] h-[21px] object-fill"
+											/>
+										</div>
+									</div>
+								</div>
+								<span className="text-black text-base font-bold mb-3" >
+									{"Dapatkan Melalui"}
+								</span>
+								<div className="flex items-center gap-[11px]">
+									<div className="flex shrink-0 items-center bg-white py-1.5 px-2 gap-2 rounded-md border border-solid border-black">
+										<img
+											src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/w1e1lck3_expires_30_days.png"} 
+											className="w-5 h-6 rounded-md object-fill"
+										/>
+										<div className="flex flex-col shrink-0 items-center">
+											<span className="text-black text-[9px]" >
+												{"Download on the"}
+											</span>
+											<span className="text-black text-lg" >
+												{"App Store"}
+											</span>
+										</div>
+									</div>
+									<div className="flex shrink-0 items-center bg-white py-[5px] px-2 gap-[7px] rounded-md border border-solid border-black">
+										<img
+											src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/58wf6mqc_expires_30_days.png"} 
+											className="w-[21px] h-6 rounded-md object-fill"
+										/>
+										<div className="flex flex-col shrink-0 items-start gap-[3px]">
+											<span className="text-black text-[10px] mr-[30px]" >
+												{"GET IT ON"}
+											</span>
+											<img
+												src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/1cjevxch_expires_30_days.png"} 
+												className="w-[74px] h-[15px] object-fill"
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<img
+							src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/690f3bcp_expires_30_days.png"} 
+							className="self-stretch h-[1px] mb-3 mx-[92px] object-fill"
+						/>
+						<div className="flex items-center mb-[61px] ml-[94px]">
+							<span className="text-black text-base mr-[5px]" >
+								{"Copyright"}
+							</span>
+							<img
+								src={"https://storage.googleapis.com/tagjs-prod.appspot.com/v1/JX82NLxcwY/n3cfz7q9_expires_30_days.png"} 
+								className="w-[15px] h-[15px] mr-[3px] object-fill"
+							/>
+							<span className="text-black text-base" >
+								{"2025 bulky.id All Right Reserved."}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	)
+}
