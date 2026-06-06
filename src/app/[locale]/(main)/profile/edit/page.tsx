@@ -1,4 +1,5 @@
-import { EditProfileContent, ProfileShell } from "../_components/profile-shell";
+import { ProfileShell } from "../_components/profile-shell";
+import { EditProfileClient } from "./client";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 export default function EditProfilPage() {
   return (
     <ProfileShell activeTab="edit">
-      <EditProfileContent />
+      <EditProfileClient />
     </ProfileShell>
   );
 }

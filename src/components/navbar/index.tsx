@@ -2,7 +2,7 @@
 
 import React, { useSyncExternalStore } from "react";
 import { Button } from "@ui/button";
-import { Phone, LogOut, User } from "lucide-react";
+import { Phone, LogOut, User, CreditCard, Package, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@i18n/navigation";
@@ -87,7 +87,7 @@ export const Navbar = () => {
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuContent align="end" className="w-52">
                   <DropdownMenuGroup>
                     <DropdownMenuLabel className="flex flex-col gap-0.5">
                       <span className="text-sm font-semibold">{user.name}</span>
@@ -98,16 +98,28 @@ export const Navbar = () => {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem render={<Link href="/profil" />}>
+                    <DropdownMenuItem render={<Link href="/profile/edit" />}>
                       <User className="mr-2 h-4 w-4" />
                       {t("profile")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem render={<Link href="/profile/payments" />}>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      {t("payment")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem render={<Link href="/profile/orders" />}>
+                      <Package className="mr-2 h-4 w-4" />
+                      {t("orders")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem render={<Link href="/profile/group-buy" />}>
+                      <Users className="mr-2 h-4 w-4" />
+                      {t("patungan")}
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
                       onClick={logout}
-                      className="text-red-600 cursor-pointer focus:text-red-600"
+                      className="cursor-pointer text-red-600 focus:text-red-600"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
                       {t("logout")}

@@ -11,5 +11,5 @@ export default async function ProfilPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  redirect({ href: "/profil/pesanan", locale: locale as "en" | "id" });
+  redirect({ href: "/profile/orders", locale: locale as "en" | "id" });
 }

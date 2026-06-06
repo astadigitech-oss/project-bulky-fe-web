@@ -1,23 +1,27 @@
+import { getTranslations } from "next-intl/server";
 import { OrderCard, ProfileShell, orders } from "../_components/profile-shell";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Status Pesanan",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("ProfilePages.orders");
+  return { title: t("pageTitle") };
+}
 
-const statuses = [
-  { label: "Semua", width: "w-[132px]" },
-  { label: "Menunggu Konfirmasi", width: "w-[184px]" },
-  { label: "Proses", width: "w-[132px]" },
-  { label: "Tiba Ditujuan", width: "w-[156px]" },
-  { label: "Dibatalkan", width: "w-[150px]" },
-];
+export default async function StatusPesananPage() {
+  const t = await getTranslations("ProfilePages.orders");
 
-export default function StatusPesananPage() {
+  const statuses = [
+    { label: t("filters.all"), width: "w-[132px]" },
+    { label: t("filters.waitingConfirmation"), width: "w-[184px]" },
+    { label: t("filters.inProcess"), width: "w-[132px]" },
+    { label: t("filters.arrived"), width: "w-[156px]" },
+    { label: t("filters.cancelled"), width: "w-[150px]" },
+  ];
+
   return (
-    <ProfileShell activeTab="pesanan">
+    <ProfileShell activeTab="orders">
       <div className="mb-12 flex flex-col gap-4 xl:flex-row xl:items-center">
-        <p className="shrink-0 text-base text-[#727272]">Status</p>
+        <p className="shrink-0 text-base text-[#727272]">{t("statusLabel")}</p>
         <div className="flex flex-1 flex-wrap gap-4">
           {statuses.map((status, index) => (
             <button

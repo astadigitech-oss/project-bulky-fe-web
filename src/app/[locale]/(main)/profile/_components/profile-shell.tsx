@@ -1,37 +1,22 @@
 import Image from "next/image";
-import { Avatar, AvatarFallback } from "@ui/avatar";
 import { Button } from "@ui/button";
 import { Link } from "@i18n/navigation";
 import { cn } from "@/lib/utils";
 import {
   CheckCircle2,
-  Edit3,
-  LockKeyhole,
-  LogOut,
   Mail,
   MapPin,
   Package,
   Truck,
-  User,
   Warehouse,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import { getTranslations } from "next-intl/server";
+import { ProfileSidebarClient } from "./profile-sidebar-client";
 
-const user = {
-  name: "Ahyar Sihono Widodo",
-  email: "ahyarsihonowdd@gmail.com",
-  phone: "08222 123 123",
-  gender: "Laki-Laki",
-};
+const tabValues = ["payments", "orders", "group-buy", "edit"] as const;
 
-const tabs = [
-  { href: "/profil/pembayaran", label: "Pembayaran", value: "pembayaran" },
-  { href: "/profil/pesanan", label: "Pesanan", value: "pesanan" },
-  { href: "/profil/patungan", label: "Patungan", value: "patungan" },
-  { href: "/profil/edit", label: "Edit Profil", value: "edit" },
-] as const;
-
-type ProfileTab = (typeof tabs)[number]["value"];
+type ProfileTab = (typeof tabValues)[number];
 
 export type OrderStatus = "Dikemas" | "Selesai";
 
@@ -52,49 +37,69 @@ export const orders = [
   },
 ];
 
-export function ProfileShell({
+export async function ProfileShell({
   activeTab,
   children,
 }: {
   activeTab: ProfileTab;
   children: ReactNode;
 }) {
+  const t = await getTranslations("Profile");
+
+  const tabs = [
+    { href: "/profile/payments", label: t("tabs.payment"), value: "payments" },
+    { href: "/profile/orders", label: t("tabs.orders"), value: "orders" },
+    { href: "/profile/group-buy", label: t("tabs.patungan"), value: "group-buy" },
+    { href: "/profile/edit", label: t("tabs.edit"), value: "edit" },
+  ] as const;
+
   return (
     <main className="bg-[#f0f0f0] px-6 py-6 lg:px-16">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 lg:flex-row">
-        <aside className="rounded-lg bg-[#ffcf02] p-7 text-center lg:w-72 lg:shrink-0">
-          <h2 className="mb-7 text-2xl font-bold text-black">Bio Data</h2>
-          <Avatar className="mx-auto mb-4 size-31 rounded-lg border border-black/10 bg-white">
-            <AvatarFallback className="rounded-lg bg-white text-3xl font-bold text-black">
-              AS
-            </AvatarFallback>
-          </Avatar>
-          <div className="space-y-1 text-base text-black">
-            <p className="font-bold">{user.name}</p>
-            <p>{user.email}</p>
-            <p>{user.phone}</p>
-            <p>{user.gender}</p>
+        <aside className="relative overflow-hidden rounded-lg bg-[#ffcf02] p-7 text-center lg:w-72 lg:shrink-0">
+          {/* Looper decorations */}
+          <Image
+            src="/assets/images/Looper-kiri.svg"
+            alt=""
+            width={260}
+            height={220}
+            aria-hidden
+            className="pointer-events-none absolute -bottom-8 left-0 w-full rotate-[-10deg] select-none opacity-80"
+          />
+          <Image
+            src="/assets/images/Looper-kiri.svg"
+            alt=""
+            width={260}
+            height={220}
+            aria-hidden
+            className="pointer-events-none absolute -right-0 -top-8 w-full rotate-160 select-none opacity-80"
+          />
+          <div className="relative z-10">
+            <h2 className="mb-7 text-2xl font-bold text-black">{t("bioData")}</h2>
+            <ProfileSidebarClient />
           </div>
         </aside>
 
-        <section className="min-h-[640px] flex-1 rounded-lg bg-white p-6 shadow-sm">
-          <nav className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {tabs.map((tab) => (
-              <Link
-                key={tab.value}
-                href={tab.href}
-                className={cn(
-                  "flex h-9 items-center justify-center whitespace-nowrap rounded-lg text-base font-normal text-black transition-colors",
-                  activeTab === tab.value
-                    ? "bg-[#ffcf02] font-bold hover:bg-[#ffcf02]"
-                    : "bg-[#efefef] hover:bg-[#e5e5e5]",
-                )}
-              >
-                {tab.label}
-              </Link>
-            ))}
-          </nav>
-          {children}
+        <section className="min-h-[640px] flex-1 overflow-hidden rounded-lg bg-white shadow-sm lg:h-[calc(100vh-9rem)]">
+          <div className="h-full overflow-y-auto p-6">
+            <nav className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {tabs.map((tab) => (
+                <Link
+                  key={tab.value}
+                  href={tab.href}
+                  className={cn(
+                    "flex h-9 items-center justify-center whitespace-nowrap rounded-lg text-base font-normal text-black transition-colors",
+                    activeTab === tab.value
+                      ? "bg-[#ffcf02] font-bold hover:bg-[#ffcf02]"
+                      : "bg-[#efefef] hover:bg-[#e5e5e5]",
+                  )}
+                >
+                  {tab.label}
+                </Link>
+              ))}
+            </nav>
+            {children}
+          </div>
         </section>
       </div>
     </main>
@@ -150,7 +155,8 @@ export function EmptyState({
   );
 }
 
-export function OrderCard({ order }: { order: (typeof orders)[number] }) {
+export async function OrderCard({ order }: { order: (typeof orders)[number] }) {
+  const t = await getTranslations("ProfilePages.orders.card");
   const isDone = order.status === "Selesai";
 
   return (
@@ -169,15 +175,15 @@ export function OrderCard({ order }: { order: (typeof orders)[number] }) {
               {order.originalPrice}
             </p>
             <p className="flex items-center gap-1.5 text-xs text-[#01798a]">
-              <Warehouse className="size-4" /> Tipe Palet Online
+              <Warehouse className="size-4" /> {t("palletType")}
             </p>
           </div>
         </div>
 
         <div className="flex flex-col items-start gap-7 text-sm md:items-center">
-          <p className="whitespace-nowrap text-black">Status Pengiriman</p>
+          <p className="whitespace-nowrap text-black">{t("deliveryStatus")}</p>
           <p className="whitespace-nowrap font-bold text-[#01798a]">
-            {order.status}
+            {isDone ? t("statusDone") : t("statusPacking")}
           </p>
         </div>
 
@@ -186,14 +192,14 @@ export function OrderCard({ order }: { order: (typeof orders)[number] }) {
             type="button"
             className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300] hover:text-black"
           >
-            Lihat Riwayat
+            {t("viewHistory")}
           </button>
         ) : (
           <Link
-            href="/profil/pesanan/lacak"
+            href="/profile/orders/lacak"
             className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300] hover:text-black"
           >
-            Lacak Pesanan
+            {t("trackOrder")}
           </Link>
         )}
       </div>
@@ -201,115 +207,15 @@ export function OrderCard({ order }: { order: (typeof orders)[number] }) {
   );
 }
 
-export function EditProfileContent() {
-  const sections = [
-    {
-      title: "Informasi Data Diri",
-      icon: User,
-      rows: [
-        ["Nama Lengkap", user.name],
-        ["Email", user.email],
-        ["Telepon", user.phone],
-        ["Jenis Kelamin", user.gender],
-      ],
-    },
-    {
-      title: "Daftar Alamat",
-      icon: MapPin,
-      rows: [
-        [
-          "Alamat yang digunakan",
-          "Andi Santoso — Jl. Melati No. 45, RT 05/RW 02, Kel. Cempaka Putih, Jakarta Pusat, DKI Jakarta 10310",
-        ],
-      ],
-    },
-    {
-      title: "Pengaturan Akun",
-      icon: LockKeyhole,
-      rows: [
-        ["Email Terkait", user.email],
-        ["Kata Sandi", "*************"],
-      ],
-    },
-  ];
 
-  return (
-    <div>
-      <p className="mb-8 text-base text-[#727272]">Edit Profile</p>
-      <div className="mb-9 flex items-center gap-8">
-        <Avatar className="size-31 rounded-lg bg-[#f7f7f7]">
-          <AvatarFallback className="rounded-lg bg-[#f7f7f7] text-3xl font-bold text-black">
-            AS
-          </AvatarFallback>
-        </Avatar>
-        <div className="space-y-3">
-          <Button
-            variant="outline"
-            className="h-9 px-5 text-sm font-bold text-black shadow-none transition-colors hover:border-[#ffcf02] hover:bg-[#fff7cc] hover:text-black"
-          >
-            Ganti Foto Profil
-          </Button>
-          <p className="whitespace-pre-line text-sm text-[#727272]">
-            Format foto JPG,PNG{"\n"}Rasio foto 1:1
-          </p>
-        </div>
-      </div>
+export async function TrackingContent() {
+  const t = await getTranslations("ProfilePages.tracking");
 
-      <div className="space-y-3">
-        {sections.map((section) => {
-          const Icon = section.icon;
-          return (
-            <section
-              key={section.title}
-              className="rounded-lg border border-[#727272cc] p-5"
-            >
-              <div className="mb-6 flex items-center justify-between gap-4">
-                <h3 className="flex items-center gap-2 text-base font-bold text-black">
-                  <Icon className="size-4" /> {section.title}
-                </h3>
-                <Button
-                  variant="outline"
-                  className="h-9 px-4 text-sm font-bold shadow-none transition-colors hover:border-[#ffcf02] hover:bg-[#fff7cc] hover:text-black"
-                >
-                  <Edit3 className="size-4" /> Edit
-                </Button>
-              </div>
-              <dl className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-                {section.rows.map(([label, value]) => (
-                  <div key={label} className="space-y-2">
-                    <dt className="text-base text-[#727272]">{label}</dt>
-                    <dd className="text-base text-black">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          );
-        })}
-      </div>
-
-      <Button className="mt-5 h-9 rounded bg-[#ffcf02] px-16 text-sm font-bold text-black shadow-none transition-colors hover:bg-[#f0c300] hover:text-black">
-        <LogOut className="size-4" /> Keluar Akun
-      </Button>
-    </div>
-  );
-}
-
-export function TrackingContent() {
   const steps = [
-    {
-      title: "Pesanan",
-      time: "15 Oktober 2025\n12:00 wib",
-      active: true,
-      icon: Package,
-    },
-    {
-      title: "Dikemas",
-      time: "15 Oktober 2025\n15:00 wib",
-      active: true,
-      icon: Warehouse,
-    },
-    { title: "Dikirim", time: "-", active: false, icon: Truck },
-    { title: "Selesai", time: "-", active: false, icon: CheckCircle2 },
+    { title: t("steps.ordered"), time: "15 Oktober 2025\n12:00 wib", active: true, icon: Package },
+    { title: t("steps.packed"), time: "15 Oktober 2025\n15:00 wib", active: true, icon: Warehouse },
+    { title: t("steps.shipped"), time: "-", active: false, icon: Truck },
+    { title: t("steps.done"), time: "-", active: false, icon: CheckCircle2 },
   ];
 
   return (
@@ -317,14 +223,14 @@ export function TrackingContent() {
       <Button
         nativeButton={false}
         variant="ghost"
-        render={<Link href="/profil/pesanan" />}
+        render={<Link href="/profile/orders" />}
         className="mb-4 h-8 px-0 text-sm text-[#727272] hover:bg-transparent"
       >
-        ← Kembali
+        {t("back")}
       </Button>
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4 border-t border-[#d9d9d9] pt-6">
         <div className="flex gap-5">
-          <h1 className="text-base text-black">Lacak Pesanan</h1>
+          <h1 className="text-base text-black">{t("title")}</h1>
           <p className="text-sm text-[#01798a]">Palet Sepatu Olahraga</p>
         </div>
         <p className="text-sm text-[#727272]">Order ID. 22312938123</p>
@@ -353,20 +259,18 @@ export function TrackingContent() {
                 )}
               />
               <p className="text-base text-black">{step.title}</p>
-              <p className="whitespace-pre-line text-[13px] text-black">
-                {step.time}
-              </p>
+              <p className="whitespace-pre-line text-[13px] text-black">{step.time}</p>
             </div>
           );
         })}
       </div>
 
       <section className="border-t border-[#d9d9d9] pt-5">
-        <h2 className="mb-3 text-base text-black">Keterangan</h2>
+        <h2 className="mb-3 text-base text-black">{t("notes")}</h2>
         <div className="grid gap-8 md:grid-cols-[1fr_1.4fr]">
           <div>
             <h3 className="mb-2 flex items-center gap-2 text-sm text-black">
-              <MapPin className="size-4" /> Alamat Kirim
+              <MapPin className="size-4" /> {t("shippingAddress")}
             </h3>
             <p className="text-sm text-black">
               Andi Santoso — Jl. Melati No. 45, RT 05/RW 02, Kel. Cempaka Putih,
@@ -374,22 +278,14 @@ export function TrackingContent() {
             </p>
           </div>
           <div>
-            <h3 className="mb-3 text-base text-black">Status</h3>
+            <h3 className="mb-3 text-base text-black">{t("status")}</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-[90px_1fr] gap-4 text-xs text-[#01798a]">
-                <p>
-                  15 Okt 2025
-                  <br />
-                  15:00 wib
-                </p>
+                <p>15 Okt 2025<br />15:00 wib</p>
                 <p>Paket sedang dikemas di Gudang Warehouse Depok</p>
               </div>
               <div className="grid grid-cols-[90px_1fr] gap-4 text-xs text-[#9db2ce]">
-                <p>
-                  15 Okt 2025
-                  <br />
-                  12:00 wib
-                </p>
+                <p>15 Okt 2025<br />12:00 wib</p>
                 <p>Pesanan dibuat</p>
               </div>
             </div>
