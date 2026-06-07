@@ -509,7 +509,7 @@ function AddressFormDialog({
           {formFields.map(({ key, label, placeholder, required, type }: any) => (
             <div key={key} className="space-y-1.5">
               <label className="text-sm font-medium text-black">{label}</label>
-              <Input type={type ?? "text"} value={form[key] ?? ""} onChange={(e) => setField(key, e.target.value)} placeholder={placeholder} required={required} />
+              <Input type={type ?? "text"} value={form[key as keyof typeof form] ?? ""} onChange={(e) => setField(key, e.target.value)} placeholder={placeholder} required={required} />
             </div>
           ))}
           <DialogFooter className="pt-2">
