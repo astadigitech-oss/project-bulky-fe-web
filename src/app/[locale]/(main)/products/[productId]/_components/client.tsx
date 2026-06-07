@@ -122,9 +122,7 @@ export const ProductIdClient = () => {
 
   const addToCart = useMutate<
     { message: string; status: boolean; data: null },
-    { product_id: string },
-    undefined,
-    { locale: Locale }
+    { product_id: string }
   >({
     endpoint: "/product/add-to-cart",
     method: "post",

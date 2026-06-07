@@ -174,7 +174,7 @@ export const CartClient = () => {
           {/* Sub-header: item count */}
           <div className="flex items-center px-4 py-2.5 border-b border-gray-100 bg-gray-50">
             <span className="flex-1 text-xs text-gray-500">
-              {t("itemsSelected", { count: selectedCount })}
+              {t("itemsSelected", { count: String(selectedCount) })}
             </span>
           </div>
 
