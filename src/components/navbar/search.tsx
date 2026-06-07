@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -8,20 +8,20 @@ import {
 import { SearchIcon, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
-import { useSearchQuery } from "@/hooks/use-serach";
+import { useRouter } from "@/i18n/navigation";
+import { useSearch } from "@/hooks/use-serach";
 
 export const Search = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const t = useTranslations("Header.search");
-  const { search, searchValue, setSearch } = useSearchQuery();
+  const { search, setSearch } = useSearch();
 
-  useEffect(() => {
-    if (searchValue.length > 0 && pathname !== "/products") {
-      router.push(`/products?q=${searchValue}`);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && search.trim().length > 0) {
+      router.push(`/products?q=${encodeURIComponent(search.trim())}`);
+      setSearch("");
     }
-  }, [pathname, searchValue]);
+  };
 
   return (
     <InputGroup className="w-fit has-[[data-slot=input-group-control]:focus-visible]:w-full max-w-120">
@@ -29,6 +29,7 @@ export const Search = () => {
         placeholder={t("placeholder")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={handleKeyDown}
         autoComplete="off"
         name="search_product"
       />

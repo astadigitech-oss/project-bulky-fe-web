@@ -21,7 +21,10 @@
     },
     "auth": {
       "login": "Login",
-      "profile": "My Profile",
+      "profile": "Edit Profile",
+      "payment": "Payment",
+      "orders": "Orders",
+      "patungan": "Group Buy",
       "logout": "Logout"
     },
     "topBar": {
@@ -211,7 +214,7 @@
     "nextImage": "Next image",
     "detailTitle": "Product Detail",
     "palletId": "Pallet ID",
-    "stock": "Stock",
+    "stock": "Quantity",
     "category": "Category",
     "brand": "Brand",
     "packageCondition": "Package Condition",
@@ -244,7 +247,31 @@
     "cm": "cm",
     "cm3": "cm³",
     "warehouseFallback": "Warehouse",
-    "loginRequiredToast": "Please log in first to continue."
+    "loginRequiredToast": "Please log in first to continue.",
+    "addToCartError": "Failed to add product to cart."
+  },
+  "CartPage": {
+    "title": "Cart",
+    "selectProduct": "Select Product",
+    "summary": "Summary",
+    "itemsSelected": "{count} Items Selected",
+    "delete": "Delete",
+    "productName": "Product Name",
+    "quantity": "Quantity",
+    "price": "Price",
+    "select": "Select",
+    "totalProductsSelected": "Total Products Selected",
+    "totalOrder": "Total Order",
+    "total": "Total",
+    "buy": "Buy",
+    "emptyTitle": "Your Cart is Empty",
+    "emptyDescription": "Add products to your cart to start shopping.",
+    "browseProducts": "Browse Products",
+    "loadError": "Failed to load cart.",
+    "removeError": "Failed to remove item.",
+    "checkError": "Failed to update selection.",
+    "checkoutError": "Failed to checkout.",
+    "pcs": "pcs"
   },
   "Homepage": {
     "hero": {
@@ -371,6 +398,168 @@
       "badge1": "Secure",
       "badge2": "Fast",
       "badge3": "24/7 Support"
+    }
+  },
+  "ProfilePages": {
+    "payment": {
+      "pageTitle": "Waiting for Payment",
+      "heading": "Waiting for Payment",
+      "emptyTitle": "No unpaid products",
+      "emptyAction": "Start Shopping"
+    },
+    "orders": {
+      "pageTitle": "Order Status",
+      "statusLabel": "Status",
+      "filters": {
+        "all": "All",
+        "waitingConfirmation": "Waiting Confirmation",
+        "inProcess": "In Process",
+        "arrived": "Arrived",
+        "cancelled": "Cancelled"
+      },
+      "card": {
+        "palletType": "Online Pallet Type",
+        "deliveryStatus": "Delivery Status",
+        "viewHistory": "View History",
+        "trackOrder": "Track Order",
+        "statusPacking": "Packing",
+        "statusDone": "Done"
+      }
+    },
+    "tracking": {
+      "pageTitle": "Track Order",
+      "back": "← Back",
+      "title": "Track Order",
+      "steps": {
+        "ordered": "Order",
+        "packed": "Packed",
+        "shipped": "Shipped",
+        "done": "Done"
+      },
+      "notes": "Notes",
+      "shippingAddress": "Shipping Address",
+      "status": "Status"
+    },
+    "patungan": {
+      "pageTitle": "Group Payment",
+      "heading": "Group Buy",
+      "emptyTitle": "No group payments",
+      "emptyAction": "Create Group Payment"
+    }
+  },
+  "Profile": {
+    "bioData": "Bio Data",
+    "tabs": {
+      "payment": "Payment",
+      "orders": "Orders",
+      "patungan": "Group Buy",
+      "edit": "Edit Profile"
+    },
+    "edit": {
+      "heading": "Edit Profile",
+      "changePhoto": "Change Profile Photo",
+      "photoHint": "JPG, PNG format\n1:1 aspect ratio",
+      "editButton": "Edit",
+      "saveButton": "Save",
+      "saving": "Saving...",
+      "cancelButton": "Cancel",
+      "changeButton": "Change",
+      "infoSection": "Personal Information",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "loadingAddresses": "Loading addresses...",
+      "addressSection": "Address List",
+      "noAddress": "No saved addresses yet.",
+      "addAddress": "Add Address",
+      "makeDefault": "Make Default",
+      "defaultBadge": "Default",
+      "accountSection": "Account Settings",
+      "linkedEmail": "Linked Email",
+      "phoneNumber": "Phone Number",
+      "password": "Password",
+      "deleteAccount": "Delete Account"
+    },
+    "editInfoDialog": {
+      "title": "Edit Personal Information",
+      "description": "Update your full name.",
+      "nameLabel": "Full Name",
+      "namePlaceholder": "Enter full name"
+    },
+    "changePhoneDialog": {
+      "title": "Change Phone Number",
+      "step1Description": "Enter your new phone number.",
+      "step2Description": "Enter the OTP code sent to {phone}",
+      "newPhoneLabel": "New Phone Number",
+      "phonePlaceholder": "+62812345678",
+      "sendOtp": "Send OTP",
+      "sending": "Processing...",
+      "otpLabel": "OTP Code",
+      "otpPlaceholder": "Enter OTP code",
+      "back": "Back",
+      "verify": "Verify",
+      "verifying": "Verifying..."
+    },
+    "changeEmailDialog": {
+      "title": "Change Email",
+      "step1Description": "Enter your new email address.",
+      "step2Description": "Enter the OTP code sent to your WhatsApp.",
+      "newEmailLabel": "New Email",
+      "emailPlaceholder": "name@example.com",
+      "sendOtp": "Send OTP",
+      "sending": "Processing...",
+      "otpLabel": "OTP Code",
+      "otpPlaceholder": "Enter OTP code",
+      "back": "Back",
+      "verify": "Verify",
+      "verifying": "Verifying..."
+    },
+    "changePasswordDialog": {
+      "title": "Change Password",
+      "description": "Enter your old password and new password.",
+      "oldPassword": "Old Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "passwordPlaceholder": "••••••••"
+    },
+    "deleteAccountDialog": {
+      "title": "Delete Account",
+      "description": "Are you sure you want to delete your account? This action cannot be undone.",
+      "deleting": "Deleting...",
+      "confirm": "Delete Account"
+    },
+    "addressDialog": {
+      "addTitle": "Add New Address",
+      "editTitle": "Edit Address",
+      "addDescription": "Add a new delivery address.",
+      "editDescription": "Update your address information.",
+      "nameLabel": "Recipient Name",
+      "namePlaceholder": "Full name of recipient",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "+62812345678",
+      "detailLabel": "Address Detail",
+      "detailPlaceholder": "Street, house number, hamlet, village",
+      "referenceLabel": "Landmark (optional)",
+      "referencePlaceholder": "e.g. in front of mosque",
+      "districtLabel": "District",
+      "districtPlaceholder": "District name",
+      "cityLabel": "City / Regency",
+      "cityPlaceholder": "City or regency name",
+      "provinceLabel": "Province",
+      "provincePlaceholder": "Province name",
+      "postalCodeLabel": "Postal Code",
+      "postalCodePlaceholder": "12345",
+      "addButton": "Add Address",
+      "updateButton": "Update",
+      "cancel": "Cancel",
+      "saving": "Saving..."
+    },
+    "common": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "back": "Back",
+      "edit": "Edit"
     }
   },
   "ContactUs": {
