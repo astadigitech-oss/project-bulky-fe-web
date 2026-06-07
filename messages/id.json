@@ -48,6 +48,8 @@
     "or": "Atau",
     "loginWithGoogle": "Masuk dengan Google",
     "loginWithApple": "Masuk dengan Apple",
+    "noAccount": "Belum punya akun?",
+    "authRequired": "Silakan masuk terlebih dahulu untuk melanjutkan.",
     "authRequiredAddToCart": "Silakan masuk terlebih dahulu untuk menambahkan produk ke keranjang.",
     "authRequiredBuyNow": "Silakan masuk terlebih dahulu untuk melanjutkan pembelian produk ini."
   },

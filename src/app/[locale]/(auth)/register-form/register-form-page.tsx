@@ -150,14 +150,14 @@ export default function RegisterFormPage({
         alt=""
         width={902}
         height={768}
-        className="pointer-events-none absolute left-0 top-1/2 h-auto w-[52vw] min-w-[700px] -translate-y-1/2 select-none opacity-80"
+        className="pointer-events-none absolute left-0 top-0 h-screen w-auto select-none opacity-80"
       />
       <Image
         src={assets.looperRight}
         alt=""
         width={684}
         height={768}
-        className="pointer-events-none absolute right-0 top-1/2 h-auto w-[40vw] min-w-[520px] -translate-y-1/2 select-none opacity-80"
+        className="pointer-events-none absolute right-0 top-0 h-screen w-auto select-none opacity-80"
       />
 
       <section className="relative z-10 flex h-full w-full items-center justify-center lg:mx-auto lg:h-[calc(100vh-40px)] lg:max-w-[1320px] lg:grid lg:grid-cols-[500px_1fr] lg:items-stretch lg:overflow-hidden lg:rounded-[20px]">

@@ -157,7 +157,9 @@ export default function LoginPage() {
     loginReason === "auth-required"
       ? action === "buy-now"
         ? t("authRequiredBuyNow")
-        : t("authRequiredAddToCart")
+        : action === "add-to-cart"
+          ? t("authRequiredAddToCart")
+          : t("authRequired")
       : null;
 
   const assets = useMemo(
@@ -199,7 +201,7 @@ export default function LoginPage() {
         width={902}
         height={768}
         placeholderLabel="Looper kiri"
-        className="pointer-events-none absolute left-0 top-1/2 h-auto w-[52vw] min-w-[700px] -translate-y-1/2 select-none opacity-80"
+        className="pointer-events-none absolute left-0 top-0 h-screen w-auto select-none opacity-80"
       />
 
       <AssetWithFallback
@@ -208,7 +210,7 @@ export default function LoginPage() {
         width={684}
         height={768}
         placeholderLabel="Looper kanan"
-        className="pointer-events-none absolute right-0 top-1/2 h-auto w-[40vw] min-w-[520px] -translate-y-1/2 select-none opacity-80"
+        className="pointer-events-none absolute right-0 top-0 h-screen w-auto select-none opacity-80"
       />
 
       <section className="relative z-10 flex w-full max-w-[1366px] items-center justify-center gap-12 lg:justify-between lg:px-[146px]">
@@ -243,14 +245,13 @@ export default function LoginPage() {
             className="mb-[20px] h-[37px] w-auto object-contain"
           />
 
-          <div className="mb-[20px] flex w-full items-end justify-between">
-            <h1 className="text-[30px] leading-none font-bold tracking-[-0.01em] text-[#222]">
-              {t("title")}
-            </h1>
-            <Link
-              href="/register"
-              className="text-[16px] leading-none font-normal text-[#f90] hover:underline"
-            >
+          <h1 className="mb-[6px] w-full text-[30px] leading-none font-bold tracking-[-0.01em] text-[#222]">
+            {t("title")}
+          </h1>
+
+          <div className="mb-[24px] flex w-full items-center gap-1">
+            <span className="text-[14px] text-black">{t("noAccount")}</span>
+            <Link href="/register" className="text-[14px] text-[#f90] hover:underline">
               {t("register")}
             </Link>
           </div>
