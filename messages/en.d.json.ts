@@ -203,7 +203,8 @@ declare const messages: {
     "sortNewest": "Newest",
     "sortCheapest": "Cheapest",
     "sortExpensive": "Most Expensive",
-    "listError": "Failed to fetch product list."
+    "listError": "Failed to fetch product list.",
+    "sold": "Sold"
   },
   "ProductDetail": {
     "detailError": "Failed to fetch product detail.",
@@ -274,7 +275,8 @@ declare const messages: {
     "removeError": "Failed to remove item.",
     "checkError": "Failed to update selection.",
     "checkoutError": "Failed to checkout.",
-    "pcs": "pcs"
+    "pcs": "pcs",
+    "sold": "Sold"
   },
   "Homepage": {
     "hero": {

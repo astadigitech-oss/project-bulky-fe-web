@@ -200,7 +200,8 @@
     "sortNewest": "Terbaru",
     "sortCheapest": "Termurah",
     "sortExpensive": "Termahal",
-    "listError": "Gagal mengambil data produk."
+    "listError": "Gagal mengambil data produk.",
+    "sold": "Terjual"
   },
   "ProductDetail": {
     "detailError": "Gagal mengambil detail produk.",
@@ -271,7 +272,8 @@
     "removeError": "Gagal menghapus item.",
     "checkError": "Gagal memperbarui pilihan.",
     "checkoutError": "Gagal melakukan checkout.",
-    "pcs": "pcs"
+    "pcs": "pcs",
+    "sold": "Terjual"
   },
   "Homepage": {
     "hero": {

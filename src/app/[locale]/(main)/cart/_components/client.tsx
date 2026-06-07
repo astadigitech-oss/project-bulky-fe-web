@@ -75,9 +75,22 @@ export const CartClient = () => {
 
   const cartData = cartQuery.data?.data;
   const items: CartItem[] = cartData?.data ?? [];
-  const selectedCount = cartData?.selected_product ?? 0;
-  const totalPrice = cartData?.total_price ?? "Rp 0";
-  const allChecked = items.length > 0 && items.every((i) => i.is_checked);
+
+  // Hitung client-side, exclude produk terjual
+  const checkedItems = items.filter((i) => i.is_checked && !i.is_sold);
+  const selectedCount = checkedItems.length;
+  const totalPrice = checkedItems.length > 0
+    ? new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(
+        checkedItems.reduce((sum, i) => {
+          const num = Number(i.price.replace(/[^\d]/g, "")) || 0;
+          return sum + num;
+        }, 0),
+      )
+    : "Rp 0";
+
+  const allChecked =
+    items.length > 0 &&
+    items.filter((i) => !i.is_sold).every((i) => i.is_checked);
 
   // ─── Handlers ─────────────────────────────────────────────────────────────────
 
@@ -181,11 +194,16 @@ export const CartClient = () => {
           {/* Items */}
           <div className="flex flex-col divide-y divide-gray-100">
             {items.map((item) => (
-              <div key={item.id} className="flex items-center px-4 py-4 gap-4">
+              <div
+                key={item.id}
+                className={`flex items-center px-4 py-4 gap-4 ${
+                  item.is_sold ? "opacity-50" : ""
+                }`}
+              >
                 <Checkbox
                   checked={item.is_checked}
                   onCheckedChange={() => handleToggleItem(item)}
-                  disabled={isMutating}
+                  disabled={isMutating || item.is_sold}
                   aria-label={`Pilih ${item.name}`}
                 />
                 <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -198,9 +216,16 @@ export const CartClient = () => {
                       sizes="72px"
                     />
                   </div>
-                  <p className="font-medium text-sm line-clamp-2 leading-snug min-w-0">
-                    {item.name}
-                  </p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm line-clamp-2 leading-snug min-w-0">
+                      {item.name}
+                    </p>
+                    {item.is_sold && (
+                      <span className="inline-block mt-0.5 text-[10px] font-semibold text-white bg-red-500 px-1.5 py-0.5 rounded">
+                        {t("sold")}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <span className="w-28 text-center text-sm text-gray-700">
                   1 Palet
