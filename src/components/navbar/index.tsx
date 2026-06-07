@@ -21,6 +21,8 @@ import { LocaleSwitcher } from "@components/navbar/locale-switcher";
 import { Navigation } from "./navigation";
 import { Search } from "./search";
 import { useSession } from "@/providers/session-provider";
+import { useApiQuery } from "@/lib/query/use-query";
+import type { GetCartResponse } from "@/services/cart/types";
 
 function getInitials(name: string): string {
   return name
@@ -40,6 +42,15 @@ export const Navbar = () => {
     () => true,
     () => false,
   );
+
+  const cartQuery = useApiQuery<GetCartResponse>({
+    key: ["cart"],
+    endpoint: "/carts",
+    enabled: isAuthenticated,
+    staleTime: 60_000,
+  });
+
+  const cartCount = cartQuery.data?.data?.data?.length ?? 0;
 
   return (
     <header className="sticky -top-10 w-full z-50">
@@ -71,8 +82,13 @@ export const Navbar = () => {
             <Search />
             <LocaleSwitcher />
             <Link href={"/cart"}>
-              <Button size={"icon"} variant={"outline"}>
+              <Button size={"icon"} variant={"outline"} className="relative">
                 <CartMyIcon />
+                {isAuthenticated && cartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
               </Button>
             </Link>
 

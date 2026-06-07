@@ -214,7 +214,7 @@
     "nextImage": "Gambar selanjutnya",
     "detailTitle": "Detail Produk",
     "palletId": "ID Palet",
-    "stock": "Stock",
+    "stock": "Jumlah Item",
     "category": "Kategori",
     "brand": "Merek",
     "packageCondition": "Kondisi Paket",
@@ -247,7 +247,31 @@
     "cm": "cm",
     "cm3": "cm³",
     "warehouseFallback": "Warehouse",
-    "loginRequiredToast": "Silakan masuk terlebih dahulu untuk melanjutkan."
+    "loginRequiredToast": "Silakan masuk terlebih dahulu untuk melanjutkan.",
+    "addToCartError": "Gagal menambahkan produk ke keranjang."
+  },
+  "CartPage": {
+    "title": "Keranjang",
+    "selectProduct": "Pilih Produk",
+    "summary": "Ringkasan",
+    "itemsSelected": "{count} Item Dipilih",
+    "delete": "Hapus",
+    "productName": "Nama Produk",
+    "quantity": "Jumlah",
+    "price": "Harga",
+    "select": "Pilih",
+    "totalProductsSelected": "Total Produk Dipilih",
+    "totalOrder": "Total Pesanan",
+    "total": "Total",
+    "buy": "Beli",
+    "emptyTitle": "Keranjang Kamu Kosong",
+    "emptyDescription": "Tambahkan produk ke keranjang untuk mulai berbelanja.",
+    "browseProducts": "Lihat Produk",
+    "loadError": "Gagal memuat keranjang.",
+    "removeError": "Gagal menghapus item.",
+    "checkError": "Gagal memperbarui pilihan.",
+    "checkoutError": "Gagal melakukan checkout.",
+    "pcs": "pcs"
   },
   "Homepage": {
     "hero": {

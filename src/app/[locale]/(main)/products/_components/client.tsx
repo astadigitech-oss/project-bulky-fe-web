@@ -122,6 +122,15 @@ export const ProductClient = () => {
   const [searchInput, setSearchInput] = useState(query.get("q") ?? "");
   const [debouncedSearch, setDebouncedSearch] = useState(searchInput);
 
+  // Sync searchInput saat URL ?q= berubah dari luar (misal navigasi dari navbar)
+  const qFromUrl = query.get("q") ?? "";
+  const skipUrlSyncRef = React.useRef(false);
+  useEffect(() => {
+    skipUrlSyncRef.current = true;
+    setSearchInput(qFromUrl);
+    setDebouncedSearch(qFromUrl);
+  }, [qFromUrl]);
+
   const initialHasPriceFilter = Boolean(
     query.get("min-price") || query.get("max-price"),
   );
@@ -178,6 +187,10 @@ export const ProductClient = () => {
   }, [searchInput]);
 
   useEffect(() => {
+    if (skipUrlSyncRef.current) {
+      skipUrlSyncRef.current = false;
+      return;
+    }
     const sp = new URLSearchParams();
 
     if (page > 1) sp.set("p", String(page));

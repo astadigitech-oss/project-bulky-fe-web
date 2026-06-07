@@ -26,6 +26,7 @@ import Image from "next/image";
 import React from "react";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query/use-mutate";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { getCookie } from "cookies-next/client";
 import { cookiesKey } from "@/config";
@@ -104,6 +105,7 @@ export const ProductIdClient = () => {
   const [added, setAdded] = React.useState(false);
   const [pdfOpen, setPdfOpen] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(0);
+  const queryClient = useQueryClient();
 
   const detailQuery = useApiQuery<ProductDetailResponse>({
     key: ["product-detail", locale, productId],
@@ -126,7 +128,6 @@ export const ProductIdClient = () => {
   >({
     endpoint: "/product/add-to-cart",
     method: "post",
-    isPublic: true,
   });
 
   const product = detailQuery.data?.data;
@@ -148,8 +149,16 @@ export const ProductIdClient = () => {
     if (!product?.id) return;
     if (!handleRequireLogin("cart")) return;
 
-    // TODO: integrasi endpoint add-to-cart
-    toast.info("Fitur keranjang sedang dalam pengembangan.");
+    addToCart.mutate(
+      { body: { product_id: product.id } },
+      {
+        onSuccess: () => {
+          setAdded(true);
+          queryClient.invalidateQueries({ queryKey: ["cart"] });
+        },
+        onError: () => toast.error(t("addToCartError")),
+      },
+    );
   };
 
   const handleBuyNow = () => {
@@ -209,7 +218,7 @@ export const ProductIdClient = () => {
           </div>
           <div className="relative size-52">
             <Image
-              src={"/assets/images/added-to-cart.webp"}
+              src={"/assets/images/cart-illustration.svg"}
               alt={"added"}
               fill
               className="object-contain"

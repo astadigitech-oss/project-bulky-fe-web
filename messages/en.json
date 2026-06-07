@@ -214,7 +214,7 @@
     "nextImage": "Next image",
     "detailTitle": "Product Detail",
     "palletId": "Pallet ID",
-    "stock": "Stock",
+    "stock": "Quantity",
     "category": "Category",
     "brand": "Brand",
     "packageCondition": "Package Condition",
@@ -247,7 +247,31 @@
     "cm": "cm",
     "cm3": "cm³",
     "warehouseFallback": "Warehouse",
-    "loginRequiredToast": "Please log in first to continue."
+    "loginRequiredToast": "Please log in first to continue.",
+    "addToCartError": "Failed to add product to cart."
+  },
+  "CartPage": {
+    "title": "Cart",
+    "selectProduct": "Select Product",
+    "summary": "Summary",
+    "itemsSelected": "{count} Items Selected",
+    "delete": "Delete",
+    "productName": "Product Name",
+    "quantity": "Quantity",
+    "price": "Price",
+    "select": "Select",
+    "totalProductsSelected": "Total Products Selected",
+    "totalOrder": "Total Order",
+    "total": "Total",
+    "buy": "Buy",
+    "emptyTitle": "Your Cart is Empty",
+    "emptyDescription": "Add products to your cart to start shopping.",
+    "browseProducts": "Browse Products",
+    "loadError": "Failed to load cart.",
+    "removeError": "Failed to remove item.",
+    "checkError": "Failed to update selection.",
+    "checkoutError": "Failed to checkout.",
+    "pcs": "pcs"
   },
   "Homepage": {
     "hero": {
