@@ -79,8 +79,8 @@ export default function ResetPasswordClient({ phone }: Props) {
 
   return (
     <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#ffcf02] px-5 py-8 md:px-10">
-      <Image src={assets.looperLeft} alt="" width={902} height={768} className="pointer-events-none absolute left-0 top-1/2 h-auto w-[52vw] min-w-[700px] -translate-y-1/2 select-none opacity-80" />
-      <Image src={assets.looperRight} alt="" width={684} height={768} className="pointer-events-none absolute right-0 top-1/2 h-auto w-[40vw] min-w-[520px] -translate-y-1/2 select-none opacity-80" />
+      <Image src={assets.looperLeft} alt="" width={902} height={768} className="pointer-events-none absolute left-0 top-0 h-screen w-auto select-none opacity-80" />
+      <Image src={assets.looperRight} alt="" width={684} height={768} className="pointer-events-none absolute right-0 top-0 h-screen w-auto select-none opacity-80" />
 
       <section className="relative z-10 flex w-full max-w-[1366px] items-center justify-center gap-12 lg:justify-between lg:px-[146px]">
         <div className="hidden lg:block">

@@ -74,25 +74,19 @@ type RecommendationResponse = {
   success: boolean;
   message: string;
   data: Array<{
-    name: string;
+    id: string;
     slug: string;
-    image: string;
-    price: { old_price: string; current_price: string };
-    stock?: number;
-    warehouse?: string;
+    slug_trans: { id: string; en: string };
+    nama: string;
+    nama_trans: { id: string; en: string };
+    harga_sebelum_diskon: number;
+    harga_sesudah_diskon: number;
+    harga_formatted: string;
+    persentase_diskon: number;
+    gambar_utama: string;
+    is_sold: boolean;
+    source: string;
   }>;
-};
-
-const parseRupiahToNumber = (value: string) =>
-  Number(value.replace(/[^\d]/g, "")) || 0;
-
-const getDiscountPercent = (oldPrice: string, currentPrice: string) => {
-  const oldNum = parseRupiahToNumber(oldPrice);
-  const currentNum = parseRupiahToNumber(currentPrice);
-
-  if (oldNum <= 0 || currentNum <= 0 || currentNum >= oldNum) return 0;
-
-  return Math.round(((oldNum - currentNum) / oldNum) * 100);
 };
 
 export const ProductIdClient = () => {
@@ -115,9 +109,10 @@ export const ProductIdClient = () => {
   });
 
   const recommendationQuery = useApiQuery<RecommendationResponse>({
-    key: ["product-recommendation", locale],
-    endpoint: "/web/products/recommendations",
-    searchParams: { local: locale },
+    key: ["product-recommendation", locale, productId],
+    endpoint: `/web/products/${productId}/recommendations`,
+    searchParams: { locale, limit: 6 },
+    enabled: Boolean(productId),
   });
 
   const addToCart = useMutate<
@@ -561,14 +556,13 @@ export const ProductIdClient = () => {
       </div>
 
       <div className="grid grid-cols-6 gap-4">
-        {(recommendationQuery.data?.data ?? []).slice(0, 6).map((item) => {
-          const discountPercent = getDiscountPercent(
-            item.price.old_price,
-            item.price.current_price,
-          );
+        {(recommendationQuery.data?.data ?? []).map((item) => {
+          const slug = locale === "en" ? item.slug_trans.en : item.slug_trans.id;
+          const name = locale === "en" ? item.nama_trans.en : item.nama_trans.id;
+          const discountPercent = Math.round(item.persentase_diskon);
 
           return (
-            <Link key={item.slug} href={`/products/${item.slug}`}>
+            <Link key={item.id} href={`/products/${slug}`}>
               <div className="w-full border border-gray-300 rounded-3xl overflow-hidden bg-white">
                 <div className="aspect-square w-full relative bg-[#e9e9e9]">
                   {discountPercent > 0 && (
@@ -576,9 +570,14 @@ export const ProductIdClient = () => {
                       {discountPercent}%
                     </div>
                   )}
+                  {item.is_sold && (
+                    <div className="absolute inset-0 z-10 bg-black/50 flex items-center justify-center">
+                      <span className="text-white text-xs font-semibold">Terjual</span>
+                    </div>
+                  )}
                   <Image
-                    src={item.image}
-                    alt={item.name}
+                    src={item.gambar_utama}
+                    alt={name}
                     fill
                     sizes="20vw"
                     className="object-cover"
@@ -586,21 +585,18 @@ export const ProductIdClient = () => {
                 </div>
                 <div className="w-full px-3 py-2.5 flex flex-col gap-2">
                   <p className="font-medium line-clamp-1 text-sm leading-tight text-gray-900">
-                    {item.name}
+                    {name}
                   </p>
                   <div className="flex flex-col gap-0.5">
                     <p className="font-bold text-orange-500 text-xl leading-tight whitespace-nowrap">
-                      {item.price.current_price}
+                      {item.harga_formatted}
                     </p>
-                    <p className="text-[11px] line-through text-gray-400 leading-none whitespace-nowrap">
-                      {item.price.old_price}
-                    </p>
+                    {item.harga_sebelum_diskon > item.harga_sesudah_diskon && (
+                      <p className="text-[11px] line-through text-gray-400 leading-none whitespace-nowrap">
+                        {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(item.harga_sebelum_diskon)}
+                      </p>
+                    )}
                   </div>
-                  <p className="text-[11px] text-gray-400 leading-none line-clamp-1">
-                    {item.stock ?? "-"} {t("pcs")}{" "}
-                    <span className="mx-1">/</span>
-                    {item.warehouse ?? t("warehouseFallback")}
-                  </p>
                 </div>
               </div>
             </Link>

@@ -8,6 +8,7 @@ export type CartItem = {
   name: string;
   price: string;
   is_checked: boolean;
+  is_sold: boolean;
 };
 
 export type CartData = {

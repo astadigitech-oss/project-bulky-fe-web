@@ -51,6 +51,8 @@ declare const messages: {
     "or": "Or",
     "loginWithGoogle": "Continue with Google",
     "loginWithApple": "Continue with Apple",
+    "noAccount": "Don't have an account?",
+    "authRequired": "Please log in first to continue.",
     "authRequiredAddToCart": "Please log in first to add this product to your cart.",
     "authRequiredBuyNow": "Please log in first to continue purchasing this product."
   },
@@ -203,7 +205,8 @@ declare const messages: {
     "sortNewest": "Newest",
     "sortCheapest": "Cheapest",
     "sortExpensive": "Most Expensive",
-    "listError": "Failed to fetch product list."
+    "listError": "Failed to fetch product list.",
+    "sold": "Sold"
   },
   "ProductDetail": {
     "detailError": "Failed to fetch product detail.",
@@ -274,7 +277,8 @@ declare const messages: {
     "removeError": "Failed to remove item.",
     "checkError": "Failed to update selection.",
     "checkoutError": "Failed to checkout.",
-    "pcs": "pcs"
+    "pcs": "pcs",
+    "sold": "Sold"
   },
   "Homepage": {
     "hero": {

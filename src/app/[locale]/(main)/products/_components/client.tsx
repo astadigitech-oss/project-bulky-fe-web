@@ -80,6 +80,7 @@ type ProductCard = {
   image: string;
   stock: number;
   warehouse: string;
+  is_sold: boolean;
 };
 
 type ProductListResponse = {
@@ -740,12 +741,23 @@ export const ProductClient = () => {
                   );
 
                   return (
-                    <Link key={item.slug} href={`/products/${item.slug}`}>
+                    <Link
+                      key={item.slug}
+                      href={item.is_sold ? "#" : `/products/${item.slug}`}
+                      onClick={(e) => item.is_sold && e.preventDefault()}
+                      aria-disabled={item.is_sold}
+                      className={item.is_sold ? "cursor-not-allowed" : ""}
+                    >
                       <div className="w-full border border-gray-300 rounded-3xl overflow-hidden bg-white">
                         <div className="aspect-square w-full relative bg-[#e9e9e9]">
                           {discountPercent > 0 && (
                             <div className="absolute top-2 left-0 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded-r-sm">
                               {discountPercent}%
+                            </div>
+                          )}
+                          {item.is_sold && (
+                            <div className="absolute inset-0 z-10 bg-black/50 flex items-center justify-center rounded-t-3xl">
+                              <span className="text-white text-xs font-semibold">{t("sold")}</span>
                             </div>
                           )}
                           <Image
