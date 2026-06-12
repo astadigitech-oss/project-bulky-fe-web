@@ -8,6 +8,7 @@ import QueryProviders from "@/providers/query-provider";
 import { SessionProvider } from "@/providers/session-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ToastProvider } from "@/providers/toast-provider";
+import { GoogleMapsProvider } from "@/providers/google-maps-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
@@ -50,8 +51,10 @@ const LocaleLayout = async ({
           <NuqsAdapter>
             <NextIntlClientProvider>
               <SessionProvider>
-                <ToastProvider />
-                {children}
+                <GoogleMapsProvider>
+                  <ToastProvider />
+                  {children}
+                </GoogleMapsProvider>
               </SessionProvider>
             </NextIntlClientProvider>
           </NuqsAdapter>

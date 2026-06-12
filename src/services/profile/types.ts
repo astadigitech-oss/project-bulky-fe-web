@@ -47,7 +47,24 @@ export type Address = {
   formatted_address: string;
 };
 
+export type AddressDetail = {
+  id: string;
+  name: string;
+  phone: string;
+  label: string;
+  is_default: boolean;
+  address_detail: string;
+  address_reference: string | null;
+  district: string;
+  city: string;
+  province: string;
+  postal_code: string;
+  latitude: string | null;
+  longitude: string | null;
+};
+
 export type GetAddressesResponse = BaseAuthResponse<Address[]>;
+export type GetAddressDetailResponse = BaseAuthResponse<AddressDetail>;
 
 export type AddressFormBody = {
   name: string;

@@ -17,6 +17,7 @@
     "@icons-pack/react-simple-icons": "^13.11.2",
     "@tabler/icons-react": "^3.37.1",
     "@tanstack/react-query": "^5.90.21",
+    "@vis.gl/react-google-maps": "^1.8.3",
     "axios": "^1.13.5",
     "chalk": "^5.6.2",
     "class-variance-authority": "^0.7.1",
