@@ -79,6 +79,24 @@ export type CheckoutData = {
   alamat_default: CheckoutAddress | null;
 };
 
+// ─── Voucher ───────────────────────────────────────────────────────────────────
+
+export type VoucherData = {
+  kupon_id: string;
+  kode: string;
+  nama: string;
+  deskripsi: string;
+  jenis_diskon: "persentase" | "jumlah_tetap";
+  nilai_diskon: number;
+  nilai_potongan: number;
+};
+
+export type ApplyVoucherBody = {
+  kode: string;
+};
+
+export type ApplyVoucherResponse = BaseAuthResponse<VoucherData>;
+
 // ─── Responses ─────────────────────────────────────────────────────────────────
 
 export type GetCheckoutResponse = BaseAuthResponse<CheckoutData>;
