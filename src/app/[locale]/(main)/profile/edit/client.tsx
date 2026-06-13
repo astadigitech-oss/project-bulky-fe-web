@@ -33,9 +33,9 @@ import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query";
 import { invalidateQuery } from "@/lib/query/utils";
 import { cookiesKey } from "@/config";
+import { AddressFormDialog } from "@/components/address-form-dialog";
 
 import type {
-  AddressFormBody,
   Address,
   BaseProfileResponse,
   ChangePasswordBody,
@@ -422,108 +422,6 @@ function DeleteAccountDialog({
   );
 }
 
-// ─── Address Form Dialog ──────────────────────────────────────────────────────
-
-const EMPTY_ADDRESS: AddressFormBody = {
-  name: "",
-  phone: "",
-  address_reference: "",
-  address_detail: "",
-  district: "",
-  city: "",
-  province: "",
-  postal_code: "",
-  latitude: "0",
-  longitude: "0",
-};
-
-function AddressFormDialog({
-  open,
-  onOpenChange,
-  addressId,
-  initialName,
-  initialPhone,
-  onSuccess,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  addressId?: string;
-  initialName?: string;
-  initialPhone?: string;
-  onSuccess: () => void;
-}) {
-  const t = useTranslations("Profile.addressDialog");
-  const isEdit = !!addressId;
-  const [form, setForm] = useState<AddressFormBody>({ ...EMPTY_ADDRESS, name: initialName ?? "", phone: initialPhone ?? "" });
-
-  useEffect(() => {
-    if (open) setForm({ ...EMPTY_ADDRESS, name: initialName ?? "", phone: initialPhone ?? "" });
-  }, [open, initialName, initialPhone]);
-
-  function setField(key: keyof AddressFormBody, value: string) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
-
-  const createMutation = useMutate<BaseProfileResponse, AddressFormBody>({
-    endpoint: "/addresses",
-    method: "post",
-    onSuccess: () => { onOpenChange(false); onSuccess(); },
-    onError: { title: "CREATE_ADDRESS" },
-  });
-
-  const updateMutation = useMutate<BaseProfileResponse, AddressFormBody, { id: string }>({
-    endpoint: "/addresses/:id",
-    method: "put",
-    onSuccess: () => { onOpenChange(false); onSuccess(); },
-    onError: { title: "UPDATE_ADDRESS" },
-  });
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const body: AddressFormBody = { ...form, latitude: form.latitude || "0", longitude: form.longitude || "0" };
-    if (isEdit) updateMutation.mutate({ body, params: { id: addressId! } });
-    else createMutation.mutate({ body });
-  }
-
-  const isPending = createMutation.isPending || updateMutation.isPending;
-
-  const formFields: { key: keyof AddressFormBody; labelKey: keyof ReturnType<typeof t extends (...args: any) => any ? never : never>; label: string; placeholder: string; required?: boolean; type?: string }[] = [
-    { key: "name", label: t("nameLabel"), placeholder: t("namePlaceholder"), required: true },
-    { key: "phone", label: t("phoneLabel"), placeholder: t("phonePlaceholder"), required: true, type: "tel" },
-    { key: "address_detail", label: t("detailLabel"), placeholder: t("detailPlaceholder"), required: true },
-    { key: "address_reference", label: t("referenceLabel"), placeholder: t("referencePlaceholder") },
-    { key: "district", label: t("districtLabel"), placeholder: t("districtPlaceholder"), required: true },
-    { key: "city", label: t("cityLabel"), placeholder: t("cityPlaceholder"), required: true },
-    { key: "province", label: t("provinceLabel"), placeholder: t("provincePlaceholder"), required: true },
-    { key: "postal_code", label: t("postalCodeLabel"), placeholder: t("postalCodePlaceholder"), required: true },
-  ] as any;
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{isEdit ? t("editTitle") : t("addTitle")}</DialogTitle>
-          <DialogDescription>{isEdit ? t("editDescription") : t("addDescription")}</DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-3 pt-2">
-          {formFields.map(({ key, label, placeholder, required, type }: any) => (
-            <div key={key} className="space-y-1.5">
-              <label className="text-sm font-medium text-black">{label}</label>
-              <Input type={type ?? "text"} value={form[key as keyof typeof form] ?? ""} onChange={(e) => setField(key, e.target.value)} placeholder={placeholder} required={required} />
-            </div>
-          ))}
-          <DialogFooter className="pt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>{t("cancel")}</Button>
-            <Button type="submit" className="bg-[#ffcf02] text-black shadow-none hover:bg-[#f0c300]" disabled={isPending}>
-              {isPending ? t("saving") : isEdit ? t("updateButton") : t("addButton")}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 // ─── Addresses Section ────────────────────────────────────────────────────────
 
 function AddressesSection({
@@ -598,7 +496,7 @@ function AddressesSection({
       </Button>
 
       <AddressFormDialog open={addOpen} onOpenChange={setAddOpen} onSuccess={() => { setAddOpen(false); onRefresh(); }} />
-      <AddressFormDialog open={!!editAddress} onOpenChange={(val) => { if (!val) setEditAddress(null); }} addressId={editAddress?.id} initialName={editAddress?.name} initialPhone={editAddress?.phone} onSuccess={() => { setEditAddress(null); onRefresh(); }} />
+      <AddressFormDialog open={!!editAddress} onOpenChange={(val) => { if (!val) setEditAddress(null); }} addressId={editAddress?.id} onSuccess={() => { setEditAddress(null); onRefresh(); }} />
     </div>
   );
 }
