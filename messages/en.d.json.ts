@@ -333,6 +333,7 @@ declare const messages: {
     },
     "recommendation": "Recommendations",
     "seeAllProducts": "View All Products",
+    "seeAllTV": "View All Contents",
     "infoBanner": {
       "title": "Ship Across Indonesia",
       "getNow": "Get It Now",
@@ -351,6 +352,38 @@ declare const messages: {
     "testimony": {
       "title": "Testimonials",
       "description": "What do customers say about our products and services? See their experiences here."
+    },
+    "wholesale": {
+      "title": "Ayo! Register to Become",
+      "titleHighlight": "Wholesale Bulky.id",
+      "cta": "Register",
+      "form": {
+        "title": "Wholesale Registration",
+        "description": "Fill in your business information to become a Bulky.id wholesale member.",
+        "fullNameLabel": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "businessNameLabel": "Business / Store Name",
+        "businessNamePlaceholder": "Enter your business name",
+        "phoneLabel": "Phone Number",
+        "phonePlaceholder": "e.g. 08123456789",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Enter your email address",
+        "addressLabel": "Business Address",
+        "addressPlaceholder": "Enter your business address",
+        "businessTypeLabel": "Business Type",
+        "businessTypePlaceholder": "Select business type",
+        "businessTypes": {
+          "retailer": "Retailer",
+          "distributor": "Distributor",
+          "reseller": "Reseller",
+          "other": "Other"
+        },
+        "notesLabel": "Additional Notes",
+        "notesPlaceholder": "Any additional information (optional)",
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "submitting": "Submitting..."
+      }
     }
   },
   "Footer": {
@@ -614,6 +647,72 @@ declare const messages: {
       "saving": "Saving...",
       "back": "Back",
       "edit": "Edit"
+    }
+  },
+  "BulkyTV": {
+    "pageTitle": "Bulky Live",
+    "subtitle": "Watch videos about pallets, business, and Bulky operations",
+    "latest": "Latest",
+    "empty": "No videos in this category yet.",
+    "description": "Description",
+    "relatedVideos": "More Videos",
+    "views": "views",
+    "play": "Play video",
+    "pause": "Pause",
+    "close": "Close",
+    "prevVideo": "Previous video",
+    "nextVideo": "Next video",
+    "search": "Search videos...",
+    "isNew": "NEW",
+    "categories": {
+      "all": "All",
+      "tutorial": "Tutorial",
+      "unboxing": "Pallet Unboxing",
+      "tips": "Business Tips",
+      "ops": "Operations",
+      "testimony": "Testimonials"
+    },
+    "videos": {
+      "v1": {
+        "title": "Unboxing 100kg clothing pallet – contents and estimated selling price",
+        "category": "Pallet Unboxing",
+        "description": "In this video we open a 100kg mixed clothing pallet from Bulky Cibinong warehouse. We go through each item, product condition, and estimate the selling price you can get as a reseller on marketplace or offline store."
+      },
+      "v2": {
+        "title": "How to register & place your first order on the Bulky app",
+        "category": "Tutorial",
+        "description": "Complete guide to registering an account and placing your first order on the Bulky app. From registration, verification, to checkout."
+      },
+      "v3": {
+        "title": "Quick tour of Bulky Cibinong warehouse – pickup & sorting area",
+        "category": "Operations",
+        "description": "See firsthand how the sorting and pickup process works at Bulky Cibinong warehouse. A clean, well-organized area ready to serve you."
+      },
+      "v4": {
+        "title": "From 1 pallet to regular distributor – a Bulky buyer's story",
+        "category": "Testimonials",
+        "description": "Pak Rudi shares how he started with just 1 small pallet and is now a regular distributor who shops every month at Bulky."
+      },
+      "v5": {
+        "title": "Tips to calculate ROI before buying a pallet – don't buy blindly!",
+        "category": "Business Tips",
+        "description": "Before buying a pallet, make sure you've calculated the ROI. In this video we discuss a simple formula to estimate profit from each pallet."
+      },
+      "v6": {
+        "title": "Warehouse pickup process – what do you need to prepare?",
+        "category": "Operations",
+        "description": "Planning to pick up your pallet yourself? Here's a list of things to prepare before you come: documents, vehicle, and on-site procedures."
+      },
+      "v7": {
+        "title": "Unboxing refurbished electronics pallet – is it worth it?",
+        "category": "Pallet Unboxing",
+        "description": "This time we try unboxing a refurbished electronics pallet. There are phones, earphones, chargers, and other gadgets. Let's see the condition and estimated value!"
+      },
+      "v8": {
+        "title": "FAQ: What if there are damaged products in the pallet?",
+        "category": "Tutorial",
+        "description": "Many people ask about discrepancy and damaged products. In this video we answer the most frequently asked questions from Bulky buyers about product conditions in pallets."
+      }
     }
   },
   "ContactUs": {

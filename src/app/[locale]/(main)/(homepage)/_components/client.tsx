@@ -7,6 +7,7 @@ import { TVSection } from "./_sections/tv";
 import { InfoSection } from "./_sections/info";
 import { HowToWorkSecttion } from "./_sections/how-to-work";
 import { TestimonySection } from "./_sections/testimony";
+import { WholesaleSection } from "./_sections/wholesale";
 
 export const HompageClient = () => {
   return (
@@ -19,6 +20,7 @@ export const HompageClient = () => {
       <InfoSection />
       <HowToWorkSecttion />
       <TestimonySection />
+      <WholesaleSection />
     </main>
   );
 };

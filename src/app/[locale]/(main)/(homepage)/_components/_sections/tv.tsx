@@ -1,5 +1,6 @@
 import { PlayCircle } from "lucide-react";
 import React, { useRef } from "react";
+import { useTranslations } from "next-intl";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -8,15 +9,18 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Link } from "@i18n/navigation";
+import { Button } from "@ui/button";
 
 export const TVSection = () => {
+  const t = useTranslations("Homepage");
   const emblaRef = useRef(
     Autoplay({ delay: 10000, stopOnInteraction: true, stopOnMouseEnter: true }),
   );
   return (
     <section className="bg-linear-to-b from-yellow-400 from-50% to-50% to-yellow-400/0 w-full">
       <div className="xl:max-w-7xl max-w-5xl w-full mx-auto px-17 pb-32 py-13 z-10 flex flex-col gap-9">
-        <p className="text-center font-black text-4xl">BULKY TV</p>
+        <p className="text-center font-black text-4xl">BULKY LIVE</p>
         <Carousel
           plugins={[emblaRef?.current]}
           onMouseEnter={() => {
@@ -49,6 +53,11 @@ export const TVSection = () => {
             }
           />
         </Carousel>
+        <Link href="/bulky-live" className="w-fit mx-auto rounded-full overflow-hidden">
+          <Button className="rounded-full py-2.5 h-auto px-9 text-base font-bold">
+            {t("seeAllTV")}
+          </Button>
+        </Link>
       </div>
     </section>
   );

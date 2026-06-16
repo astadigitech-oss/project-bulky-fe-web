@@ -158,8 +158,16 @@ export const ProductIdClient = () => {
     if (!product?.id) return;
     if (!handleRequireLogin("buy-now")) return;
 
-    // TODO: integrasi endpoint beli langsung
-    toast.info("Fitur beli langsung sedang dalam pengembangan.");
+    addToCart.mutate(
+      { body: { product_id: product.id } },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["cart"] });
+          router.push("/checkout");
+        },
+        onError: () => toast.error(t("addToCartError")),
+      },
+    );
   };
 
   const handlePrevImage = () => {
@@ -211,7 +219,7 @@ export const ProductIdClient = () => {
           </div>
           <div className="relative size-52">
             <Image
-              src={"/assets/images/cart-illustration.svg"}
+              src="/assets/images/profile/empty-illustration.svg"
               alt={"added"}
               fill
               className="object-contain"

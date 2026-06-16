@@ -330,6 +330,7 @@
     },
     "recommendation": "Rekomendasi",
     "seeAllProducts": "Lihat Semua Produk",
+    "seeAllTV": "Lihat Semua Konten",
     "infoBanner": {
       "title": "Kirim ke Seluruh Indonesia",
       "getNow": "Dapatkan Sekarang",
@@ -348,6 +349,38 @@
     "testimony": {
       "title": "Testimoni",
       "description": "Apa kata pelanggan tentang produk dan layanan kami? Lihat pengalaman mereka di sini."
+    },
+    "wholesale": {
+      "title": "Ayo! Daftarkan Diri Menjadi",
+      "titleHighlight": "Wholesale Bulky.id",
+      "cta": "Daftar",
+      "form": {
+        "title": "Pendaftaran Wholesale",
+        "description": "Isi informasi bisnis kamu untuk menjadi member wholesale Bulky.id.",
+        "fullNameLabel": "Nama Lengkap",
+        "fullNamePlaceholder": "Masukkan nama lengkap kamu",
+        "businessNameLabel": "Nama Usaha / Toko",
+        "businessNamePlaceholder": "Masukkan nama usaha kamu",
+        "phoneLabel": "Nomor Telepon",
+        "phonePlaceholder": "Contoh: 08123456789",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Masukkan alamat email kamu",
+        "addressLabel": "Alamat Usaha",
+        "addressPlaceholder": "Masukkan alamat usaha kamu",
+        "businessTypeLabel": "Jenis Usaha",
+        "businessTypePlaceholder": "Pilih jenis usaha",
+        "businessTypes": {
+          "retailer": "Retailer",
+          "distributor": "Distributor",
+          "reseller": "Reseller",
+          "other": "Lainnya"
+        },
+        "notesLabel": "Catatan Tambahan",
+        "notesPlaceholder": "Informasi tambahan (opsional)",
+        "cancel": "Batal",
+        "submit": "Kirim",
+        "submitting": "Mengirim..."
+      }
     }
   },
   "Footer": {
@@ -611,6 +644,72 @@
       "saving": "Menyimpan...",
       "back": "Kembali",
       "edit": "Edit"
+    }
+  },
+  "BulkyTV": {
+    "pageTitle": "Bulky Live",
+    "subtitle": "Tonton video seputar palet, bisnis, dan operasional Bulky",
+    "latest": "Terbaru",
+    "empty": "Belum ada video di kategori ini.",
+    "description": "Deskripsi",
+    "relatedVideos": "Video Lainnya",
+    "views": "tayangan",
+    "play": "Putar video",
+    "pause": "Jeda",
+    "close": "Tutup",
+    "prevVideo": "Video sebelumnya",
+    "nextVideo": "Video berikutnya",
+    "search": "Cari video...",
+    "isNew": "BARU",
+    "categories": {
+      "all": "Semua",
+      "tutorial": "Tutorial",
+      "unboxing": "Unboxing Palet",
+      "tips": "Tips Bisnis",
+      "ops": "Operasional",
+      "testimony": "Testimoni"
+    },
+    "videos": {
+      "v1": {
+        "title": "Unboxing palet pakaian 100kg – isi dan estimasi harga jual",
+        "category": "Unboxing Palet",
+        "description": "Di video ini kita buka satu palet pakaian campur 100kg dari gudang Bulky Cibinong. Kita lihat satu per satu isinya, kondisi produk, dan estimasi berapa harga jual yang bisa kamu dapat sebagai reseller di marketplace atau toko offline."
+      },
+      "v2": {
+        "title": "Cara daftar & order pertama di aplikasi Bulky",
+        "category": "Tutorial",
+        "description": "Panduan lengkap untuk mendaftar akun dan melakukan order pertama kamu di aplikasi Bulky. Dari registrasi, verifikasi, hingga checkout."
+      },
+      "v3": {
+        "title": "Tur singkat gudang Bulky Cibinong – area pickup & sortir",
+        "category": "Operasional",
+        "description": "Lihat langsung bagaimana proses sortir dan pickup di gudang Bulky Cibinong. Area yang bersih, tertata, dan siap melayani kamu."
+      },
+      "v4": {
+        "title": "Dari 1 palet jadi distributor tetap – cerita buyer Bulky",
+        "category": "Testimoni",
+        "description": "Pak Rudi berbagi cerita bagaimana ia memulai dari 1 palet kecil dan kini jadi distributor tetap yang belanja rutin setiap bulan di Bulky."
+      },
+      "v5": {
+        "title": "Tips hitung ROI sebelum beli palet – jangan asal beli!",
+        "category": "Tips Bisnis",
+        "description": "Sebelum kamu beli palet, pastikan kamu sudah hitung ROI-nya. Di video ini kita bahas formula sederhana untuk estimasi profit dari tiap palet."
+      },
+      "v6": {
+        "title": "Proses pickup ke gudang – apa yang harus kamu siapkan?",
+        "category": "Operasional",
+        "description": "Kamu mau ambil palet sendiri ke gudang? Ini daftar hal yang perlu kamu siapkan sebelum datang: dokumen, kendaraan, dan prosedur di sana."
+      },
+      "v7": {
+        "title": "Unboxing palet elektronik refurbished – worth it nggak?",
+        "category": "Unboxing Palet",
+        "description": "Kali ini kita coba unboxing palet elektronik refurbished. Ada HP, earphone, charger, dan gadget lainnya. Yuk lihat kondisi dan estimasi nilainya!"
+      },
+      "v8": {
+        "title": "FAQ: Gimana kalau ada produk rusak dalam palet?",
+        "category": "Tutorial",
+        "description": "Banyak yang tanya soal discrepancy dan produk rusak. Di video ini kita jawab pertanyaan paling sering dari buyer Bulky tentang kondisi produk dalam palet."
+      }
     }
   },
   "ContactUs": {
