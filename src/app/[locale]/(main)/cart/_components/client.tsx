@@ -134,7 +134,7 @@ export const CartClient = () => {
       <div className="flex min-h-[500px] flex-col items-center justify-center gap-5">
         <div className="relative w-64 h-64">
           <Image
-            src="/assets/images/cart-illustration.svg"
+            src="/assets/images/profile/empty-illustration.svg"
             alt={t("emptyTitle")}
             fill
             className="object-contain"

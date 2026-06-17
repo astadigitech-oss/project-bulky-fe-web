@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { Edit3, HelpCircle, MapPin, Package, Plus, ShieldCheck, ShieldOff, Star, Tag, Trash2, Truck } from "lucide-react";
+import { Edit3, HelpCircle, MapPin, Package, Plus, ShieldCheck, ShieldOff, Star, Tag, Trash2, Truck, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useProtectRoute } from "@/providers/session-provider";
@@ -22,12 +22,15 @@ import {
 import { AddressFormDialog } from "@/components/address-form-dialog";
 
 import type {
+  ApplyVoucherBody,
+  ApplyVoucherResponse,
   CheckShippingCostBody,
   CheckShippingCostResponse,
   GetCheckoutResponse,
   PlaceOrderBody,
   PlaceOrderResponse,
   ShippingCostData,
+  VoucherData,
 } from "@/services/checkout/types";
 import type {
   Address,
@@ -311,6 +314,10 @@ export const CheckoutClient = () => {
   const [deliveryMode, setDeliveryMode] = useState<DeliveryMode | null>(null);
   const [selectedProvider, setSelectedProvider] = useState<DeliveryProvider | null>(null);
   const [shippingCost, setShippingCost] = useState<ShippingCostData | null>(null);
+  const [voucherInputOpen, setVoucherInputOpen] = useState(false);
+  const [voucherCode, setVoucherCode] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState<VoucherData | null>(null);
+  const [voucherError, setVoucherError] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   // ─── Query ──────────────────────────────────────────────────────────────────
@@ -340,6 +347,20 @@ export const CheckoutClient = () => {
     onError: { title: "SHIPPING_COST" },
   });
 
+  const applyVoucher = useMutate<ApplyVoucherResponse, ApplyVoucherBody, undefined, { locale: string }>({
+    endpoint: "/checkout/voucher",
+    method: "post",
+    onSuccess: (res) => {
+      setAppliedVoucher(res.data?.data ?? null);
+      setVoucherError(null);
+      setVoucherInputOpen(false);
+      setVoucherCode("");
+    },
+    errorCustom: () => {
+      setVoucherError(t("voucherErrorDefault"));
+    },
+  });
+
   // ─── Derived data ────────────────────────────────────────────────────────────
 
   const data = checkoutQuery.data?.data;
@@ -351,12 +372,16 @@ export const CheckoutClient = () => {
       ? shippingCost[selectedProvider].biaya_pengiriman
       : 0;
 
+  const voucherDiscount = appliedVoucher?.nilai_potongan ?? 0;
+
   const totalPayment = data
     ? new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
         maximumFractionDigits: 0,
-      }).format(data.biaya_produk + data.biaya_ppn + selectedProviderCost)
+      }).format(
+        Math.max(0, data.biaya_produk + data.biaya_ppn + selectedProviderCost - voucherDiscount),
+      )
     : "Rp 0";
 
   // ─── Effects ─────────────────────────────────────────────────────────────────
@@ -474,7 +499,7 @@ export const CheckoutClient = () => {
                 className={[
                   "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
                   deliveryMode === "PICKUP"
-                    ? "bg-[#01798A] text-white"
+                    ? "bg-[#ffcf02] text-black"
                     : "bg-white text-gray-600 hover:bg-gray-50",
                 ].join(" ")}
               >
@@ -488,7 +513,7 @@ export const CheckoutClient = () => {
                 className={[
                   "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
                   deliveryMode === "DELIVERY"
-                    ? "bg-[#01798A] text-white"
+                    ? "bg-[#ffcf02] text-black"
                     : "bg-white text-gray-600 hover:bg-gray-50",
                 ].join(" ")}
               >
@@ -647,16 +672,86 @@ export const CheckoutClient = () => {
           {/* Voucher */}
           <section className="flex flex-col gap-3">
             <SectionTitle>{t("voucher")}</SectionTitle>
-            <div className="flex items-center gap-3 rounded border border-gray-200 bg-white px-4 py-3">
-              <Tag className="size-5 shrink-0 text-gray-400" />
-              <span className="flex-1 text-sm text-gray-400">{t("noVoucher")}</span>
-              <button
-                type="button"
-                className="shrink-0 text-sm text-[#01798A] hover:underline"
-              >
-                {t("chooseVoucher")}
-              </button>
-            </div>
+
+            {appliedVoucher ? (
+              /* Applied voucher card */
+              <div className="flex items-start gap-3 rounded border border-green-200 bg-green-50 px-4 py-3">
+                <Tag className="mt-0.5 size-4 shrink-0 text-green-600" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-green-800">
+                    {appliedVoucher.kode}
+                    {" "}
+                    <span className="font-normal text-green-700">— {appliedVoucher.nama}</span>
+                  </p>
+                  <p className="text-xs text-green-600">
+                    {appliedVoucher.jenis_diskon === "persentase"
+                      ? `${appliedVoucher.nilai_diskon}% off`
+                      : new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(appliedVoucher.nilai_diskon) + " off"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setAppliedVoucher(null); setVoucherError(null); }}
+                  className="shrink-0 rounded p-0.5 text-green-600 hover:bg-green-100"
+                  aria-label={t("voucherRemove")}
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+            ) : voucherInputOpen ? (
+              /* Input row */
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={voucherCode}
+                    onChange={(e) => { setVoucherCode(e.target.value.toUpperCase()); setVoucherError(null); }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && voucherCode.trim()) {
+                        applyVoucher.mutate({ body: { kode: voucherCode.trim() }, searchParams: { locale } });
+                      }
+                    }}
+                    placeholder={t("voucherPlaceholder")}
+                    className="h-10 flex-1 rounded border border-gray-200 bg-white px-3 text-sm uppercase tracking-wider outline-none transition-colors focus:border-[#ffcf02] focus:ring-1 focus:ring-[#ffcf02]"
+                    autoFocus
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    disabled={!voucherCode.trim() || applyVoucher.isPending}
+                    onClick={() => applyVoucher.mutate({ body: { kode: voucherCode.trim() }, searchParams: { locale } })}
+                    className="h-10 bg-[#ffcf02] px-4 text-xs font-bold text-black shadow-none hover:bg-[#f0c300] disabled:opacity-50"
+                  >
+                    {applyVoucher.isPending ? t("voucherApplying") : t("voucherApply")}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => { setVoucherInputOpen(false); setVoucherCode(""); setVoucherError(null); }}
+                    className="h-10 px-3 text-xs shadow-none"
+                  >
+                    {t("voucherCancel")}
+                  </Button>
+                </div>
+                {voucherError && (
+                  <p className="text-xs text-red-500">{voucherError}</p>
+                )}
+              </div>
+            ) : (
+              /* Empty state */
+              <div className="flex items-center gap-3 rounded border border-gray-200 bg-white px-4 py-3">
+                <Tag className="size-5 shrink-0 text-gray-400" />
+                <span className="flex-1 text-sm text-gray-400">{t("noVoucher")}</span>
+                <button
+                  type="button"
+                  onClick={() => setVoucherInputOpen(true)}
+                  className="shrink-0 text-sm text-[#01798A] hover:underline"
+                >
+                  {t("chooseVoucher")}
+                </button>
+              </div>
+            )}
           </section>
         </div>
 
@@ -690,6 +785,14 @@ export const CheckoutClient = () => {
                       : "-"
               }
             />
+            {appliedVoucher && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-green-600">{t("voucherDiscount")} ({appliedVoucher.kode})</span>
+                <span className="font-semibold text-green-600">
+                  -{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(appliedVoucher.nilai_potongan)}
+                </span>
+              </div>
+            )}
           </div>
 
           <Separator className="bg-gray-200" />
