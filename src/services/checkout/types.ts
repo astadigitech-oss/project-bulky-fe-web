@@ -6,6 +6,7 @@ type ShippingOption = {
   tersedia: boolean;
   biaya_pengiriman: number;
   biaya_pengiriman_formatted: string;
+  lead_time: number;
 };
 
 export type ShippingPickup = ShippingOption;
@@ -101,8 +102,63 @@ export type ApplyVoucherResponse = BaseAuthResponse<VoucherData>;
 
 export type GetCheckoutResponse = BaseAuthResponse<CheckoutData>;
 
-// POST /orders — place the order
+// POST /place-order — place the order
 export type PlaceOrderBody = {
-  notes?: string;
+  delivery_type: "PICKUP" | "DELIVEREE" | "FORWARDER";
+  alamat_buyer_id?: string;
+  biaya_pengiriman: number;
+  with_insurance?: boolean;
+  insurance_premi?: number;
+  metode_pembayaran_id?: string;
+  metode_pembayaran_kode?: string;
+  catatan?: string;
+  kupon_kode?: string;
 };
-export type PlaceOrderResponse = BaseAuthResponse<{ order_id: string } | null>;
+
+export type PlaceOrderData = {
+  pesanan_id: string;
+  kode: string;
+  total: number;
+  expired_at: string;
+  payment_url: string;
+};
+
+export type PlaceOrderResponse = BaseAuthResponse<PlaceOrderData>;
+
+// ─── Payment Methods ──────────────────────────────────────────────────────────
+
+export type PaymentChannel = {
+  id: string;
+  nama: string;
+  kode: string;
+  logo_value: string;
+  urutan: number;
+  is_active: boolean;
+};
+
+export type PaymentGroup = {
+  nama: string;
+  urutan: number;
+  metode: PaymentChannel[];
+};
+
+export type GetPaymentMethodsResponse = BaseAuthResponse<PaymentGroup[]>;
+
+// ─── Pickup Info ───────────────────────────────────────────────────────────────
+
+export type PickupScheduleDay = {
+  hari: number | string; // 0 = Sunday, 6 = Saturday
+  jam_buka: string | null;
+  jam_tutup: string | null;
+  is_buka: boolean;
+};
+
+export type PickupInfoData = {
+  id: string;
+  nama: string;
+  alamat: string;
+  telepon: string;
+  jadwal: PickupScheduleDay[];
+};
+
+export type GetPickupInfoResponse = BaseAuthResponse<PickupInfoData>;

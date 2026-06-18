@@ -24,6 +24,7 @@ type LatLng = { lat: number; lng: number };
 
 export type ResolvedAddress = {
   address_detail?: string;
+  village?: string;
   district?: string;
   city?: string;
   province?: string;
@@ -43,11 +44,11 @@ function parseAddressComponents(
 
   return {
     address_detail: [get("street_number"), get("route")].filter(Boolean).join(" "),
-    district:
+    village:
       get("administrative_area_level_4") ||
-      get("administrative_area_level_3") ||
       get("sublocality_level_1") ||
       get("sublocality"),
+    district: get("administrative_area_level_3"),
     city: get("administrative_area_level_2") || get("locality"),
     province: get("administrative_area_level_1"),
     postal_code: get("postal_code"),
