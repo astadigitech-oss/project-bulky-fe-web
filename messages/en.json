@@ -333,8 +333,24 @@
     "totalPayment": "Total Payment",
     "placeOrder": "Place Order",
     "placingOrder": "Processing...",
+    "deliveryModeRequired": "Please select a delivery method first.",
+    "deliveryProviderRequired": "Please select a shipping provider first.",
+    "deliveryAddressRequired": "Please add a shipping address first.",
+    "deliveryShippingCostRequired": "Shipping cost has not been calculated, please try again.",
     "paymentMethodRequired": "Please select a payment method first.",
-    "loadError": "Failed to load checkout data."
+    "loadError": "Failed to load checkout data.",
+    "vaPaymentTitle": "Virtual Account Payment Instructions",
+    "vaBank": "Bank",
+    "vaNumber": "VA Number",
+    "vaAmount": "Total Amount",
+    "vaExpiry": "Valid until",
+    "vaCopy": "Copy",
+    "vaCopied": "VA number copied!",
+    "vaInstruction": "Please transfer the exact amount above to the virtual account number. Your order will be confirmed automatically once payment is received.",
+    "vaGoToOrders": "View Orders",
+    "paymentSuccessTitle": "Payment Successful!",
+    "paymentSuccessDesc": "Your order is being processed. Thank you for shopping at Bulky!",
+    "paymentSuccessGoToOrders": "View My Orders"
   },
   "Homepage": {
     "hero": {

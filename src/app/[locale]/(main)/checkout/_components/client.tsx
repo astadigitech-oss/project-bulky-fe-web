@@ -757,6 +757,22 @@ export const CheckoutClient = () => {
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
   const handlePlaceOrder = () => {
+    if (!deliveryMode) {
+      toast.error(t("deliveryModeRequired"));
+      return;
+    }
+    if (deliveryMode === "DELIVERY" && !selectedProvider) {
+      toast.error(t("deliveryProviderRequired"));
+      return;
+    }
+    if (deliveryMode === "DELIVERY" && !address) {
+      toast.error(t("deliveryAddressRequired"));
+      return;
+    }
+    if (deliveryMode === "DELIVERY" && !shippingCost) {
+      toast.error(t("deliveryShippingCostRequired"));
+      return;
+    }
     if (!selectedPaymentKode) {
       toast.error(t("paymentMethodRequired"));
       return;
@@ -1224,6 +1240,7 @@ export const CheckoutClient = () => {
         onOpenChange={setAddressPickerOpen}
         onChanged={() => queryClient.invalidateQueries({ queryKey: ["checkout"] })}
       />
+
     </div>
   );
 };

@@ -333,8 +333,24 @@
     "totalPayment": "Total Pembayaran",
     "placeOrder": "Buat Pesanan",
     "placingOrder": "Memproses...",
+    "deliveryModeRequired": "Pilih metode pengiriman terlebih dahulu.",
+    "deliveryProviderRequired": "Pilih jenis pengiriman terlebih dahulu.",
+    "deliveryAddressRequired": "Tambahkan alamat pengiriman terlebih dahulu.",
+    "deliveryShippingCostRequired": "Biaya pengiriman belum dihitung, coba lagi.",
     "paymentMethodRequired": "Pilih metode pembayaran terlebih dahulu.",
-    "loadError": "Gagal memuat data checkout."
+    "loadError": "Gagal memuat data checkout.",
+    "vaPaymentTitle": "Instruksi Pembayaran Virtual Account",
+    "vaBank": "Bank",
+    "vaNumber": "Nomor VA",
+    "vaAmount": "Total Bayar",
+    "vaExpiry": "Berlaku hingga",
+    "vaCopy": "Salin",
+    "vaCopied": "Nomor VA disalin!",
+    "vaInstruction": "Silakan transfer sesuai jumlah di atas ke nomor virtual account tersebut. Pesanan akan dikonfirmasi otomatis setelah pembayaran diterima.",
+    "vaGoToOrders": "Lihat Pesanan",
+    "paymentSuccessTitle": "Pembayaran Berhasil!",
+    "paymentSuccessDesc": "Pesananmu sedang diproses. Terima kasih telah berbelanja di Bulky!",
+    "paymentSuccessGoToOrders": "Lihat Pesanan Saya"
   },
   "Homepage": {
     "hero": {
