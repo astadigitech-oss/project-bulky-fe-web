@@ -113,6 +113,7 @@ export type PlaceOrderBody = {
   metode_pembayaran_kode?: string;
   catatan?: string;
   kupon_kode?: string;
+  success_return_url?: string;
 };
 
 export type PlaceOrderData = {

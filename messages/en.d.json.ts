@@ -314,6 +314,7 @@ declare const messages: {
     "paymentMethodLoading": "Loading payment methods...",
     "paymentMethodError": "Failed to load payment methods.",
     "paymentMethodUnavailable": "Unavailable",
+    "paymentMethodQrisLimit": "Max IDR 10M",
     "paymentMethodSelected": "Selected method",
     "directPayment": "Direct Payment",
     "chooseOtherPayment": "Choose Other Payment",
@@ -532,6 +533,10 @@ declare const messages: {
         "arrived": "Arrived",
         "cancelled": "Cancelled"
       },
+      "paymentSuccessTitle": "Payment Successful!",
+      "paymentSuccessDesc": "Your order is being processed. Thank you for shopping at Bulky!",
+      "paymentSuccessContinue": "Continue Shopping",
+      "paymentSuccessViewOrders": "View Orders",
       "card": {
         "palletType": "Online Pallet Type",
         "deliveryStatus": "Delivery Status",

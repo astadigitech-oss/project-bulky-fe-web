@@ -152,7 +152,7 @@ function ProviderCard({
             <span>
               {leadTime === 0
                 ? t("leadTimeSameDay")
-                : t("leadTimeDays", { days: leadTime })}
+                : t("leadTimeDays", { days: String(leadTime) })}
             </span>
           </div>
         )}
@@ -503,12 +503,14 @@ function PaymentMethodSelector({
   isError,
   selectedKode,
   onSelect,
+  qrisDisabled,
 }: {
   groups: PaymentGroup[];
   isLoading: boolean;
   isError: boolean;
   selectedKode: string | null;
   onSelect: (kode: string) => void;
+  qrisDisabled?: boolean;
 }) {
   const t = useTranslations("CheckoutPage");
   const [activeGroupUrutan, setActiveGroupUrutan] = React.useState<number | null>(null);
@@ -580,7 +582,8 @@ function PaymentMethodSelector({
           .sort((a, b) => a.urutan - b.urutan)
           .map((channel) => {
             const isSelected = selectedKode === channel.kode;
-            const isUnavailable = !channel.is_active;
+            const isQrisLimitExceeded = channel.logo_value === "qris" && !!qrisDisabled;
+            const isUnavailable = !channel.is_active || isQrisLimitExceeded;
 
             return (
               <button
@@ -611,9 +614,11 @@ function PaymentMethodSelector({
                 ].join(" ")}>
                   {channel.nama}
                 </span>
-                {isUnavailable && (
-                  <span className="text-[10px] text-gray-400">{t("paymentMethodUnavailable")}</span>
-                )}
+                {isQrisLimitExceeded
+                  ? <span className="text-[10px] text-gray-400">{t("paymentMethodQrisLimit")}</span>
+                  : isUnavailable && (
+                    <span className="text-[10px] text-gray-400">{t("paymentMethodUnavailable")}</span>
+                  )}
               </button>
             );
           })}
@@ -723,15 +728,19 @@ export const CheckoutClient = () => {
 
   const voucherDiscount = appliedVoucher?.nilai_potongan ?? 0;
 
+  const totalAmount = data
+    ? Math.max(0, data.biaya_produk + data.biaya_ppn + selectedProviderCost + insuranceCost - voucherDiscount)
+    : 0;
+
   const totalPayment = data
     ? new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
         maximumFractionDigits: 0,
-      }).format(
-        Math.max(0, data.biaya_produk + data.biaya_ppn + selectedProviderCost + insuranceCost - voucherDiscount),
-      )
+      }).format(totalAmount)
     : "Rp 0";
+
+  const isQrisDisabled = totalAmount > 10_000_000;
 
   // ─── Effects ─────────────────────────────────────────────────────────────────
 
@@ -753,6 +762,16 @@ export const CheckoutClient = () => {
   useEffect(() => {
     setInsuranceSelected(false);
   }, [selectedProvider]);
+
+  useEffect(() => {
+    if (!isQrisDisabled) return;
+    const allChannels = (paymentMethodsQuery.data?.data ?? []).flatMap((g) => g.metode);
+    const selectedChannel = allChannels.find((c) => c.kode === selectedPaymentKode);
+    if (selectedChannel?.logo_value === "qris") {
+      setSelectedPaymentKode(null);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isQrisDisabled]);
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
@@ -784,6 +803,8 @@ export const CheckoutClient = () => {
     const allChannels = (paymentMethodsQuery.data?.data ?? []).flatMap((g) => g.metode);
     const selectedChannel = allChannels.find((c) => c.kode === selectedPaymentKode);
 
+    const successReturnUrl = `${window.location.origin}/${locale}/profile/orders?payment_success=1`;
+
     placeOrder.mutate({
       body: {
         delivery_type: deliveryType,
@@ -802,6 +823,7 @@ export const CheckoutClient = () => {
           : {}),
         ...(notes.trim() ? { catatan: notes.trim() } : {}),
         ...(appliedVoucher ? { kupon_kode: appliedVoucher.kode } : {}),
+        success_return_url: successReturnUrl,
       },
     });
   };
@@ -1076,6 +1098,7 @@ export const CheckoutClient = () => {
               isError={paymentMethodsQuery.isError}
               selectedKode={selectedPaymentKode}
               onSelect={setSelectedPaymentKode}
+              qrisDisabled={isQrisDisabled}
             />
           </section>
 

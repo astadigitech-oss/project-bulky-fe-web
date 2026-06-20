@@ -311,6 +311,7 @@
     "paymentMethodLoading": "Memuat metode pembayaran...",
     "paymentMethodError": "Gagal memuat metode pembayaran.",
     "paymentMethodUnavailable": "Tidak tersedia",
+    "paymentMethodQrisLimit": "Maks Rp 10 jt",
     "paymentMethodSelected": "Metode terpilih",
     "directPayment": "Bayar Langsung",
     "chooseOtherPayment": "Pilih Cara Bayar Lainnya",
@@ -529,6 +530,10 @@
         "arrived": "Tiba Ditujuan",
         "cancelled": "Dibatalkan"
       },
+      "paymentSuccessTitle": "Pembayaran Berhasil!",
+      "paymentSuccessDesc": "Pesananmu sedang diproses. Terima kasih telah berbelanja di Bulky!",
+      "paymentSuccessContinue": "Lanjut Belanja",
+      "paymentSuccessViewOrders": "Lihat Pesanan",
       "card": {
         "palletType": "Tipe Palet Online",
         "deliveryStatus": "Status Pengiriman",
