@@ -4,7 +4,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { Edit3, HelpCircle, MapPin, Package, Plus, ShieldCheck, ShieldOff, Star, Tag, Trash2, Truck, X } from "lucide-react";
+import { useRouter } from "@/i18n/navigation";
+import { toast } from "sonner";
+import { Clock, Edit3, HelpCircle, MapPin, Package, Phone, Plus, ShieldCheck, ShieldOff, Star, Store, Tag, Trash2, Truck, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useProtectRoute } from "@/providers/session-provider";
@@ -27,6 +29,10 @@ import type {
   CheckShippingCostBody,
   CheckShippingCostResponse,
   GetCheckoutResponse,
+  GetPaymentMethodsResponse,
+  GetPickupInfoResponse,
+  PickupInfoData,
+  PaymentGroup,
   PlaceOrderBody,
   PlaceOrderResponse,
   ShippingCostData,
@@ -66,9 +72,9 @@ function InfoTooltip({ content }: { content: string }) {
   return (
     <div className="relative inline-flex group/tooltip">
       <HelpCircle className="size-3.5 shrink-0 cursor-help text-gray-400 hover:text-gray-600" />
-      <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-64 -translate-x-1/2 rounded-lg bg-gray-900 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-lg transition-opacity group-hover/tooltip:opacity-100">
+      <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-64 -translate-x-1/2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs leading-relaxed text-gray-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:opacity-100">
         {content}
-        <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+        <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-white" />
       </div>
     </div>
   );
@@ -82,6 +88,7 @@ function ProviderCard({
   logoAlt,
   name,
   cost,
+  leadTime,
   insurance,
   tooltip,
   unavailable,
@@ -93,19 +100,22 @@ function ProviderCard({
   logoAlt: string;
   name: string;
   cost: string;
+  leadTime?: number;
   insurance?: { available: boolean; label: string; cost?: string };
   tooltip?: string;
   unavailable: boolean;
   selected: boolean;
   onSelect: (id: DeliveryProvider) => void;
 }) {
+  const t = useTranslations("CheckoutPage");
+
   return (
     <button
       type="button"
       disabled={unavailable}
       onClick={() => onSelect(id)}
       className={[
-        "flex w-full items-start gap-3 rounded border px-4 py-3 text-left transition-colors",
+        "flex w-full items-center gap-3 rounded border px-4 py-3 text-left transition-colors",
         unavailable
           ? "cursor-not-allowed border-gray-200 bg-gray-50 opacity-50"
           : selected
@@ -116,7 +126,7 @@ function ProviderCard({
       {/* Radio indicator */}
       <span
         className={[
-          "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border-2",
+          "flex size-4 shrink-0 items-center justify-center rounded-full border-2",
           selected && !unavailable ? "border-[#01798A]" : "border-gray-300",
         ].join(" ")}
       >
@@ -136,16 +146,26 @@ function ProviderCard({
           <span className="text-sm font-semibold text-black">{name}</span>
           {tooltip && <InfoTooltip content={tooltip} />}
         </div>
+        {!unavailable && leadTime !== undefined && (
+          <div className="flex items-center gap-1 text-xs text-gray-600">
+            <Clock className="size-3 text-gray-500" />
+            <span>
+              {leadTime === 0
+                ? t("leadTimeSameDay")
+                : t("leadTimeDays", { days: String(leadTime) })}
+            </span>
+          </div>
+        )}
         {insurance && (
-          <div className="flex items-center gap-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 text-xs text-gray-600">
             {insurance.available ? (
-              <ShieldCheck className="size-3 text-green-500" />
+              <ShieldCheck className="size-3 text-green-600" />
             ) : (
-              <ShieldOff className="size-3 text-gray-400" />
+              <ShieldOff className="size-3 text-gray-500" />
             )}
             <span>{insurance.label}</span>
             {insurance.available && insurance.cost && (
-              <span className="text-gray-400">({insurance.cost})</span>
+              <span className="text-gray-500">({insurance.cost})</span>
             )}
           </div>
         )}
@@ -301,6 +321,312 @@ function AddressPickerDialog({
   );
 }
 
+// ─── Pickup Info Card ─────────────────────────────────────────────────────────
+
+const DAY_NAMES_ID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const DAY_NAMES_EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function PickupInfoCard({
+  data,
+  isLoading,
+  isError,
+  locale,
+}: {
+  data: PickupInfoData | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  locale: string;
+}) {
+  const t = useTranslations("CheckoutPage");
+  const dayNames = locale === "en" ? DAY_NAMES_EN : DAY_NAMES_ID;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-2 rounded border border-green-200 bg-green-50 px-4 py-3">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-green-600 border-t-transparent" />
+        <span className="text-sm text-green-900">{t("pickupLoadingInfo")}</span>
+      </div>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <div className="flex items-center gap-3 rounded border border-green-200 bg-green-50 px-4 py-3">
+        <Package className="size-5 shrink-0 text-green-700" />
+        <div className="flex-1">
+          <p className="text-sm font-medium text-green-900">{t("pickupWarehouseInfo")}</p>
+          <p className="text-xs text-green-800">{t("pickupWarehouseDesc")}</p>
+        </div>
+        <span className="shrink-0 text-sm font-bold text-green-900">{t("shippingFree")}</span>
+      </div>
+    );
+  }
+
+  const sortedSchedule = [...data.jadwal].sort((a, b) => Number(a.hari) - Number(b.hari));
+
+  return (
+    <div className="flex flex-col gap-3 rounded border border-green-200 bg-green-50 p-4">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Package className="size-5 shrink-0 text-green-600" />
+          <p className="text-sm font-semibold text-green-900">{data.nama}</p>
+        </div>
+        <span className="shrink-0 rounded bg-green-600 px-2 py-0.5 text-xs font-bold text-white">
+          {t("shippingFree")}
+        </span>
+      </div>
+
+      {/* Description */}
+      <p className="text-sm text-green-900">{t("pickupWarehouseDesc")}</p>
+
+      {/* Info + Schedule grid */}
+      <div className="mt-1 grid grid-cols-1 gap-4 border-t border-green-200 pt-4 sm:grid-cols-2">
+
+        {/* Left: address & phone */}
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-start gap-2 text-sm text-green-900">
+            <MapPin className="mt-0.5 size-4 shrink-0 text-green-700" />
+            <span>{data.alamat}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-green-900">
+            <Phone className="size-4 shrink-0 text-green-700" />
+            <span>{data.telepon}</span>
+          </div>
+        </div>
+
+        {/* Right: schedule */}
+        {sortedSchedule.length > 0 && (
+          <div className="flex flex-col gap-0">
+            <div className="flex items-center gap-1.5 mb-2">
+              <Clock className="size-4 text-green-700" />
+              <span className="text-sm font-semibold text-green-900">{t("pickupScheduleTitle")}</span>
+            </div>
+            <div className="flex flex-col divide-y divide-green-200">
+              {sortedSchedule.map((d) => (
+                <div key={d.hari} className="flex items-center justify-between py-1.5 text-sm">
+                  <span className="w-20 font-medium text-green-900">{dayNames[Number(d.hari)]}</span>
+                  {d.is_buka && d.jam_buka && d.jam_tutup ? (
+                    <span className="flex items-center gap-1 text-green-900">
+                      <Clock className="size-3.5 text-green-700" />
+                      {d.jam_buka} – {d.jam_tutup}
+                    </span>
+                  ) : (
+                    <span className="flex-1" />
+                  )}
+                  <span
+                    className={[
+                      "flex w-20 shrink-0 items-center justify-center gap-1.5 rounded-full py-1 text-xs font-bold",
+                      d.is_buka
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white",
+                    ].join(" ")}
+                  >
+                    <Store className="size-3.5" />
+                    {d.is_buka ? t("pickupStatusOpen") : t("pickupStatusClosed")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Payment Logo ──────────────────────────────────────────────────────────────
+
+const LOGO_EXT: Record<string, string> = {
+  gopay: "png",
+};
+
+const LOGO_COLORS: Record<string, string> = {
+  bca: "bg-blue-600",
+  mandiri: "bg-yellow-500",
+  bni: "bg-orange-600",
+  bri: "bg-blue-800",
+  permata: "bg-red-600",
+  cimb: "bg-red-700",
+  bsi: "bg-green-700",
+  bjb: "bg-blue-700",
+  gopay: "bg-green-500",
+  ovo: "bg-purple-600",
+  dana: "bg-blue-500",
+  linkaja: "bg-red-500",
+  shopeepay: "bg-orange-500",
+  akulaku: "bg-blue-400",
+  "credit-card": "bg-gray-700",
+  qris: "bg-red-600",
+};
+
+function PaymentLogo({ logoValue, nama }: { logoValue: string; nama: string }) {
+  const [imgError, setImgError] = React.useState(false);
+  const colorClass = LOGO_COLORS[logoValue] ?? "bg-gray-500";
+  const initials = nama
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+
+  if (!imgError) {
+    return (
+      <Image
+        src={`/assets/images/payment/${logoValue}.${LOGO_EXT[logoValue] ?? "svg"}`}
+        alt={nama}
+        width={56}
+        height={32}
+        className="h-8 w-14 object-contain"
+        onError={() => setImgError(true)}
+      />
+    );
+  }
+
+  return (
+    <span
+      className={[
+        "flex h-8 w-14 shrink-0 items-center justify-center rounded text-xs font-bold text-white",
+        colorClass,
+      ].join(" ")}
+    >
+      {initials}
+    </span>
+  );
+}
+
+// ─── Payment Method Selector ───────────────────────────────────────────────────
+
+function PaymentMethodSelector({
+  groups,
+  isLoading,
+  isError,
+  selectedKode,
+  onSelect,
+  qrisDisabled,
+}: {
+  groups: PaymentGroup[];
+  isLoading: boolean;
+  isError: boolean;
+  selectedKode: string | null;
+  onSelect: (kode: string) => void;
+  qrisDisabled?: boolean;
+}) {
+  const t = useTranslations("CheckoutPage");
+  const [activeGroupUrutan, setActiveGroupUrutan] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (groups.length > 0 && activeGroupUrutan === null) {
+      setActiveGroupUrutan(groups[0].urutan);
+    }
+  }, [groups, activeGroupUrutan]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-2 rounded border border-gray-200 bg-white px-4 py-3">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#ffcf02] border-t-black" />
+        <span className="text-sm text-gray-600">{t("paymentMethodLoading")}</span>
+      </div>
+    );
+  }
+
+  if (isError || groups.length === 0) {
+    return (
+      <p className="text-sm text-red-500">{t("paymentMethodError")}</p>
+    );
+  }
+
+  const activeGroup = groups.find((g) => g.urutan === activeGroupUrutan) ?? groups[0];
+  const selectedChannel = groups
+    .flatMap((g) => g.metode)
+    .find((c) => c.kode === selectedKode);
+
+  return (
+    <div className="flex flex-col gap-3">
+      {/* Selected summary — shown when a method is picked */}
+      {selectedChannel && (
+        <div className="flex items-center gap-4 rounded border border-[#01798A] bg-[#f0fafb] px-4 py-3">
+          <div className="flex h-10 w-16 shrink-0 items-center justify-center">
+            <PaymentLogo logoValue={selectedChannel.logo_value} nama={selectedChannel.nama} />
+          </div>
+          <div className="flex flex-1 flex-col gap-0.5">
+            <span className="text-xs font-medium text-[#01798A]">{t("paymentMethodSelected")}</span>
+            <span className="text-base font-semibold text-black">{selectedChannel.nama}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Group tabs */}
+      <div className="flex flex-wrap gap-2">
+        {groups.map((group) => (
+          <button
+            key={group.urutan}
+            type="button"
+            onClick={() => setActiveGroupUrutan(group.urutan)}
+            className={[
+              "rounded-full border px-3 py-1 text-xs font-semibold transition-colors",
+              activeGroupUrutan === group.urutan
+                ? "border-[#ffcf02] bg-[#ffcf02] text-black"
+                : "border-gray-300 bg-white text-gray-600 hover:border-gray-400",
+            ].join(" ")}
+          >
+            {group.nama}
+          </button>
+        ))}
+      </div>
+
+      {/* Channel grid */}
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+        {activeGroup.metode
+          .slice()
+          .sort((a, b) => a.urutan - b.urutan)
+          .map((channel) => {
+            const isSelected = selectedKode === channel.kode;
+            const isQrisLimitExceeded = channel.logo_value === "qris" && !!qrisDisabled;
+            const isUnavailable = !channel.is_active || isQrisLimitExceeded;
+
+            return (
+              <button
+                key={channel.id}
+                type="button"
+                disabled={isUnavailable}
+                onClick={() => onSelect(channel.kode)}
+                className={[
+                  "relative flex flex-col items-center justify-center gap-1.5 rounded border px-2 py-3 text-center transition-colors",
+                  isUnavailable
+                    ? "cursor-not-allowed border-gray-100 bg-gray-50 opacity-40"
+                    : isSelected
+                      ? "border-[#01798A] bg-[#f0fafb]"
+                      : "border-gray-200 bg-white hover:border-[#01798A]",
+                ].join(" ")}
+              >
+                {isSelected && (
+                  <span className="absolute right-1.5 top-1.5 flex size-4 items-center justify-center rounded-full bg-[#01798A]">
+                    <svg viewBox="0 0 10 8" className="size-2.5 fill-none stroke-white stroke-2">
+                      <polyline points="1,4 4,7 9,1" />
+                    </svg>
+                  </span>
+                )}
+                <PaymentLogo logoValue={channel.logo_value} nama={channel.nama} />
+                <span className={[
+                  "text-xs font-medium leading-tight",
+                  isSelected ? "text-[#01798A]" : "text-gray-700",
+                ].join(" ")}>
+                  {channel.nama}
+                </span>
+                {isQrisLimitExceeded
+                  ? <span className="text-[10px] text-gray-400">{t("paymentMethodQrisLimit")}</span>
+                  : isUnavailable && (
+                    <span className="text-[10px] text-gray-400">{t("paymentMethodUnavailable")}</span>
+                  )}
+              </button>
+            );
+          })}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
 export const CheckoutClient = () => {
@@ -308,6 +634,7 @@ export const CheckoutClient = () => {
   const { isLoading: sessionLoading } = useProtectRoute();
   const params = useParams<{ locale: string }>();
   const locale = params?.locale === "en" ? "en" : "id";
+  const router = useRouter();
 
   const [notes, setNotes] = useState("");
   const [addressPickerOpen, setAddressPickerOpen] = useState(false);
@@ -318,6 +645,8 @@ export const CheckoutClient = () => {
   const [voucherCode, setVoucherCode] = useState("");
   const [appliedVoucher, setAppliedVoucher] = useState<VoucherData | null>(null);
   const [voucherError, setVoucherError] = useState<string | null>(null);
+  const [insuranceSelected, setInsuranceSelected] = useState(false);
+  const [selectedPaymentKode, setSelectedPaymentKode] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   // ─── Query ──────────────────────────────────────────────────────────────────
@@ -329,11 +658,31 @@ export const CheckoutClient = () => {
     enabled: !sessionLoading,
   });
 
+  const pickupInfoQuery = useApiQuery<GetPickupInfoResponse>({
+    key: ["pickup-info"],
+    endpoint: "/checkout/pickup-info",
+    enabled: !sessionLoading && deliveryMode === "PICKUP",
+  });
+
+  const paymentMethodsQuery = useApiQuery<GetPaymentMethodsResponse>({
+    key: ["payment-methods"],
+    endpoint: "/checkout/payment-methods",
+    enabled: !sessionLoading,
+  });
+
   // ─── Mutations ──────────────────────────────────────────────────────────────
 
   const placeOrder = useMutate<PlaceOrderResponse, PlaceOrderBody>({
-    endpoint: "/orders",
+    endpoint: "/place-order",
     method: "post",
+    onSuccess: (res) => {
+      const paymentUrl = res.data?.data?.payment_url;
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
+      } else {
+        router.push("/profile");
+      }
+    },
     onError: { title: "PLACE_ORDER" },
   });
 
@@ -372,17 +721,26 @@ export const CheckoutClient = () => {
       ? shippingCost[selectedProvider].biaya_pengiriman
       : 0;
 
+  const insuranceCost =
+    insuranceSelected && selectedProvider === "FORWARDER" && shippingCost?.FORWARDER?.asuransi.tersedia
+      ? shippingCost.FORWARDER.asuransi.premi
+      : 0;
+
   const voucherDiscount = appliedVoucher?.nilai_potongan ?? 0;
+
+  const totalAmount = data
+    ? Math.max(0, data.biaya_produk + data.biaya_ppn + selectedProviderCost + insuranceCost - voucherDiscount)
+    : 0;
 
   const totalPayment = data
     ? new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
         maximumFractionDigits: 0,
-      }).format(
-        Math.max(0, data.biaya_produk + data.biaya_ppn + selectedProviderCost - voucherDiscount),
-      )
+      }).format(totalAmount)
     : "Rp 0";
+
+  const isQrisDisabled = totalAmount > 10_000_000;
 
   // ─── Effects ─────────────────────────────────────────────────────────────────
 
@@ -390,19 +748,84 @@ export const CheckoutClient = () => {
     if (deliveryMode === "DELIVERY" && address?.id) {
       setShippingCost(null);
       setSelectedProvider(null);
+      setInsuranceSelected(false);
       checkShipping.mutate({ body: { alamat_buyer_id: address.id } });
     }
     if (deliveryMode === "PICKUP") {
       setShippingCost(null);
       setSelectedProvider(null);
+      setInsuranceSelected(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryMode, address?.id]);
 
+  useEffect(() => {
+    setInsuranceSelected(false);
+  }, [selectedProvider]);
+
+  useEffect(() => {
+    if (!isQrisDisabled) return;
+    const allChannels = (paymentMethodsQuery.data?.data ?? []).flatMap((g) => g.metode);
+    const selectedChannel = allChannels.find((c) => c.kode === selectedPaymentKode);
+    if (selectedChannel?.logo_value === "qris") {
+      setSelectedPaymentKode(null);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isQrisDisabled]);
+
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
   const handlePlaceOrder = () => {
-    placeOrder.mutate({ body: { notes: notes.trim() || undefined } });
+    if (!deliveryMode) {
+      toast.error(t("deliveryModeRequired"));
+      return;
+    }
+    if (deliveryMode === "DELIVERY" && !selectedProvider) {
+      toast.error(t("deliveryProviderRequired"));
+      return;
+    }
+    if (deliveryMode === "DELIVERY" && !address) {
+      toast.error(t("deliveryAddressRequired"));
+      return;
+    }
+    if (deliveryMode === "DELIVERY" && !shippingCost) {
+      toast.error(t("deliveryShippingCostRequired"));
+      return;
+    }
+    if (!selectedPaymentKode) {
+      toast.error(t("paymentMethodRequired"));
+      return;
+    }
+
+    const deliveryType: "PICKUP" | "DELIVEREE" | "FORWARDER" =
+      deliveryMode === "PICKUP" ? "PICKUP" : selectedProvider!;
+
+    const allChannels = (paymentMethodsQuery.data?.data ?? []).flatMap((g) => g.metode);
+    const selectedChannel = allChannels.find((c) => c.kode === selectedPaymentKode);
+
+    const successReturnUrl = `${window.location.origin}/${locale}/profile/orders?payment_success=1`;
+
+    placeOrder.mutate({
+      body: {
+        delivery_type: deliveryType,
+        biaya_pengiriman:
+          deliveryMode === "PICKUP"
+            ? 0
+            : (shippingCost?.[deliveryType]?.biaya_pengiriman ?? 0),
+        ...(deliveryMode !== "PICKUP" && address?.id
+          ? { alamat_buyer_id: address.id }
+          : {}),
+        ...(insuranceSelected && shippingCost?.FORWARDER?.asuransi.tersedia
+          ? { with_insurance: true, insurance_premi: shippingCost.FORWARDER.asuransi.premi }
+          : {}),
+        ...(selectedChannel
+          ? { metode_pembayaran_id: selectedChannel.id, metode_pembayaran_kode: selectedChannel.kode }
+          : {}),
+        ...(notes.trim() ? { catatan: notes.trim() } : {}),
+        ...(appliedVoucher ? { kupon_kode: appliedVoucher.kode } : {}),
+        success_return_url: successReturnUrl,
+      },
+    });
   };
 
   // ─── Render states ────────────────────────────────────────────────────────────
@@ -524,14 +947,12 @@ export const CheckoutClient = () => {
 
             {/* Pickup info */}
             {deliveryMode === "PICKUP" && (
-              <div className="flex items-center gap-3 rounded border border-green-200 bg-green-50 px-4 py-3">
-                <Package className="size-5 shrink-0 text-green-600" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-green-800">{t("pickupWarehouseInfo")}</p>
-                  <p className="text-xs text-green-600">{t("pickupWarehouseDesc")}</p>
-                </div>
-                <span className="shrink-0 text-sm font-bold text-green-700">{t("shippingFree")}</span>
-              </div>
+              <PickupInfoCard
+                data={pickupInfoQuery.data?.data}
+                isLoading={pickupInfoQuery.isLoading}
+                isError={pickupInfoQuery.isError}
+                locale={locale}
+              />
             )}
 
             {/* Delivery: address + providers */}
@@ -551,7 +972,7 @@ export const CheckoutClient = () => {
                       : "—"}
                   </p>
                   {address && (
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-500">
                       {[address.kecamatan, address.kota, address.provinsi, address.kode_pos]
                         .filter(Boolean)
                         .join(", ")}
@@ -576,7 +997,7 @@ export const CheckoutClient = () => {
                 {!address ? null : checkShipping.isPending ? (
                   <div className="flex items-center gap-2 rounded border border-gray-200 bg-white px-4 py-3">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#ffcf02] border-t-black" />
-                    <span className="text-sm text-gray-400">{t("shippingLoading")}</span>
+                    <span className="text-sm text-gray-600">{t("shippingLoading")}</span>
                   </div>
                 ) : checkShipping.isError ? (
                   <p className="text-sm text-red-500">{t("shippingError")}</p>
@@ -592,6 +1013,7 @@ export const CheckoutClient = () => {
                           ? deliveree.biaya_pengiriman_formatted
                           : t("shippingUnavailable")
                       }
+                      leadTime={deliveree?.tersedia ? deliveree.lead_time : undefined}
                       tooltip={t("delivereeTooltip")}
                       unavailable={!deliveree?.tersedia}
                       selected={selectedProvider === "DELIVEREE"}
@@ -607,6 +1029,7 @@ export const CheckoutClient = () => {
                           ? forwarder.biaya_pengiriman_formatted
                           : t("shippingUnavailable")
                       }
+                      leadTime={forwarder?.tersedia ? forwarder.lead_time : undefined}
                       insurance={
                         forwarder?.tersedia
                           ? {
@@ -625,6 +1048,41 @@ export const CheckoutClient = () => {
                       selected={selectedProvider === "FORWARDER"}
                       onSelect={setSelectedProvider}
                     />
+                    {/* Insurance opt-in */}
+                    {selectedProvider === "FORWARDER" && forwarder?.asuransi.tersedia && (
+                      <button
+                        type="button"
+                        onClick={() => setInsuranceSelected((v) => !v)}
+                        className={[
+                          "flex w-full items-center gap-3 rounded border px-4 py-3 text-left transition-colors",
+                          insuranceSelected
+                            ? "border-[#01798A] bg-[#f0fafb]"
+                            : "border-gray-200 bg-white hover:border-[#01798A]",
+                        ].join(" ")}
+                      >
+                        {/* Checkbox */}
+                        <span
+                          className={[
+                            "flex size-4 shrink-0 items-center justify-center rounded border-2 transition-colors",
+                            insuranceSelected ? "border-[#01798A] bg-[#01798A]" : "border-gray-300",
+                          ].join(" ")}
+                        >
+                          {insuranceSelected && (
+                            <svg viewBox="0 0 10 8" className="size-2.5 fill-none stroke-white stroke-2">
+                              <polyline points="1,4 4,7 9,1" />
+                            </svg>
+                          )}
+                        </span>
+                        <ShieldCheck className={["size-5 shrink-0", insuranceSelected ? "text-[#01798A]" : "text-gray-400"].join(" ")} />
+                        <div className="flex flex-1 flex-col gap-0.5 min-w-0">
+                          <span className="text-sm font-semibold text-black">{t("insuranceOptIn")}</span>
+                          <span className="text-xs text-gray-600">{t("insuranceOptInDesc")}</span>
+                        </div>
+                        <span className="shrink-0 text-sm font-semibold text-black">
+                          +{forwarder.asuransi.premi_formatted}
+                        </span>
+                      </button>
+                    )}
                   </div>
                 ) : null}
               </div>
@@ -634,39 +1092,14 @@ export const CheckoutClient = () => {
           {/* Pilih Cara Bayar */}
           <section className="flex flex-col gap-3">
             <SectionTitle>{t("paymentMethod")}</SectionTitle>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-3 rounded border border-gray-200 bg-white px-4 py-3">
-                <span className="shrink-0 text-[#ffcf02]">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="size-5 fill-[#ffcf02]"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2H2V7zm0 4h20v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6zm3 3a1 1 0 0 0 0 2h3a1 1 0 0 0 0-2H5z" />
-                  </svg>
-                </span>
-                <span className="flex-1 text-sm font-medium text-black">{t("directPayment")}</span>
-                <button
-                  type="button"
-                  className="shrink-0 text-sm text-[#01798A] hover:underline"
-                >
-                  {t("chooseOtherPayment")}
-                </button>
-              </div>
-              {/* Payment method card – QRIS */}
-              <div className="flex items-center gap-3 rounded border border-gray-200 bg-white px-4 py-3">
-                <span className="flex h-8 items-center rounded bg-black px-2 text-xs font-black tracking-widest text-white">
-                  QRIS
-                </span>
-                <span className="flex-1" />
-                <button
-                  type="button"
-                  className="shrink-0 text-sm text-[#01798A] hover:underline"
-                >
-                  {t("choosePaymentMethod")}
-                </button>
-              </div>
-            </div>
+            <PaymentMethodSelector
+              groups={paymentMethodsQuery.data?.data ?? []}
+              isLoading={paymentMethodsQuery.isLoading}
+              isError={paymentMethodsQuery.isError}
+              selectedKode={selectedPaymentKode}
+              onSelect={setSelectedPaymentKode}
+              qrisDisabled={isQrisDisabled}
+            />
           </section>
 
           {/* Voucher */}
@@ -785,6 +1218,17 @@ export const CheckoutClient = () => {
                       : "-"
               }
             />
+            {insuranceSelected && shippingCost?.FORWARDER?.asuransi.tersedia && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-1 text-gray-500">
+                  <ShieldCheck className="size-3.5 text-[#01798A]" />
+                  {t("insuranceSummaryLabel")}
+                </span>
+                <span className="font-semibold text-black">
+                  +{shippingCost.FORWARDER.asuransi.premi_formatted}
+                </span>
+              </div>
+            )}
             {appliedVoucher && (
               <div className="flex items-center justify-between text-sm">
                 <span className="text-green-600">{t("voucherDiscount")} ({appliedVoucher.kode})</span>
@@ -819,6 +1263,7 @@ export const CheckoutClient = () => {
         onOpenChange={setAddressPickerOpen}
         onChanged={() => queryClient.invalidateQueries({ queryKey: ["checkout"] })}
       />
+
     </div>
   );
 };

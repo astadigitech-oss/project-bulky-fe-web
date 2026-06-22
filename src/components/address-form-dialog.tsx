@@ -27,10 +27,12 @@ import type {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 export const EMPTY_ADDRESS: AddressFormBody = {
+  label: "",
   name: "",
   phone: "",
   address_reference: "",
   address_detail: "",
+  village: "",
   district: "",
   city: "",
   province: "",
@@ -72,10 +74,12 @@ export function AddressFormDialog({
     if (detailData?.data) {
       const d: AddressDetail = detailData.data;
       setForm({
+        label: d.label ?? "",
         name: d.name,
         phone: d.phone,
         address_reference: d.address_reference ?? "",
         address_detail: d.address_detail,
+        village: d.village ?? "",
         district: d.district,
         city: d.city,
         province: d.province,
@@ -118,10 +122,12 @@ export function AddressFormDialog({
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const textFields = [
+    { key: "label" as const, label: t("labelLabel"), placeholder: t("labelPlaceholder") },
     { key: "name" as const, label: t("nameLabel"), placeholder: t("namePlaceholder"), required: true },
     { key: "phone" as const, label: t("phoneLabel"), placeholder: t("phonePlaceholder"), required: true, type: "tel" },
     { key: "address_detail" as const, label: t("detailLabel"), placeholder: t("detailPlaceholder"), required: true },
     { key: "address_reference" as const, label: t("referenceLabel"), placeholder: t("referencePlaceholder") },
+    { key: "village" as const, label: t("villageLabel"), placeholder: t("villagePlaceholder") },
     { key: "district" as const, label: t("districtLabel"), placeholder: t("districtPlaceholder"), required: true },
     { key: "city" as const, label: t("cityLabel"), placeholder: t("cityPlaceholder"), required: true },
     { key: "province" as const, label: t("provinceLabel"), placeholder: t("provincePlaceholder"), required: true },
@@ -166,6 +172,7 @@ export function AddressFormDialog({
                   setField("longitude", lng);
                   if (resolved) {
                     if (resolved.address_detail) setField("address_detail", resolved.address_detail);
+                    if (resolved.village) setField("village", resolved.village);
                     if (resolved.district) setField("district", resolved.district);
                     if (resolved.city) setField("city", resolved.city);
                     if (resolved.province) setField("province", resolved.province);

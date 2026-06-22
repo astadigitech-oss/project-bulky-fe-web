@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { OrderCard, ProfileShell, orders } from "../_components/profile-shell";
+import { PaymentSuccessModal } from "./_components/payment-success-modal";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,6 +22,9 @@ export default async function StatusPesananPage() {
 
   return (
     <ProfileShell activeTab="orders">
+      <Suspense>
+        <PaymentSuccessModal />
+      </Suspense>
       <div className="mb-12 flex flex-col gap-4 xl:flex-row xl:items-center">
         <p className="shrink-0 text-base text-[#727272]">{t("statusLabel")}</p>
         <div className="flex flex-1 flex-wrap gap-4">

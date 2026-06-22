@@ -41,6 +41,7 @@ export type ChangePasswordBody = {
 
 export type Address = {
   id: string;
+  label: string;
   name: string;
   phone: string;
   is_default: boolean;
@@ -49,12 +50,13 @@ export type Address = {
 
 export type AddressDetail = {
   id: string;
+  label: string;
   name: string;
   phone: string;
-  label: string;
   is_default: boolean;
   address_detail: string;
   address_reference: string | null;
+  village: string | null;
   district: string;
   city: string;
   province: string;
@@ -67,10 +69,12 @@ export type GetAddressesResponse = BaseAuthResponse<Address[]>;
 export type GetAddressDetailResponse = BaseAuthResponse<AddressDetail>;
 
 export type AddressFormBody = {
+  label?: string;
   name: string;
   phone: string;
   address_reference?: string;
   address_detail: string;
+  village?: string;
   district: string;
   city: string;
   province: string;
