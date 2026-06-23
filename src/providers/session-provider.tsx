@@ -29,7 +29,6 @@ const SessionContext = createContext<SessionContextValue>({
 // ─── Provider ────────────────────────────────────────────────────────────────
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const token = getCookie(cookiesKey);
   const queryClient = useQueryClient();
 
@@ -47,7 +46,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     onSuccess: () => {
       deleteCookie(cookiesKey, { path: "/" });
       queryClient.removeQueries({ queryKey: ["session"] });
-      router.push("/login");
+      window.location.href = "/login";
     },
     onError: { title: "LOGOUT" },
   });
