@@ -7,10 +7,15 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("pageTitle") };
 }
 
-const CheckoutPage = () => {
+const CheckoutPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ slug?: string }>;
+}) => {
+  const { slug } = await searchParams;
   return (
     <div className="w-full px-17.5 my-16 mx-auto xl:max-w-7xl max-w-5xl">
-      <CheckoutClient />
+      <CheckoutClient productSlug={slug} />
     </div>
   );
 };

@@ -36,6 +36,7 @@ export type ShippingCostData = {
 
 export type CheckShippingCostBody = {
   alamat_buyer_id: string;
+  slug?: string;
 };
 
 export type CheckShippingCostResponse = BaseAuthResponse<ShippingCostData>;
@@ -114,6 +115,7 @@ export type PlaceOrderBody = {
   catatan?: string;
   kupon_kode?: string;
   success_return_url?: string;
+  slug?: string;
 };
 
 export type PlaceOrderData = {

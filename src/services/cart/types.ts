@@ -5,7 +5,7 @@ import type { BaseAuthResponse } from "@/services/auth/types";
 export type CartItem = {
   id: string;
   image: string;
-  name: string;
+  name: { id: string; en: string };
   price: string;
   is_checked: boolean;
   is_sold: boolean;

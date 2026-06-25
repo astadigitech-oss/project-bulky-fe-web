@@ -629,7 +629,7 @@ function PaymentMethodSelector({
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 
-export const CheckoutClient = () => {
+export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
   const t = useTranslations("CheckoutPage");
   const { isLoading: sessionLoading } = useProtectRoute();
   const params = useParams<{ locale: string }>();
@@ -652,9 +652,9 @@ export const CheckoutClient = () => {
   // ─── Query ──────────────────────────────────────────────────────────────────
 
   const checkoutQuery = useApiQuery<GetCheckoutResponse>({
-    key: ["checkout"],
+    key: ["checkout", productSlug ?? "cart"],
     endpoint: "/checkout/summary",
-    searchParams: { locale },
+    searchParams: { locale, ...(productSlug ? { slug: productSlug } : {}) },
     enabled: !sessionLoading,
   });
 
@@ -749,7 +749,7 @@ export const CheckoutClient = () => {
       setShippingCost(null);
       setSelectedProvider(null);
       setInsuranceSelected(false);
-      checkShipping.mutate({ body: { alamat_buyer_id: address.id } });
+      checkShipping.mutate({ body: { alamat_buyer_id: address.id, ...(productSlug ? { slug: productSlug } : {}) } });
     }
     if (deliveryMode === "PICKUP") {
       setShippingCost(null);
@@ -823,6 +823,7 @@ export const CheckoutClient = () => {
           : {}),
         ...(notes.trim() ? { catatan: notes.trim() } : {}),
         ...(appliedVoucher ? { kupon_kode: appliedVoucher.kode } : {}),
+        ...(productSlug ? { slug: productSlug } : {}),
         success_return_url: successReturnUrl,
       },
     });

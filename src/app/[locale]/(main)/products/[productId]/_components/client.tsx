@@ -155,19 +155,10 @@ export const ProductIdClient = () => {
   };
 
   const handleBuyNow = () => {
-    if (!product?.id) return;
+    if (!product?.slug) return;
     if (!handleRequireLogin("buy-now")) return;
 
-    addToCart.mutate(
-      { body: { product_id: product.id } },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["cart"] });
-          router.push("/checkout");
-        },
-        onError: () => toast.error(t("addToCartError")),
-      },
-    );
+    router.push(`/checkout?slug=${encodeURIComponent(product.slug)}`);
   };
 
   const handlePrevImage = () => {
