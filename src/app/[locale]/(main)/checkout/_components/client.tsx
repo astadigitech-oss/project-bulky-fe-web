@@ -226,7 +226,7 @@ function AddressPickerDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-lg lg:max-w-2xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t("addressSection")}</DialogTitle>
           </DialogHeader>

@@ -382,7 +382,7 @@
       "description": "What do customers say about our products and services? See their experiences here."
     },
     "wholesale": {
-      "title": "Ayo! Register to Become",
+      "title": "Register to Become",
       "titleHighlight": "Wholesale Bulky.id",
       "cta": "Register",
       "form": {
@@ -390,27 +390,18 @@
         "description": "Fill in your business information to become a Bulky.id wholesale member.",
         "fullNameLabel": "Full Name",
         "fullNamePlaceholder": "Enter your full name",
-        "businessNameLabel": "Business / Store Name",
-        "businessNamePlaceholder": "Enter your business name",
         "phoneLabel": "Phone Number",
         "phonePlaceholder": "e.g. 08123456789",
-        "emailLabel": "Email",
-        "emailPlaceholder": "Enter your email address",
         "addressLabel": "Business Address",
         "addressPlaceholder": "Enter your business address",
-        "businessTypeLabel": "Business Type",
-        "businessTypePlaceholder": "Select business type",
-        "businessTypes": {
-          "retailer": "Retailer",
-          "distributor": "Distributor",
-          "reseller": "Reseller",
-          "other": "Other"
-        },
-        "notesLabel": "Additional Notes",
-        "notesPlaceholder": "Any additional information (optional)",
+        "budgetLabel": "Budget Range",
+        "budgetPlaceholder": "Select budget range",
+        "categoriesLabel": "Product Categories",
+        "categoriesRequired": "Please select at least one product category",
         "cancel": "Cancel",
         "submit": "Submit",
-        "submitting": "Submitting..."
+        "submitting": "Submitting...",
+        "errorMessage": "Something went wrong. Please try again."
       }
     }
   },
@@ -645,6 +636,15 @@
       "deleting": "Deleting...",
       "confirm": "Delete Account"
     },
+    "mapPickerDialog": {
+      "title": "Pick Location",
+      "description": "Search or click/drag the pin to set a location.",
+      "searchPlaceholder": "Search address on map...",
+      "addressDetected": "Address detected",
+      "cancel": "Cancel",
+      "confirm": "Confirm Location",
+      "selectPin": "Select Location Pin on Map"
+    },
     "addressDialog": {
       "addTitle": "Add New Address",
       "editTitle": "Edit Address",
@@ -671,6 +671,7 @@
       "postalCodeLabel": "Postal Code",
       "postalCodePlaceholder": "12345",
       "locationLabel": "Pin Location on Map",
+      "locationRequired": "Please pin your location on the map.",
       "locationHint": "Search or drop a pin — address fields will be auto-filled from the map result.",
       "addButton": "Add Address",
       "updateButton": "Update",

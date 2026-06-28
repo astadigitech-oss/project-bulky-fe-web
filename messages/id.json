@@ -390,27 +390,18 @@
         "description": "Isi informasi bisnis kamu untuk menjadi member wholesale Bulky.id.",
         "fullNameLabel": "Nama Lengkap",
         "fullNamePlaceholder": "Masukkan nama lengkap kamu",
-        "businessNameLabel": "Nama Usaha / Toko",
-        "businessNamePlaceholder": "Masukkan nama usaha kamu",
         "phoneLabel": "Nomor Telepon",
         "phonePlaceholder": "Contoh: 08123456789",
-        "emailLabel": "Email",
-        "emailPlaceholder": "Masukkan alamat email kamu",
         "addressLabel": "Alamat Usaha",
         "addressPlaceholder": "Masukkan alamat usaha kamu",
-        "businessTypeLabel": "Jenis Usaha",
-        "businessTypePlaceholder": "Pilih jenis usaha",
-        "businessTypes": {
-          "retailer": "Retailer",
-          "distributor": "Distributor",
-          "reseller": "Reseller",
-          "other": "Lainnya"
-        },
-        "notesLabel": "Catatan Tambahan",
-        "notesPlaceholder": "Informasi tambahan (opsional)",
+        "budgetLabel": "Kisaran Budget",
+        "budgetPlaceholder": "Pilih kisaran budget",
+        "categoriesLabel": "Kategori Produk",
+        "categoriesRequired": "Pilih minimal satu kategori produk",
         "cancel": "Batal",
         "submit": "Kirim",
-        "submitting": "Mengirim..."
+        "submitting": "Mengirim...",
+        "errorMessage": "Terjadi kesalahan. Silakan coba lagi."
       }
     }
   },
@@ -645,6 +636,15 @@
       "deleting": "Menghapus...",
       "confirm": "Hapus Akun"
     },
+    "mapPickerDialog": {
+      "title": "Pilih Lokasi",
+      "description": "Cari alamat atau klik/seret pin untuk menentukan titik lokasi.",
+      "searchPlaceholder": "Cari alamat di peta...",
+      "addressDetected": "Alamat terdeteksi",
+      "cancel": "Batal",
+      "confirm": "Konfirmasi Lokasi",
+      "selectPin": "Pilih Titik Lokasi di Peta"
+    },
     "addressDialog": {
       "addTitle": "Tambah Alamat Baru",
       "editTitle": "Edit Alamat",
@@ -671,6 +671,7 @@
       "postalCodeLabel": "Kode Pos",
       "postalCodePlaceholder": "12345",
       "locationLabel": "Pin Lokasi di Peta",
+      "locationRequired": "Silakan tentukan titik lokasi di peta terlebih dahulu.",
       "locationHint": "Cari atau seret pin — kolom alamat akan terisi otomatis dari hasil peta.",
       "addButton": "Tambah Alamat",
       "updateButton": "Perbarui",
