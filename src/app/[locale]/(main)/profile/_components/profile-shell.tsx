@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Mail,
   MapPin,
+  Package,
   Truck,
   Warehouse,
 } from "lucide-react";
