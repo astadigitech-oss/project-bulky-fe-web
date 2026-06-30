@@ -509,16 +509,25 @@
       "pageTitle": "Menunggu Pembayaran",
       "heading": "Menunggu Pembayaran",
       "emptyTitle": "Tidak ada produk yang belum dibayar",
-      "emptyAction": "Mulai Belanja"
+      "emptyAction": "Mulai Belanja",
+      "errorLoading": "Gagal memuat data pembayaran.",
+      "card": {
+        "payNow": "Bayar Sekarang"
+      }
     },
     "orders": {
       "pageTitle": "Status Pesanan",
       "statusLabel": "Status",
+      "emptyTitle": "Tidak ada pesanan",
+      "emptyAction": "Mulai Belanja",
+      "errorLoading": "Gagal memuat data pesanan.",
       "filters": {
         "all": "Semua",
         "waitingConfirmation": "Menunggu Konfirmasi",
-        "inProcess": "Proses",
-        "arrived": "Tiba Ditujuan",
+        "inProcess": "Diproses",
+        "arrived": "Siap Kirim",
+        "shipped": "Dikirim",
+        "completed": "Selesai",
         "cancelled": "Dibatalkan"
       },
       "paymentSuccessTitle": "Pembayaran Berhasil!",
@@ -529,9 +538,67 @@
         "palletType": "Tipe Palet Online",
         "deliveryStatus": "Status Pengiriman",
         "viewHistory": "Lihat Riwayat",
+        "viewDetail": "Detail Pesanan",
         "trackOrder": "Lacak Pesanan",
+        "pickupInfo": "Info Pickup",
         "statusPacking": "Dikemas",
         "statusDone": "Selesai"
+      },
+      "pickupModal": {
+        "title": "Informasi Pickup",
+        "description": "Pesananmu siap diambil! Datangi gudang kami sesuai jadwal operasional dan tunjukkan bukti pesanan saat tiba.",
+        "schedule": "Jadwal Operasional",
+        "closed": "Tutup",
+        "today": "Hari ini",
+        "copyAddress": "Salin alamat",
+        "copied": "Tersalin!"
+      }
+    },
+    "orderDetail": {
+      "pageTitle": "Detail Pesanan",
+      "back": "Kembali ke Pesanan",
+      "orderId": "Nomor Pesanan",
+      "createdAt": "Dibuat pada",
+      "palletType": "Tipe Palet Online",
+      "progress": "Status Pesanan",
+      "history": "Riwayat Status",
+      "historyEmpty": "Belum ada riwayat status.",
+      "notes": "Catatan",
+      "address": "Alamat Pengiriman",
+      "payNow": "Bayar Sekarang",
+      "errorLoading": "Gagal memuat detail pesanan.",
+      "pickupInfo": "Info Pickup",
+      "trackOrder": "Lacak Pesanan",
+      "orderStatus": {
+        "PROCESSING": "Diproses",
+        "READY": "Siap Kirim",
+        "SHIPPED": "Dikirim",
+        "COMPLETED": "Selesai",
+        "CANCELLED": "Dibatalkan"
+      },
+      "orderStatusPickup": {
+        "READY": "Siap Diambil",
+        "SHIPPED": "Sudah Diambil"
+      },
+      "deliveryType": {
+        "PICKUP": "Ambil di Gudang",
+        "DELIVEREE": "Deliveree",
+        "FORWARDER": "Forwarder"
+      },
+      "stepper": {
+        "ordered": "Pesanan Dibuat",
+        "packed": "Dikemas",
+        "shipped": "Dikirim",
+        "readyPickup": "Siap Diambil",
+        "done": "Selesai"
+      },
+      "biaya": {
+        "title": "Rincian Biaya",
+        "produk": "Biaya Produk",
+        "pengiriman": "Biaya Pengiriman",
+        "ppn": "PPN",
+        "lainnya": "Asuransi Pengiriman",
+        "total": "Total Pembayaran"
       }
     },
     "tracking": {

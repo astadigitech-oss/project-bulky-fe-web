@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Mail,
   MapPin,
-  Package,
   Truck,
   Warehouse,
 } from "lucide-react";
@@ -18,24 +17,6 @@ const tabValues = ["payments", "orders", "group-buy", "edit"] as const;
 
 type ProfileTab = (typeof tabValues)[number];
 
-export type OrderStatus = "Dikemas" | "Selesai";
-
-export const orders = [
-  {
-    id: "22312938123",
-    name: "Palet Sepatu Olahraga",
-    price: "Rp. 5.000.000",
-    originalPrice: "Rp. 6.500.000",
-    status: "Dikemas" as OrderStatus,
-  },
-  {
-    id: "22312938124",
-    name: "Palet Sepatu Olahraga 2",
-    price: "Rp. 5.950.000",
-    originalPrice: "Rp. 7.500.000",
-    status: "Selesai" as OrderStatus,
-  },
-];
 
 export async function ProfileShell({
   activeTab,
@@ -152,58 +133,6 @@ export function EmptyState({
         {actionLabel}
       </Button>
     </div>
-  );
-}
-
-export async function OrderCard({ order }: { order: (typeof orders)[number] }) {
-  const t = await getTranslations("ProfilePages.orders.card");
-  const isDone = order.status === "Selesai";
-
-  return (
-    <article className="border-b border-[#d9d9d9] py-4 last:border-b-0">
-      <div className="grid gap-6 md:grid-cols-[minmax(360px,1fr)_150px_170px] md:items-start">
-        <div className="flex gap-3">
-          <div className="flex size-30 shrink-0 items-center justify-center rounded-[20px] border border-[#727272cc] bg-[#efefef]">
-            <Package className="size-16 text-[#727272]" strokeWidth={1.4} />
-          </div>
-          <div>
-            <h3 className="mb-2 text-sm text-black">{order.name}</h3>
-            <p className="mb-1 text-xl font-bold text-[#ff9900]">
-              {order.price}
-            </p>
-            <p className="mb-7 text-[11px] text-[#727272] line-through">
-              {order.originalPrice}
-            </p>
-            <p className="flex items-center gap-1.5 text-xs text-[#01798a]">
-              <Warehouse className="size-4" /> {t("palletType")}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-start gap-7 text-sm md:items-center">
-          <p className="whitespace-nowrap text-black">{t("deliveryStatus")}</p>
-          <p className="whitespace-nowrap font-bold text-[#01798a]">
-            {isDone ? t("statusDone") : t("statusPacking")}
-          </p>
-        </div>
-
-        {isDone ? (
-          <button
-            type="button"
-            className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300] hover:text-black"
-          >
-            {t("viewHistory")}
-          </button>
-        ) : (
-          <Link
-            href="/profile/orders/lacak"
-            className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300] hover:text-black"
-          >
-            {t("trackOrder")}
-          </Link>
-        )}
-      </div>
-    </article>
   );
 }
 

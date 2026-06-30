@@ -512,16 +512,25 @@ declare const messages: {
       "pageTitle": "Waiting for Payment",
       "heading": "Waiting for Payment",
       "emptyTitle": "No unpaid products",
-      "emptyAction": "Start Shopping"
+      "emptyAction": "Start Shopping",
+      "errorLoading": "Failed to load payment data.",
+      "card": {
+        "payNow": "Pay Now"
+      }
     },
     "orders": {
       "pageTitle": "Order Status",
       "statusLabel": "Status",
+      "emptyTitle": "No orders yet",
+      "emptyAction": "Start Shopping",
+      "errorLoading": "Failed to load order data.",
       "filters": {
         "all": "All",
         "waitingConfirmation": "Waiting Confirmation",
         "inProcess": "In Process",
-        "arrived": "Arrived",
+        "arrived": "Ready to Ship",
+        "shipped": "Shipped",
+        "completed": "Completed",
         "cancelled": "Cancelled"
       },
       "paymentSuccessTitle": "Payment Successful!",
@@ -532,9 +541,67 @@ declare const messages: {
         "palletType": "Online Pallet Type",
         "deliveryStatus": "Delivery Status",
         "viewHistory": "View History",
+        "viewDetail": "Order Detail",
         "trackOrder": "Track Order",
+        "pickupInfo": "Pickup Info",
         "statusPacking": "Packing",
         "statusDone": "Done"
+      },
+      "pickupModal": {
+        "title": "Pickup Information",
+        "description": "Your order is ready to collect! Visit our warehouse during operating hours and show your order confirmation upon arrival.",
+        "schedule": "Operating Hours",
+        "closed": "Closed",
+        "today": "Today",
+        "copyAddress": "Copy address",
+        "copied": "Copied!"
+      }
+    },
+    "orderDetail": {
+      "pageTitle": "Order Detail",
+      "back": "Back to Orders",
+      "orderId": "Order Number",
+      "createdAt": "Created on",
+      "palletType": "Online Pallet Type",
+      "progress": "Order Progress",
+      "history": "Status History",
+      "historyEmpty": "No status history yet.",
+      "notes": "Notes",
+      "address": "Shipping Address",
+      "payNow": "Pay Now",
+      "errorLoading": "Failed to load order detail.",
+      "pickupInfo": "Pickup Info",
+      "trackOrder": "Track Order",
+      "orderStatus": {
+        "PROCESSING": "In Process",
+        "READY": "Ready to Ship",
+        "SHIPPED": "Shipped",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
+      },
+      "orderStatusPickup": {
+        "READY": "Ready for Pickup",
+        "SHIPPED": "Picked Up"
+      },
+      "deliveryType": {
+        "PICKUP": "Warehouse Pickup",
+        "DELIVEREE": "Deliveree",
+        "FORWARDER": "Forwarder"
+      },
+      "stepper": {
+        "ordered": "Order Placed",
+        "packed": "Packed",
+        "shipped": "Shipped",
+        "readyPickup": "Ready for Pickup",
+        "done": "Completed"
+      },
+      "biaya": {
+        "title": "Cost Breakdown",
+        "produk": "Product Cost",
+        "pengiriman": "Shipping Cost",
+        "ppn": "VAT",
+        "lainnya": "Shipping Insurance",
+        "total": "Total Payment"
       }
     },
     "tracking": {
