@@ -112,6 +112,7 @@ export type OrderDetail = {
   stepper: OrderStepper;
   status_history: OrderStatusHistoryItem[];
   payment_url: string | null;
+  tracking_url: string | null;
   expired_at: string | null;
   created_at: string;
 };
