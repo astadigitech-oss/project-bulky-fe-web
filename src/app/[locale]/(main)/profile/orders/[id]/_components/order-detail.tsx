@@ -45,14 +45,13 @@ function Stepper({
     <div className="grid grid-cols-4 gap-0">
       {steps.map((step, index) => {
         const Icon = step.icon;
-        const nextDone = index < steps.length - 1 ? steps[index + 1].done : false;
         return (
           <div key={step.label} className="relative text-center">
             {index < steps.length - 1 && (
               <div
                 className={cn(
                   "absolute left-1/2 top-6 hidden h-1 w-full md:block",
-                  nextDone ? "bg-[#ffcf02]" : "bg-[#d9d9d9]",
+                  step.done ? "bg-[#ffcf02]" : "bg-[#d9d9d9]",
                 )}
               />
             )}
