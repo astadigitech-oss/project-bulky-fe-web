@@ -7,10 +7,12 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { Order } from "@/services/orders/types";
 import { PickupInfoModal } from "./pickup-info-modal";
+import { TrackingModal } from "./tracking-modal";
 
 function DeliveryButton({ order }: { order: Order }) {
   const t = useTranslations("ProfilePages.orders.card");
   const [pickupOpen, setPickupOpen] = useState(false);
+  const [trackingOpen, setTrackingOpen] = useState(false);
 
   if (order.order_status === "CANCELLED") return null;
 
@@ -29,29 +31,25 @@ function DeliveryButton({ order }: { order: Order }) {
     );
   }
 
-  if (order.delivery_type === "DELIVEREE" && order.tracking_url) {
+  if (
+    order.order_status === "SHIPPED" &&
+    (order.delivery_type === "DELIVEREE" || order.delivery_type === "FORWARDER")
+  ) {
     return (
-      <a
-        href={order.tracking_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex h-10 items-center justify-center whitespace-nowrap rounded bg-[#ffcf02] px-5 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300]"
-      >
-        {t("trackOrder")}
-      </a>
-    );
-  }
-
-  if (order.delivery_type === "FORWARDER") {
-    // Tracking modal — API menyusul
-    return (
-      <button
-        type="button"
-        disabled
-        className="flex h-10 items-center justify-center whitespace-nowrap rounded bg-[#efefef] px-5 text-sm font-bold text-[#727272] cursor-not-allowed"
-      >
-        {t("trackOrder")}
-      </button>
+      <>
+        <button
+          type="button"
+          onClick={() => setTrackingOpen(true)}
+          className="flex h-10 items-center justify-center whitespace-nowrap rounded bg-[#ffcf02] px-5 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300]"
+        >
+          {t("trackOrder")}
+        </button>
+        <TrackingModal
+          open={trackingOpen}
+          onClose={() => setTrackingOpen(false)}
+          orderId={order.id}
+        />
+      </>
     );
   }
 

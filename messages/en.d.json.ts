@@ -602,6 +602,15 @@ declare const messages: {
         "ppn": "VAT",
         "lainnya": "Shipping Insurance",
         "total": "Total Payment"
+      },
+      "trackingModal": {
+        "title": "Track Order",
+        "bookingNumber": "Booking Number",
+        "deliveryStatus": "Delivery Status",
+        "trackExternally": "Open Tracking Page",
+        "history": "Tracking History",
+        "noData": "No tracking information available yet.",
+        "loading": "Loading tracking information..."
       }
     },
     "tracking": {

@@ -599,6 +599,15 @@
         "ppn": "PPN",
         "lainnya": "Asuransi Pengiriman",
         "total": "Total Pembayaran"
+      },
+      "trackingModal": {
+        "title": "Lacak Pesanan",
+        "bookingNumber": "Nomor Booking",
+        "deliveryStatus": "Status Pengiriman",
+        "trackExternally": "Buka Halaman Tracking",
+        "history": "Riwayat Pengiriman",
+        "noData": "Informasi tracking belum tersedia.",
+        "loading": "Memuat informasi tracking..."
       }
     },
     "tracking": {

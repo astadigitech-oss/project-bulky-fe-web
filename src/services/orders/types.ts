@@ -123,6 +123,28 @@ export type GetOrderDetailResponse = {
   data: OrderDetail;
 };
 
+// ─── Tracking ─────────────────────────────────────────────────────────────────
+
+export type TrackingStatusHistoryItem = {
+  status_date: string;
+  status_name: string;
+  status_time: string;
+};
+
+export type TrackingData = {
+  delivery_type: string;
+  tracking_url: string | null;
+  delivery_status: string | null;
+  booking_number: string | null;
+  status_history: TrackingStatusHistoryItem[] | null;
+};
+
+export type GetTrackingResponse = {
+  success: boolean;
+  message: string;
+  data: TrackingData;
+};
+
 // ─── Pickup Info ──────────────────────────────────────────────────────────────
 
 export type PickupScheduleDay = {

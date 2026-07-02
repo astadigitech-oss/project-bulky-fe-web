@@ -2,9 +2,12 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useApiQuery } from "@/lib/query/use-query";
+import { useProtectRoute } from "@/providers/session-provider";
 import type { GetProfileResponse } from "@/services/profile/types";
 
 export function ProfileSidebarClient() {
+  useProtectRoute();
+
   const { data, isLoading } = useApiQuery<GetProfileResponse>({
     key: ["profile"],
     endpoint: "/profile",

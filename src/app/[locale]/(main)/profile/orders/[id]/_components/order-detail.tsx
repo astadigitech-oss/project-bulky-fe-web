@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { useApiQuery } from "@/lib/query/use-query";
 import type { GetOrderDetailResponse, OrderStepperStep, DeliveryType } from "@/services/orders/types";
 import { PickupInfoModal } from "../../_components/pickup-info-modal";
+import { TrackingModal } from "../../_components/tracking-modal";
 
 // ─── Stepper ──────────────────────────────────────────────────────────────────
 
@@ -135,6 +136,7 @@ export function OrderDetail({ id }: { id: string }) {
   const t = useTranslations("ProfilePages.orderDetail");
   const locale = useLocale();
   const [pickupOpen, setPickupOpen] = useState(false);
+  const [trackingOpen, setTrackingOpen] = useState(false);
 
   const { data, isLoading, isError } = useApiQuery<GetOrderDetailResponse>({
     key: ["order-detail", id, locale],
@@ -322,24 +324,21 @@ export function OrderDetail({ id }: { id: string }) {
               <PickupInfoModal open={pickupOpen} onClose={() => setPickupOpen(false)} />
             </>
           )}
-          {order.delivery_type === "DELIVEREE" && order.tracking_url && (
-            <a
-              href={order.tracking_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300]"
-            >
-              {t("trackOrder")}
-            </a>
-          )}
-          {order.delivery_type === "FORWARDER" && (
-            <button
-              type="button"
-              disabled
-              className="flex h-11 cursor-not-allowed items-center justify-center rounded bg-[#efefef] px-8 text-sm font-bold text-[#727272]"
-            >
-              {t("trackOrder")}
-            </button>
+          {order.order_status === "SHIPPED" && (order.delivery_type === "DELIVEREE" || order.delivery_type === "FORWARDER") && (
+            <>
+              <button
+                type="button"
+                onClick={() => setTrackingOpen(true)}
+                className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300]"
+              >
+                {t("trackOrder")}
+              </button>
+              <TrackingModal
+                open={trackingOpen}
+                onClose={() => setTrackingOpen(false)}
+                orderId={order.id}
+              />
+            </>
           )}
 
           {/* Pay now */}

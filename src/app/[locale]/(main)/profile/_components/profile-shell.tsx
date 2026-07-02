@@ -2,14 +2,6 @@ import Image from "next/image";
 import { Button } from "@ui/button";
 import { Link } from "@i18n/navigation";
 import { cn } from "@/lib/utils";
-import {
-  CheckCircle2,
-  Mail,
-  MapPin,
-  Package,
-  Truck,
-  Warehouse,
-} from "lucide-react";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { ProfileSidebarClient } from "./profile-sidebar-client";
@@ -136,94 +128,3 @@ export function EmptyState({
     </div>
   );
 }
-
-
-export async function TrackingContent() {
-  const t = await getTranslations("ProfilePages.tracking");
-
-  const steps = [
-    { title: t("steps.ordered"), time: "15 Oktober 2025\n12:00 wib", active: true, icon: Package },
-    { title: t("steps.packed"), time: "15 Oktober 2025\n15:00 wib", active: true, icon: Warehouse },
-    { title: t("steps.shipped"), time: "-", active: false, icon: Truck },
-    { title: t("steps.done"), time: "-", active: false, icon: CheckCircle2 },
-  ];
-
-  return (
-    <div>
-      <Button
-        nativeButton={false}
-        variant="ghost"
-        render={<Link href="/profile/orders" />}
-        className="mb-4 h-8 px-0 text-sm text-[#727272] hover:bg-transparent"
-      >
-        {t("back")}
-      </Button>
-      <div className="mb-8 flex flex-wrap items-start justify-between gap-4 border-t border-[#d9d9d9] pt-6">
-        <div className="flex gap-5">
-          <h1 className="text-base text-black">{t("title")}</h1>
-          <p className="text-sm text-[#01798a]">Palet Sepatu Olahraga</p>
-        </div>
-        <p className="text-sm text-[#727272]">Order ID. 22312938123</p>
-      </div>
-
-      <div className="mb-10 grid gap-6 md:grid-cols-4">
-        {steps.map((step, index) => {
-          const Icon = step.icon;
-          return (
-            <div key={step.title} className="relative text-center">
-              {index < steps.length - 1 ? (
-                <div
-                  className={cn(
-                    "absolute left-1/2 top-14 hidden h-1 w-full md:block",
-                    steps[index + 1].active ? "bg-[#ffcf02]" : "bg-[#727272cc]",
-                  )}
-                />
-              ) : null}
-              <div className="relative z-10 mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-white text-[#01798a]">
-                <Icon className="size-9" strokeWidth={1.5} />
-              </div>
-              <div
-                className={cn(
-                  "relative z-10 mx-auto mb-2 size-4 rounded-full border-2 border-white",
-                  step.active ? "bg-[#ffcf02]" : "bg-[#727272cc]",
-                )}
-              />
-              <p className="text-base text-black">{step.title}</p>
-              <p className="whitespace-pre-line text-[13px] text-black">{step.time}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      <section className="border-t border-[#d9d9d9] pt-5">
-        <h2 className="mb-3 text-base text-black">{t("notes")}</h2>
-        <div className="grid gap-8 md:grid-cols-[1fr_1.4fr]">
-          <div>
-            <h3 className="mb-2 flex items-center gap-2 text-sm text-black">
-              <MapPin className="size-4" /> {t("shippingAddress")}
-            </h3>
-            <p className="text-sm text-black">
-              Andi Santoso — Jl. Melati No. 45, RT 05/RW 02, Kel. Cempaka Putih,
-              Jakarta Pusat, DKI Jakarta 10310
-            </p>
-          </div>
-          <div>
-            <h3 className="mb-3 text-base text-black">{t("status")}</h3>
-            <div className="space-y-4">
-              <div className="grid grid-cols-[90px_1fr] gap-4 text-xs text-[#01798a]">
-                <p>15 Okt 2025<br />15:00 wib</p>
-                <p>Paket sedang dikemas di Gudang Warehouse Depok</p>
-              </div>
-              <div className="grid grid-cols-[90px_1fr] gap-4 text-xs text-[#9db2ce]">
-                <p>15 Okt 2025<br />12:00 wib</p>
-                <p>Pesanan dibuat</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-export { Mail };
