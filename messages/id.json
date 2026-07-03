@@ -828,6 +828,14 @@
       }
     }
   },
+  "MobileRedirectModal": {
+    "from": "Dipersembahkan oleh",
+    "title": "Belanja Lebih Nyaman di Aplikasi",
+    "description": "Dapatkan pengalaman belanja grosir terbaik di genggamanmu. Download aplikasi Bulky sekarang dan nikmati kemudahan transaksi kapan saja, di mana saja.",
+    "appStore": "Download di App Store",
+    "playStore": "Download di Google Play",
+    "dismiss": "Lanjutkan ke website"
+  },
   "ContactUs": {
     "pageTitle": "Hubungi Kami - Bulky.id",
     "hero": {

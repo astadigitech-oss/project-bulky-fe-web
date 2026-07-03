@@ -831,6 +831,14 @@ declare const messages: {
       }
     }
   },
+  "MobileRedirectModal": {
+    "from": "Presented by",
+    "title": "Shop Easier on the App",
+    "description": "Get the best wholesale shopping experience in your hands. Download the Bulky app now and enjoy seamless transactions anytime, anywhere.",
+    "appStore": "Download on the App Store",
+    "playStore": "Get it on Google Play",
+    "dismiss": "Continue to website"
+  },
   "ContactUs": {
     "pageTitle": "Contact Us - Bulky.id",
     "hero": {
