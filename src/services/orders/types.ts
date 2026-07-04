@@ -8,7 +8,7 @@ export type OrderStatus =
   | "CANCELLED";
 
 export type PaymentStatus = "PENDING" | "PAID";
-export type DeliveryType = "PICKUP" | "DELIVEREE" | "FORWARDER";
+export type DeliveryType = "PICKUP" | "DELIVEREE" | "FORWARDER" | "FORWARDER_LCL";
 
 export type Order = {
   id: string;
@@ -52,7 +52,6 @@ export type GetOrdersResponse = {
 export type OrderStepperStep = {
   done: boolean;
   timestamp: string | null;
-  timestamp_label: string | null;
 };
 
 export type OrderStepper = {
@@ -64,7 +63,6 @@ export type OrderStepper = {
 
 export type OrderStatusHistoryItem = {
   timestamp: string;
-  timestamp_label: string;
   label: string;
 };
 

@@ -583,7 +583,8 @@
       "deliveryType": {
         "PICKUP": "Ambil di Gudang",
         "DELIVEREE": "Deliveree",
-        "FORWARDER": "Forwarder"
+        "FORWARDER": "Forwarder",
+        "FORWARDER_LCL": "Forwarder LCL"
       },
       "stepper": {
         "ordered": "Pesanan Dibuat",

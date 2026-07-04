@@ -586,7 +586,8 @@ declare const messages: {
       "deliveryType": {
         "PICKUP": "Warehouse Pickup",
         "DELIVEREE": "Deliveree",
-        "FORWARDER": "Forwarder"
+        "FORWARDER": "Forwarder",
+        "FORWARDER_LCL": "Forwarder LCL"
       },
       "stepper": {
         "ordered": "Order Placed",

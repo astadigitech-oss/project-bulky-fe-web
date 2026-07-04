@@ -3,7 +3,19 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import { Loader2, Package, Warehouse, Truck, CheckCircle2, MapPin, FileText, Store } from "lucide-react";
+
+function formatTimestampWIB(timestamp: string | null | undefined, locale: string): string | null {
+  if (!timestamp) return null;
+  return new Date(timestamp).toLocaleString(locale === "id" ? "id-ID" : "en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Jakarta",
+  });
+}
+import { Loader2, Package, Warehouse, Truck, CheckCircle2, MapPin, FileText, Store, Ship } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { useApiQuery } from "@/lib/query/use-query";
@@ -33,6 +45,7 @@ function Stepper({
   deliveryType: DeliveryType;
 }) {
   const t = useTranslations("ProfilePages.orderDetail.stepper");
+  const locale = useLocale();
   const isPickup = deliveryType === "PICKUP";
 
   const steps = [
@@ -71,9 +84,9 @@ function Stepper({
             <p className={cn("text-sm font-medium", step.done ? "text-black" : "text-[#b0b0b0]")}>
               {step.label}
             </p>
-            {step.timestamp_label && (
+            {step.timestamp && (
               <p className="mt-0.5 whitespace-pre-line text-xs text-[#727272]">
-                {step.timestamp_label}
+                {formatTimestampWIB(step.timestamp, locale)}
               </p>
             )}
           </div>
@@ -117,6 +130,7 @@ const DELIVERY_ICONS: Record<DeliveryType, React.ElementType> = {
   PICKUP: Store,
   DELIVEREE: Truck,
   FORWARDER: Truck,
+  FORWARDER_LCL: Ship,
 };
 
 function DeliveryBadge({ type }: { type: DeliveryType }) {
@@ -247,7 +261,7 @@ export function OrderDetail({ id }: { id: string }) {
                     <p className={cn("text-sm", i === 0 ? "font-semibold text-black" : "text-[#727272]")}>
                       {item.label}
                     </p>
-                    <p className="text-xs text-[#b0b0b0]">{item.timestamp_label}</p>
+                    <p className="text-xs text-[#b0b0b0]">{formatTimestampWIB(item.timestamp, locale)}</p>
                   </div>
                 </div>
               ))}
@@ -324,7 +338,7 @@ export function OrderDetail({ id }: { id: string }) {
               <PickupInfoModal open={pickupOpen} onClose={() => setPickupOpen(false)} />
             </>
           )}
-          {order.order_status === "SHIPPED" && (order.delivery_type === "DELIVEREE" || order.delivery_type === "FORWARDER") && (
+          {order.order_status === "SHIPPED" && (order.delivery_type === "DELIVEREE" || order.delivery_type === "FORWARDER" || order.delivery_type === "FORWARDER_LCL") && (
             <>
               <button
                 type="button"

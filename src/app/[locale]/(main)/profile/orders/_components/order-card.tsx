@@ -33,7 +33,7 @@ function DeliveryButton({ order }: { order: Order }) {
 
   if (
     order.order_status === "SHIPPED" &&
-    (order.delivery_type === "DELIVEREE" || order.delivery_type === "FORWARDER")
+    (order.delivery_type === "DELIVEREE" || order.delivery_type === "FORWARDER" || order.delivery_type === "FORWARDER_LCL")
   ) {
     return (
       <>
