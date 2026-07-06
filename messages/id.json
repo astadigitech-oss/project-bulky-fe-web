@@ -630,6 +630,36 @@
       "heading": "Patungan",
       "emptyTitle": "Tidak ada pembayaran patungan",
       "emptyAction": "Buat Pembayaran Patungan"
+    },
+    "review": {
+      "pageTitle": "Ulasan Saya",
+      "tabPending": "Belum Direview",
+      "tabReviewed": "Sudah Direview",
+      "emptyPendingTitle": "Tidak ada pesanan yang perlu direview",
+      "emptyReviewedTitle": "Belum ada ulasan",
+      "emptyAction": "Mulai Belanja",
+      "errorLoading": "Gagal memuat data ulasan.",
+      "pendingCard": {
+        "qty": "{qty} item",
+        "writeReview": "Tulis Ulasan"
+      },
+      "reviewedCard": {
+        "approved": "Disetujui",
+        "pending": "Menunggu Persetujuan"
+      },
+      "addModal": {
+        "title": "Tulis Ulasan",
+        "ratingLabel": "Rating",
+        "commentLabel": "Komentar",
+        "commentPlaceholder": "Ceritakan pengalamanmu dengan produk ini...",
+        "imageLabel": "Foto (opsional)",
+        "imageHint": "JPG/PNG",
+        "submit": "Kirim Ulasan",
+        "submitting": "Mengirim...",
+        "successMessage": "Ulasan berhasil dikirim!",
+        "ratingRequired": "Pilih rating terlebih dahulu.",
+        "errorMessage": "Gagal mengirim ulasan. Coba lagi."
+      }
     }
   },
   "Profile": {
@@ -638,6 +668,7 @@
       "payment": "Pembayaran",
       "orders": "Pesanan",
       "patungan": "Patungan",
+      "review": "Ulasan",
       "edit": "Edit Profil"
     },
     "edit": {

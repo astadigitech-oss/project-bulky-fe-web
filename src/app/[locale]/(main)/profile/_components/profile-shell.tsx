@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { ProfileSidebarClient } from "./profile-sidebar-client";
 
-const tabValues = ["payments", "orders", "group-buy", "edit"] as const;
+const tabValues = ["payments", "orders", "group-buy", "review", "edit"] as const;
 
 type ProfileTab = (typeof tabValues)[number];
 
@@ -24,6 +24,7 @@ export async function ProfileShell({
     { href: "/profile/payments", label: t("tabs.payment"), value: "payments" },
     { href: "/profile/orders", label: t("tabs.orders"), value: "orders" },
     { href: "/profile/group-buy", label: t("tabs.patungan"), value: "group-buy" },
+    { href: "/profile/review", label: t("tabs.review"), value: "review" },
     { href: "/profile/edit", label: t("tabs.edit"), value: "edit" },
   ] as const;
 
@@ -56,13 +57,13 @@ export async function ProfileShell({
 
         <section className="min-h-[640px] flex-1 overflow-hidden rounded-lg bg-white shadow-sm lg:h-[calc(100vh-9rem)]">
           <div className="h-full overflow-y-auto p-6">
-            <nav className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <nav className="mb-8 flex gap-2">
               {tabs.map((tab) => (
                 <Link
                   key={tab.value}
                   href={tab.href}
                   className={cn(
-                    "flex h-9 items-center justify-center whitespace-nowrap rounded-lg text-base font-normal text-black transition-colors",
+                    "flex h-9 flex-1 items-center justify-center whitespace-nowrap rounded-lg text-base font-normal text-black transition-colors",
                     activeTab === tab.value
                       ? "bg-[#ffcf02] font-bold hover:bg-[#ffcf02]"
                       : "bg-[#efefef] hover:bg-[#e5e5e5]",

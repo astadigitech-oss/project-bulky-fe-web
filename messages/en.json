@@ -630,6 +630,36 @@
       "heading": "Group Buy",
       "emptyTitle": "No group payments",
       "emptyAction": "Create Group Payment"
+    },
+    "review": {
+      "pageTitle": "My Reviews",
+      "tabPending": "Pending Review",
+      "tabReviewed": "Reviewed",
+      "emptyPendingTitle": "No orders to review",
+      "emptyReviewedTitle": "No reviews yet",
+      "emptyAction": "Start Shopping",
+      "errorLoading": "Failed to load review data.",
+      "pendingCard": {
+        "qty": "{qty} item",
+        "writeReview": "Write Review"
+      },
+      "reviewedCard": {
+        "approved": "Approved",
+        "pending": "Awaiting Approval"
+      },
+      "addModal": {
+        "title": "Write a Review",
+        "ratingLabel": "Rating",
+        "commentLabel": "Comment",
+        "commentPlaceholder": "Share your experience with this product...",
+        "imageLabel": "Photo (optional)",
+        "imageHint": "JPG/PNG",
+        "submit": "Submit Review",
+        "submitting": "Submitting...",
+        "successMessage": "Review submitted successfully!",
+        "ratingRequired": "Please select a rating first.",
+        "errorMessage": "Failed to submit review. Please try again."
+      }
     }
   },
   "Profile": {
@@ -638,6 +668,7 @@
       "payment": "Payment",
       "orders": "Orders",
       "patungan": "Group Buy",
+      "review": "Reviews",
       "edit": "Edit Profile"
     },
     "edit": {
