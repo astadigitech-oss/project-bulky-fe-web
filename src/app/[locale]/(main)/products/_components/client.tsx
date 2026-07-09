@@ -291,7 +291,7 @@ export const ProductClient = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <BannerSection images={filterQuery.data?.data.banner ?? []} />
+      {/* <BannerSection images={filterQuery.data?.data.banner ?? []} /> */}
       <div className="grid grid-cols-4 w-full px-17.5 mx-auto xl:max-w-7xl max-w-5xl gap-6">
         <div className="col-span-1">
           <div className="sticky top-16 pt-5">

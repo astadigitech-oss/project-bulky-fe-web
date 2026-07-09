@@ -23,6 +23,7 @@ type Testimonial = {
   images: string[];
   date: string;
   src: string;
+  rating?: number;
 };
 export const AnimatedTestimonials = ({
   testimonials,
@@ -35,7 +36,7 @@ export const AnimatedTestimonials = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleNext = () => {
     setActive((prev) => (prev + 1) % testimonials.length);
@@ -52,7 +53,7 @@ export const AnimatedTestimonials = ({
   };
 
   useEffect(() => {
-    if (!autoplay || isPaused || isOpen) return;
+    if (!autoplay || isPaused || selectedImage) return;
 
     const duration = 5000;
     const intervalTime = 50;
@@ -75,6 +76,13 @@ export const AnimatedTestimonials = ({
     };
   }, [autoplay, isPaused]);
 
+  useEffect(() => {
+    setActive(0);
+    setProgress(0);
+  }, [testimonials.length]);
+
+  if (!testimonials.length || active >= testimonials.length) return null;
+
   const randomRotateY = (seed: number): number => {
     const x = Math.sin(seed * 9301 + 49297) * 233280;
     const normalized = x - Math.floor(x); // 0..1
@@ -91,14 +99,14 @@ export const AnimatedTestimonials = ({
           setIsPaused(false);
           setProgress(0);
         }}
-        className="relative grid grid-cols-1 gap-6 xl:gap-12 2xl:gap-20 md:grid-cols-3 w-fit mx-auto h-full"
+        className="relative grid grid-cols-1 gap-6 xl:gap-12 2xl:gap-20 md:grid-cols-3 w-full h-full"
       >
         <div className="flex items-center justify-center">
           <div className="relative w-2/3 xl:w-5/6 2xl:w-full aspect-square">
             <AnimatePresence>
               {testimonials.map((testimonial, index) => (
                 <motion.div
-                  key={testimonial.src}
+                  key={`${testimonial.src}-${index}`}
                   initial={{
                     opacity: 0,
                     scale: 0.9,
@@ -164,9 +172,21 @@ export const AnimatedTestimonials = ({
             <h3 className="text-lg xl:text-xl 2xl:text-2xl font-bold text-black dark:text-white">
               {testimonials[active].name}
             </h3>
-            <p className="text-xs xl:text-sm text-gray-700 dark:text-neutral-500">
+            {testimonials[active].rating !== undefined && (
+              <div className="flex items-center gap-0.5 mt-1">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <span
+                    key={i}
+                    className={i < testimonials[active].rating! ? "text-yellow-400" : "text-gray-300"}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+            )}
+            {/* <p className="text-xs xl:text-sm text-gray-700 dark:text-neutral-500">
               {testimonials[active].date}
-            </p>
+            </p> */}
             <motion.p className="mt-3 xl:mt-5 2xl:mt-6 text-xs leading-relaxed xl:text-sm 2xl:text-base text-black dark:text-neutral-300">
               {testimonials[active].description
                 .split(" ")
@@ -194,75 +214,73 @@ export const AnimatedTestimonials = ({
                   </motion.span>
                 ))}
             </motion.p>
-            <div className="flex items-center gap-2 mt-2 xl:mt-4">
-              {Array.from({ length: 4 }, (_, i) => (
-                <Dialog
-                  key={i}
-                  open={isOpen}
-                  onOpenChange={(e) => {
-                    setIsOpen(e);
-                    if (!e) {
-                      setIsPaused(false);
-                      setProgress(0);
-                    }
-                  }}
-                >
-                  <DialogTrigger
+            {(testimonials[active].images?.length ?? 0) > 0 && (
+              <div className="flex items-center gap-2 mt-2 xl:mt-4">
+                {testimonials[active].images.map((imgUrl, i) => (
+                  <motion.button
+                    key={imgUrl}
+                    className="relative size-16 xl:size-20 2xl:size-24 rounded-xl shadow bg-white group overflow-hidden"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.2 }}
+                    onClick={() => {
+                      setSelectedImage(imgUrl);
+                      setIsPaused(true);
+                    }}
+                  >
+                    <div className="size-full rounded-xl bg-black/10 backdrop-blur-sm absolute top-0 left-0 z-10 group-hover:opacity-100 flex items-center justify-center opacity-0 transition-all">
+                      <div className="size-6 flex items-center justify-center bg-yellow-400 rounded-full">
+                        <Eye className="size-4" />
+                      </div>
+                    </div>
+                    <Image
+                      src={imgUrl}
+                      alt={`review-${i}`}
+                      fill
+                      sizes="10vw"
+                      className="object-cover"
+                    />
+                  </motion.button>
+                ))}
+              </div>
+            )}
+            <Dialog
+              open={!!selectedImage}
+              onOpenChange={(e) => {
+                if (!e) {
+                  setSelectedImage(null);
+                  setIsPaused(false);
+                  setProgress(0);
+                }
+              }}
+            >
+              <DialogContent className={"lg:min-w-[80vh]"} showCloseButton={false}>
+                <DialogHeader>
+                  <DialogTitle>Pratinjau Foto</DialogTitle>
+                  {selectedImage && (
+                    <div className="w-full aspect-square rounded-lg relative overflow-hidden">
+                      <Image
+                        src={selectedImage}
+                        alt="preview"
+                        fill
+                        sizes="80vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose
                     render={
-                      <motion.button
-                        className="relative size-16 xl:size-20 2xl:size-24 rounded-xl shadow bg-white group"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          duration: 0.5,
-                          delay: i * 0.2, // otomatis berurutan
-                        }}
-                      >
-                        <div className="size-full rounded-xl bg-black/10 backdrop-blur-sm absolute top-0 left-0 z-10 group-hover:opacity-100 flex items-center justify-center opacity-0 transition-all">
-                          <div className="size-6 flex items-center justify-center bg-yellow-400 rounded-full">
-                            <Eye className="size-4" />
-                          </div>
-                        </div>
-                        <Image
-                          src={"/assets/images/warehouse.webp"}
-                          alt="warehouse"
-                          fill
-                          sizes="50vw"
-                          className="object-cover"
-                        />
-                      </motion.button>
+                      <Button>
+                        <XIcon />
+                        Tutup
+                      </Button>
                     }
                   />
-                  <DialogContent
-                    className={"lg:min-w-[80vh]"}
-                    showCloseButton={false}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>Pratinjau Foto</DialogTitle>
-                      <div className="w-full aspect-square rounded-lg relative overflow-hidden">
-                        <Image
-                          src={"/assets/images/warehouse.webp"}
-                          alt="warehouse"
-                          fill
-                          sizes="50vw"
-                          className="object-cover"
-                        />
-                      </div>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <DialogClose
-                        render={
-                          <Button>
-                            <XIcon />
-                            Tutup
-                          </Button>
-                        }
-                      />
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </div>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </motion.div>
           <div className="flex gap-4 pt-12 md:pt-2 xl:pt-0 items-center">
             <button

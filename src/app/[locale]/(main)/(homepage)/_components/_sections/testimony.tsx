@@ -3,12 +3,27 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import React from "react";
 
-const data = [
+type TestimoniItem = {
+  buyer: {
+    nama: string;
+    image: string;
+  };
+  rating: number;
+  deskripsi: string;
+  image: string[];
+  tanggal: string;
+};
+
+type TestimonySectionProps = {
+  testimonials?: TestimoniItem[];
+};
+
+const fallbackData = [
   {
     date: "Januari 10, 2026",
     description:
       "Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi pretium tellus duis convallis tempus leo eu aenean sed diam urna tempor pulvinar vivamus fringilla lacus nec metus bibendum egestas iaculis massa nisl malesuada lacinia integer nunc posuere ut hendrerit.",
-    images: [],
+    images: [] as string[],
     name: "fulan",
     src: "https://github.com/shadcn.png",
   },
@@ -16,14 +31,26 @@ const data = [
     date: "Januari 11, 2026",
     description:
       "Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi pretium tellus duis convallis tempus leo eu aenean sed diam urna tempor pulvinar vivamus fringilla lacus nec metus bibendum egestas iaculis massa nisl malesuada lacinia integer nunc posuere.",
-    images: [],
+    images: [] as string[],
     name: "fulan ahmad",
     src: "https://github.com/evilrabbit.png",
   },
 ];
 
-export const TestimonySection = () => {
+export const TestimonySection = ({ testimonials }: TestimonySectionProps) => {
   const t = useTranslations("Homepage.testimony");
+
+  const data = testimonials?.length
+    ? testimonials.map((item) => ({
+        name: item.buyer.nama,
+        src: item.buyer.image || "/assets/images/avatar_img.svg",
+        rating: item.rating,
+        description: item.deskripsi,
+        images: item.image,
+        date: item.tanggal,
+      }))
+    : fallbackData;
+
   return (
     <section className="relative w-full aspect-[2.2/1]">
       <Image

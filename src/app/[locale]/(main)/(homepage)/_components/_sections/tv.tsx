@@ -11,12 +11,24 @@ import {
 } from "@/components/ui/carousel";
 import { Link } from "@i18n/navigation";
 import { Button } from "@ui/button";
+import Image from "next/image";
 
-export const TVSection = () => {
+type TvItem = {
+  nama: string;
+  slug: string;
+  thumbnail_url: string;
+};
+
+type TVSectionProps = {
+  bulkyTv?: TvItem[];
+};
+
+export const TVSection = ({ bulkyTv }: TVSectionProps) => {
   const t = useTranslations("Homepage");
   const emblaRef = useRef(
     Autoplay({ delay: 10000, stopOnInteraction: true, stopOnMouseEnter: true }),
   );
+  const list = bulkyTv ?? [];
   return (
     <section className="bg-linear-to-b from-yellow-400 from-50% to-50% to-yellow-400/0 w-full">
       <div className="xl:max-w-7xl max-w-5xl w-full mx-auto px-17 pb-32 py-13 z-10 flex flex-col gap-9">
@@ -32,13 +44,27 @@ export const TVSection = () => {
           opts={{ loop: true, align: "start" }}
         >
           <CarouselContent className="-ml-3 xl:-ml-4">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <CarouselItem key={index} className="basis-1/4 pl-3 xl:pl-4">
-                <div className="bg-white rounded-xl aspect-5/7 p-1.5 xl:p-2 border">
-                  <div className="size-full bg-gray-300 rounded-lg flex items-center justify-center">
-                    <PlayCircle className="size-12 stroke-[1.25]" />
+            {list.map((item) => (
+              <CarouselItem key={item.slug} className="basis-1/4 pl-3 xl:pl-4">
+                <Link href={`/bulky-live/${item.slug}`}>
+                  <div className="bg-white rounded-xl aspect-9/16 p-1.5 xl:p-2 border">
+                    {item.thumbnail_url ? (
+                      <div className="size-full relative rounded-lg overflow-hidden">
+                        <Image
+                          src={item.thumbnail_url}
+                          alt={item.nama}
+                          fill
+                          sizes="25vw"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="size-full bg-gray-300 rounded-lg flex items-center justify-center">
+                        <PlayCircle className="size-12 stroke-[1.25]" />
+                      </div>
+                    )}
                   </div>
-                </div>
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>

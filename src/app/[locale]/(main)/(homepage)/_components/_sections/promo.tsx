@@ -11,18 +11,25 @@ import {
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 
-const list = [
-  {
-    id: 1,
-    image: "/assets/images/hero-stagging.webp",
-  },
-  {
-    id: 2,
-    image: "/assets/images/event-stagging.webp",
-  },
+type PromoItem = {
+  banner_url: string;
+  nama: string;
+  kategori: string[];
+};
+
+type PromoSectionProps = {
+  promos?: PromoItem[];
+};
+
+const defaultList = [
+  { id: 1, image: "/assets/images/hero-stagging.webp" },
+  { id: 2, image: "/assets/images/event-stagging.webp" },
 ];
 
-export const PromoSection = () => {
+export const PromoSection = ({ promos }: PromoSectionProps) => {
+  const list = promos?.length
+    ? promos.map((p, idx) => ({ id: idx + 1, image: p.banner_url }))
+    : defaultList;
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(true);
   const [api, setApi] = useState<CarouselApi>();
