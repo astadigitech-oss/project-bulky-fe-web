@@ -254,7 +254,8 @@ declare const messages: {
     "cm3": "cm³",
     "warehouseFallback": "Warehouse",
     "loginRequiredToast": "Please log in first to continue.",
-    "addToCartError": "Failed to add product to cart."
+    "addToCartError": "Failed to add product to cart.",
+    "sold": "Sold"
   },
   "CartPage": {
     "title": "Cart",

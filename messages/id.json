@@ -251,7 +251,8 @@
     "cm3": "cm³",
     "warehouseFallback": "Warehouse",
     "loginRequiredToast": "Silakan masuk terlebih dahulu untuk melanjutkan.",
-    "addToCartError": "Gagal menambahkan produk ke keranjang."
+    "addToCartError": "Gagal menambahkan produk ke keranjang.",
+    "sold": "Terjual"
   },
   "CartPage": {
     "title": "Keranjang",

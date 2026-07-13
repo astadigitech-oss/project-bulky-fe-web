@@ -224,9 +224,11 @@ export function OrderDetail({ id }: { id: string }) {
         </div>
         <div className="flex flex-col justify-center gap-1">
           <p className="text-sm font-semibold text-black">{order.produk.nama}</p>
-          <p className="text-xs text-[#727272] line-through">
-            {order.produk.harga_sebelum_diskon_formatted}
-          </p>
+          {order.produk.harga_sebelum_diskon_formatted && (
+            <p className="text-xs text-[#727272] line-through">
+              {order.produk.harga_sebelum_diskon_formatted}
+            </p>
+          )}
           <p className="text-lg font-bold text-[#ff9900]">{order.produk.subtotal_formatted}</p>
           <p className="flex items-center gap-1 text-xs text-[#01798a]">
             <Warehouse className="size-3.5" /> {t("palletType")}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
   X,
@@ -302,9 +302,13 @@ export function BulkyTVClient() {
   const t = useTranslations("BulkyTV");
   const params = useParams<{ locale: string }>();
   const locale = params?.locale === "en" ? "en" : "id";
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [activeCategory, setActiveCategory] = useState("");
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(
+    searchParams.get("v") ?? null,
+  );
   const [page, setPage] = useState(1);
 
   const initialTitleRef = useRef<string>("");
@@ -312,6 +316,21 @@ export function BulkyTVClient() {
   useEffect(() => {
     initialTitleRef.current = document.title;
   }, []);
+
+  // Sync selectedSlug ke URL query param ?v=
+  useEffect(() => {
+    const current = searchParams.get("v");
+    if (selectedSlug && current !== selectedSlug) {
+      const sp = new URLSearchParams(searchParams.toString());
+      sp.set("v", selectedSlug);
+      router.replace(`?${sp.toString()}`, { scroll: false });
+    } else if (!selectedSlug && current) {
+      const sp = new URLSearchParams(searchParams.toString());
+      sp.delete("v");
+      const qs = sp.toString();
+      router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    }
+  }, [selectedSlug]);
 
   const kategoriesQuery = useApiQuery<GetKategoriVideoResponse>({
     key: ["video-kategoris", locale],

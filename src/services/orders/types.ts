@@ -15,7 +15,7 @@ export type Order = {
   kode: string;
   nama_produk: string;
   gambar_url: string | null;
-  harga_setelah_diskon_formatted: string | null;
+  harga_sesudah_diskon_formatted: string;
   harga_sebelum_diskon_formatted: string | null;
   order_status: OrderStatus;
   payment_status: PaymentStatus;

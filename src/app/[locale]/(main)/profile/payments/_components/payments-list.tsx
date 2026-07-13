@@ -33,7 +33,7 @@ function PaymentCard({ order }: { order: Order }) {
             <p className="mb-0.5 text-xs text-[#727272]">{order.kode}</p>
             <h3 className="mb-2 text-sm text-black">{order.nama_produk}</h3>
             <p className="text-xl font-bold text-[#ff9900]">
-              {order.harga_setelah_diskon_formatted ?? order.harga_sebelum_diskon_formatted}
+              {order.harga_sesudah_diskon_formatted}
             </p>
           </div>
         </div>

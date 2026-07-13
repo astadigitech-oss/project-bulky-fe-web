@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -33,24 +33,32 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(true);
   const [api, setApi] = useState<CarouselApi>();
-  const emblaRef = useRef(
-    Autoplay({ delay: 10000, stopOnInteraction: true, stopOnMouseEnter: true }),
+
+  // Dibuat dengan useMemo agar instance tidak berubah antar render
+  const autoplayPlugin = useMemo(
+    () => Autoplay({ delay: 10000, stopOnInteraction: true, stopOnMouseEnter: true }),
+    [],
   );
+
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const delayRef = useRef<number>(0);
 
   useEffect(() => {
+    if (!api) return;
+
     if (list.length <= 1) {
       setShowProgress(false);
+      // Hentikan autoplay jika hanya 1 item
+      const autoplay = api.plugins().autoplay;
+      autoplay?.stop();
       return;
     }
-    if (!api) return;
 
     const autoplay = api.plugins().autoplay;
     if (!autoplay) return;
 
-    delayRef.current = (autoplay.options.delay as number) ?? 2500;
+    delayRef.current = (autoplay.options.delay as number) ?? 10000;
 
     const loop = () => {
       if (startTimeRef.current === null) return;
@@ -76,7 +84,6 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
     const onTimerStopped = () => {
       startTimeRef.current = null;
       setProgress(0);
-
       setShowProgress(false);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
@@ -86,6 +93,8 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
 
     api.on("autoplay:timerset", onTimerSet);
     api.on("autoplay:timerstopped", onTimerStopped);
+
+    // Pastikan autoplay dimulai setelah api siap
     autoplay.play();
 
     return () => {
@@ -93,17 +102,18 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
       api.off("autoplay:timerstopped", onTimerStopped);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [api, list]);
+  }, [api, list.length]);
+
   return (
     <section className="py-16 px-17 w-full mx-auto xl:max-w-7xl max-w-5xl">
       <div className="flex flex-col w-full gap-4">
         <Carousel
-          plugins={[emblaRef?.current]}
+          plugins={[autoplayPlugin]}
           onMouseEnter={() => {
-            if (emblaRef.current && list.length > 1) emblaRef?.current.stop();
+            if (list.length > 1) autoplayPlugin.stop();
           }}
           onMouseLeave={() => {
-            if (emblaRef.current && list.length > 1) emblaRef?.current?.play();
+            if (list.length > 1) autoplayPlugin.play();
           }}
           opts={{ loop: true }}
           setApi={setApi}
@@ -126,7 +136,7 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
             </CarouselContent>
             <div
               data-show={showProgress}
-              className="w-full absolute left-0 z-50 data-[show=true]:bottom-2 data-[show=false]:-bottom-5 data-[show=false]:scale-80 duration-500 transition-all"
+              className="w-full absolute left-0 z-10 data-[show=true]:bottom-2 data-[show=false]:-bottom-5 data-[show=false]:scale-80 duration-500 transition-all"
             >
               <div className="w-1/5 mx-auto rounded-full shadow-md p-0.5 bg-white">
                 <Progress

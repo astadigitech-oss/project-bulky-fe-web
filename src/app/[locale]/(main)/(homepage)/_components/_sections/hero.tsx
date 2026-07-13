@@ -17,6 +17,8 @@ export const HeroSection = ({ heroUrl }: HeroSectionProps) => {
           src="/assets/images/hero-stagging.webp"
           alt="banner_hero"
           fill
+          priority
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover pointer-events-none"
         />
@@ -41,6 +43,8 @@ export const HeroSection = ({ heroUrl }: HeroSectionProps) => {
         src={heroUrl}
         alt="banner_hero"
         fill
+        priority
+        fetchPriority="high"
         sizes="100vw"
         className="object-cover pointer-events-none"
       />

@@ -46,7 +46,7 @@ export const TVSection = ({ bulkyTv }: TVSectionProps) => {
           <CarouselContent className="-ml-3 xl:-ml-4">
             {list.map((item) => (
               <CarouselItem key={item.slug} className="basis-1/4 pl-3 xl:pl-4">
-                <Link href={`/bulky-live/${item.slug}`}>
+                <Link href={`/bulky-live?v=${item.slug}`}>
                   <div className="bg-white rounded-xl aspect-9/16 p-1.5 xl:p-2 border">
                     {item.thumbnail_url ? (
                       <div className="size-full relative rounded-lg overflow-hidden">
