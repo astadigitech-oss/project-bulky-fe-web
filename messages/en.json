@@ -522,6 +522,7 @@
       "emptyTitle": "No orders yet",
       "emptyAction": "Start Shopping",
       "errorLoading": "Failed to load order data.",
+      "itemCount": "items",
       "filters": {
         "all": "All",
         "waitingConfirmation": "Waiting Confirmation",
@@ -570,6 +571,14 @@
       "errorLoading": "Failed to load order detail.",
       "pickupInfo": "Pickup Info",
       "trackOrder": "Track Order",
+      "markDone": "Order Received",
+      "markDoneLoading": "Confirming...",
+      "markDoneSuccess": "Order confirmed as received!",
+      "markDoneError": "Failed to confirm order.",
+      "markDoneConfirmTitle": "Confirm Order Received",
+      "markDoneConfirmDesc": "Please make sure you have received your order in good condition before confirming. This action cannot be undone.",
+      "markDoneConfirmOk": "Yes, I've Received It",
+      "markDoneConfirmCancel": "Cancel",
       "orderStatus": {
         "PROCESSING": "In Process",
         "READY": "Ready to Ship",

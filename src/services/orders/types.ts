@@ -47,6 +47,12 @@ export type GetOrdersResponse = {
   meta: OrderMeta;
 };
 
+export type MarkDoneResponse = {
+  success: boolean;
+  message: string;
+  data: null;
+};
+
 // ─── Order Detail ─────────────────────────────────────────────────────────────
 
 export type OrderStepperStep = {
@@ -66,51 +72,55 @@ export type OrderStatusHistoryItem = {
   label: string;
 };
 
-export type OrderDetailProduk = {
+export type OrderDetailProduct = {
   id: string;
-  nama: string;
-  gambar_url: string | null;
-  harga_sebelum_diskon: number;
-  harga_sebelum_diskon_formatted: string;
+  order_item_id: string;
+  name: string;
+  image_url: string | null;
+  original_price: number;
+  original_price_formatted: string;
   subtotal: number;
   subtotal_formatted: string;
 };
 
-export type OrderDetailBiaya = {
-  biaya_produk: number;
-  biaya_produk_formatted: string;
-  biaya_pengiriman: number;
-  biaya_pengiriman_formatted: string;
-  biaya_ppn: number;
-  biaya_ppn_formatted: string;
-  biaya_lainnya: number;
-  biaya_lainnya_formatted: string;
+export type OrderDetailCost = {
+  product_cost: number;
+  product_cost_formatted: string;
+  shipping_cost: number;
+  shipping_cost_formatted: string;
+  tax_cost: number;
+  tax_cost_formatted: string;
+  other_cost: number;
+  other_cost_formatted: string;
   total: number;
   total_formatted: string;
 };
 
+export type OrderDetailShippingAddress = {
+  recipient_name: string;
+  recipient_phone: string;
+  full_address: string;
+  district: string;
+  city: string;
+  province: string;
+  postal_code: string;
+};
+
 export type OrderDetail = {
   id: string;
-  kode: string;
+  code: string;
   order_status: OrderStatus;
   payment_status: PaymentStatus;
   delivery_type: DeliveryType;
-  produk: OrderDetailProduk;
-  biaya: OrderDetailBiaya;
-  alamat_pengiriman: {
-    nama_penerima: string;
-    telepon_penerima: string;
-    alamat_lengkap: string;
-    kecamatan: string;
-    kota: string;
-    provinsi: string;
-    kode_pos: string;
-  } | null;
-  catatan: string | null;
+  deliveree_booking_id: string | null;
+  forwarder_tracking_no: string | null;
+  products: OrderDetailProduct[];
+  cost: OrderDetailCost;
+  shipping_address: OrderDetailShippingAddress | null;
+  note: string | null;
   stepper: OrderStepper;
   status_history: OrderStatusHistoryItem[];
   payment_url: string | null;
-  tracking_url: string | null;
   expired_at: string | null;
   created_at: string;
 };

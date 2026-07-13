@@ -16,7 +16,7 @@ export default async function OrderDetailPage({
   const { id } = await params;
   return (
     <ProfileShell activeTab="orders">
-      <OrderDetail id={id} />
+      <OrderDetail code={id} />
     </ProfileShell>
   );
 }

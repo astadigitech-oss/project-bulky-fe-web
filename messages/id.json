@@ -522,6 +522,7 @@
       "emptyTitle": "Tidak ada pesanan",
       "emptyAction": "Mulai Belanja",
       "errorLoading": "Gagal memuat data pesanan.",
+      "itemCount": "produk",
       "filters": {
         "all": "Semua",
         "waitingConfirmation": "Menunggu Konfirmasi",
@@ -570,6 +571,14 @@
       "errorLoading": "Gagal memuat detail pesanan.",
       "pickupInfo": "Info Pickup",
       "trackOrder": "Lacak Pesanan",
+      "markDone": "Pesanan Diterima",
+      "markDoneLoading": "Mengkonfirmasi...",
+      "markDoneSuccess": "Pesanan berhasil dikonfirmasi diterima!",
+      "markDoneError": "Gagal mengkonfirmasi pesanan.",
+      "markDoneConfirmTitle": "Konfirmasi Pesanan Diterima",
+      "markDoneConfirmDesc": "Pastikan kamu sudah menerima pesanan dalam kondisi baik sebelum mengkonfirmasi. Tindakan ini tidak dapat dibatalkan.",
+      "markDoneConfirmOk": "Ya, Sudah Diterima",
+      "markDoneConfirmCancel": "Batal",
       "orderStatus": {
         "PROCESSING": "Diproses",
         "READY": "Siap Kirim",

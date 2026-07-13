@@ -56,11 +56,11 @@ function DeliveryButton({ order }: { order: Order }) {
   return null;
 }
 
-export function OrderCard({ order }: { order: Order }) {
+export function OrderCard({ order, hideKode }: { order: Order; hideKode?: boolean }) {
   const t = useTranslations("ProfilePages.orders.card");
 
   return (
-    <article className="border-b border-[#d9d9d9] py-4 last:border-b-0">
+    <article className="py-4">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
         {/* Product info */}
         <div className="flex min-w-0 flex-1 gap-3">
@@ -78,7 +78,7 @@ export function OrderCard({ order }: { order: Order }) {
             )}
           </div>
           <div className="flex min-w-0 h-[120px] flex-col">
-            <p className="mb-0.5 text-xs text-[#727272]">{order.kode}</p>
+            {!hideKode && <p className="mb-0.5 text-xs text-[#727272]">{order.kode}</p>}
             <h3 className="mb-2 text-sm text-black">{order.nama_produk}</h3>
             <p className="text-xl font-bold text-[#ff9900]">
               {order.harga_sesudah_diskon_formatted}
@@ -99,7 +99,7 @@ export function OrderCard({ order }: { order: Order }) {
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
-              href={`/profile/orders/${order.id}`}
+              href={`/profile/orders/${order.kode}`}
               className="flex h-10 items-center justify-center whitespace-nowrap rounded border border-[#d9d9d9] px-5 text-sm text-[#1d1d1d] transition-colors hover:border-[#ffcf02] hover:bg-[#fff8df]"
             >
               {t("viewDetail")}

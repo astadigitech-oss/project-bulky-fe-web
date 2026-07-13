@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { useApiQuery } from "@/lib/query/use-query";
-import type { GetOrdersResponse, OrderStatus } from "@/services/orders/types";
+import type { GetOrdersResponse, Order, OrderStatus } from "@/services/orders/types";
 import { EmptyState } from "../../_components/profile-shell";
 import { OrderCard } from "./order-card";
+
+type OrderGroup = {
+  kode: string;
+  items: Order[];
+};
 
 type FilterValue = "all" | OrderStatus;
 
@@ -47,6 +52,16 @@ export function OrdersList() {
 
   const orders = data?.data ?? [];
 
+  const groups = useMemo<OrderGroup[]>(() => {
+    const map = new Map<string, Order[]>();
+    for (const order of orders) {
+      const existing = map.get(order.kode);
+      if (existing) existing.push(order);
+      else map.set(order.kode, [order]);
+    }
+    return Array.from(map.entries()).map(([kode, items]) => ({ kode, items }));
+  }, [orders]);
+
   return (
     <>
       <div className="mb-12 flex flex-col gap-4 xl:flex-row xl:items-center">
@@ -84,9 +99,25 @@ export function OrdersList() {
           actionLabel={t("emptyAction")}
         />
       ) : (
-        <div className="space-y-2">
-          {orders.map((order) => (
-            <OrderCard key={order.id} order={order} />
+        <div className="space-y-4">
+          {groups.map((group) => (
+            <div key={group.kode} className="rounded-xl border border-[#d9d9d9]">
+              {/* Group header */}
+              <div className="flex items-center justify-between border-b border-[#d9d9d9] px-4 py-3">
+                <p className="text-sm font-semibold text-black">{group.kode}</p>
+                {group.items.length > 1 && (
+                  <span className="rounded-full bg-[#fff8df] px-2.5 py-0.5 text-xs font-semibold text-[#ff9900]">
+                    {group.items.length} {t("itemCount")}
+                  </span>
+                )}
+              </div>
+              {/* Items */}
+              <div className="divide-y divide-[#d9d9d9] px-4">
+                {group.items.map((order, idx) => (
+                  <OrderCard key={`${order.id}-${idx}`} order={order} hideKode />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       )}

@@ -3,6 +3,18 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useMutate } from "@/lib/query/use-mutate";
+import type { MarkDoneResponse, OrderDetailProduct } from "@/services/orders/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 function formatTimestampWIB(timestamp: string | null | undefined, locale: string): string | null {
   if (!timestamp) return null;
@@ -24,13 +36,6 @@ import { PickupInfoModal } from "../../_components/pickup-info-modal";
 import { TrackingModal } from "../../_components/tracking-modal";
 
 // ─── Stepper ──────────────────────────────────────────────────────────────────
-
-const STEPS = [
-  { key: "ordered", icon: Package },
-  { key: "packed", icon: Warehouse },
-  { key: "shipped", icon: Truck },
-  { key: "done", icon: CheckCircle2 },
-] as const;
 
 function Stepper({
   stepper,
@@ -146,15 +151,39 @@ function DeliveryBadge({ type }: { type: DeliveryType }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function OrderDetail({ id }: { id: string }) {
+export function OrderDetail({ code }: { code: string }) {
   const t = useTranslations("ProfilePages.orderDetail");
   const locale = useLocale();
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [pickupOpen, setPickupOpen] = useState(false);
   const [trackingOpen, setTrackingOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const { mutate: markDone, isPending: isMarkingDone } = useMutate<
+    MarkDoneResponse,
+    undefined,
+    { id: string }
+  >({
+    endpoint: "/web/orders/:id/complete",
+    method: "patch",
+    onSuccess: async () => {
+      setConfirmOpen(false);
+      toast.success(t("markDoneSuccess"));
+      await queryClient.invalidateQueries({ queryKey: ["orders"] });
+      await queryClient.invalidateQueries({ queryKey: ["order-detail", code] });
+      router.refresh();
+    },
+    errorCustom: (error) => {
+      setConfirmOpen(false);
+      const msg = (error.response?.data as any)?.message ?? t("markDoneError");
+      toast.error(msg);
+    },
+  });
 
   const { data, isLoading, isError } = useApiQuery<GetOrderDetailResponse>({
-    key: ["order-detail", id, locale],
-    endpoint: `/web/orders/${id}`,
+    key: ["order-detail", code, locale],
+    endpoint: `/web/orders/by-code/${code}`,
     searchParams: { locale },
   });
 
@@ -190,7 +219,7 @@ export function OrderDetail({ id }: { id: string }) {
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#d9d9d9] pb-5">
         <div>
           <p className="text-xs text-[#727272]">{t("orderId")}</p>
-          <p className="mt-0.5 text-base font-bold text-black">{order.kode}</p>
+          <p className="mt-0.5 text-base font-bold text-black">{order.code}</p>
           <p className="mt-1 text-xs text-[#727272]">
             {t("createdAt")}: {new Date(order.created_at).toLocaleDateString(locale === "id" ? "id-ID" : "en-US", {
               day: "numeric", month: "long", year: "numeric",
@@ -207,33 +236,40 @@ export function OrderDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      {/* Product */}
-      <div className="flex gap-4 rounded-xl border border-[#d9d9d9] p-4">
-        <div className="flex size-[100px] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#d9d9d9] bg-[#efefef]">
-          {order.produk.gambar_url ? (
-            <Image
-              src={order.produk.gambar_url}
-              alt={order.produk.nama}
-              width={100}
-              height={100}
-              className="size-full object-cover"
-            />
-          ) : (
-            <Package className="size-12 text-[#727272]" strokeWidth={1.4} />
-          )}
-        </div>
-        <div className="flex flex-col justify-center gap-1">
-          <p className="text-sm font-semibold text-black">{order.produk.nama}</p>
-          {order.produk.harga_sebelum_diskon_formatted && (
-            <p className="text-xs text-[#727272] line-through">
-              {order.produk.harga_sebelum_diskon_formatted}
-            </p>
-          )}
-          <p className="text-lg font-bold text-[#ff9900]">{order.produk.subtotal_formatted}</p>
-          <p className="flex items-center gap-1 text-xs text-[#01798a]">
-            <Warehouse className="size-3.5" /> {t("palletType")}
-          </p>
-        </div>
+      {/* Products */}
+      <div className="rounded-xl border border-[#d9d9d9]">
+        {order.products.map((product: OrderDetailProduct, idx: number) => (
+          <div
+            key={product.order_item_id}
+            className={cn("flex gap-4 p-4", idx > 0 && "border-t border-[#d9d9d9]")}
+          >
+            <div className="flex size-[100px] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#d9d9d9] bg-[#efefef]">
+              {product.image_url ? (
+                <Image
+                  src={product.image_url}
+                  alt={product.name}
+                  width={100}
+                  height={100}
+                  className="size-full object-cover"
+                />
+              ) : (
+                <Package className="size-12 text-[#727272]" strokeWidth={1.4} />
+              )}
+            </div>
+            <div className="flex flex-col justify-center gap-1">
+              <p className="text-sm font-semibold text-black">{product.name}</p>
+              {product.original_price > product.subtotal && (
+                <p className="text-xs text-[#727272] line-through">
+                  {product.original_price_formatted}
+                </p>
+              )}
+              <p className="text-lg font-bold text-[#ff9900]">{product.subtotal_formatted}</p>
+              <p className="flex items-center gap-1 text-xs text-[#01798a]">
+                <Warehouse className="size-3.5" /> {t("palletType")}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Stepper */}
@@ -277,47 +313,47 @@ export function OrderDetail({ id }: { id: string }) {
           <div className="rounded-xl border border-[#d9d9d9] p-5">
             <p className="mb-4 text-sm font-semibold text-black">{t("biaya.title")}</p>
             <div className="space-y-2.5">
-              <CostRow label={t("biaya.produk")} value={order.biaya.biaya_produk_formatted} />
+              <CostRow label={t("biaya.produk")} value={order.cost.product_cost_formatted} />
               <CostRow
                 label={t("biaya.pengiriman")}
-                value={order.biaya.biaya_pengiriman_formatted}
-                muted={order.biaya.biaya_pengiriman === 0}
+                value={order.cost.shipping_cost_formatted}
+                muted={order.cost.shipping_cost === 0}
               />
               <CostRow
                 label={t("biaya.ppn")}
-                value={order.biaya.biaya_ppn_formatted}
-                muted={order.biaya.biaya_ppn === 0}
+                value={order.cost.tax_cost_formatted}
+                muted={order.cost.tax_cost === 0}
               />
-              {order.biaya.biaya_lainnya > 0 && (
-                <CostRow label={t("biaya.lainnya")} value={order.biaya.biaya_lainnya_formatted} />
+              {order.cost.other_cost > 0 && (
+                <CostRow label={t("biaya.lainnya")} value={order.cost.other_cost_formatted} />
               )}
-              <CostRow label={t("biaya.total")} value={order.biaya.total_formatted} isTotal />
+              <CostRow label={t("biaya.total")} value={order.cost.total_formatted} isTotal />
             </div>
           </div>
 
           {/* Notes */}
-          {order.catatan && (
+          {order.note && (
             <div className="rounded-xl border border-[#d9d9d9] p-5">
               <p className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-black">
                 <FileText className="size-4" /> {t("notes")}
               </p>
-              <p className="text-sm text-[#727272]">{order.catatan}</p>
+              <p className="text-sm text-[#727272]">{order.note}</p>
             </div>
           )}
 
           {/* Address */}
-          {order.alamat_pengiriman && (
+          {order.shipping_address && (
             <div className="rounded-xl border border-[#d9d9d9] p-5">
               <p className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-black">
                 <MapPin className="size-4" /> {t("address")}
               </p>
               <p className="text-sm font-medium text-black">
-                {order.alamat_pengiriman.nama_penerima} &middot; {order.alamat_pengiriman.telepon_penerima}
+                {order.shipping_address.recipient_name} &middot; {order.shipping_address.recipient_phone}
               </p>
               <p className="mt-1 text-sm text-[#727272]">
-                {order.alamat_pengiriman.alamat_lengkap}, {order.alamat_pengiriman.kecamatan},{" "}
-                {order.alamat_pengiriman.kota}, {order.alamat_pengiriman.provinsi}{" "}
-                {order.alamat_pengiriman.kode_pos}
+                {order.shipping_address.full_address}, {order.shipping_address.district},{" "}
+                {order.shipping_address.city}, {order.shipping_address.province}{" "}
+                {order.shipping_address.postal_code}
               </p>
             </div>
           )}
@@ -345,7 +381,7 @@ export function OrderDetail({ id }: { id: string }) {
               <button
                 type="button"
                 onClick={() => setTrackingOpen(true)}
-                className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300]"
+                className="flex h-11 items-center justify-center rounded px-8 text-sm font-bold text-[#ff9900] transition-colors hover:bg-[#fff8df]"
               >
                 {t("trackOrder")}
               </button>
@@ -366,8 +402,49 @@ export function OrderDetail({ id }: { id: string }) {
               {t("payNow")}
             </a>
           )}
+
+          {/* Mark Done */}
+          {order.order_status === "SHIPPED" && (
+            <button
+              type="button"
+              onClick={() => setConfirmOpen(true)}
+              className="flex h-11 items-center justify-center rounded bg-[#ffcf02] px-8 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300]"
+            >
+              {t("markDone")}
+            </button>
+          )}
         </div>
       ) : null}
+
+      {/* Confirm Dialog */}
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t("markDoneConfirmTitle")}</DialogTitle>
+            <DialogDescription className="pt-1">
+              {t("markDoneConfirmDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 flex justify-end gap-3">
+            <button
+              type="button"
+              disabled={isMarkingDone}
+              onClick={() => setConfirmOpen(false)}
+              className="flex h-10 items-center justify-center rounded border border-[#d9d9d9] px-6 text-sm text-[#1d1d1d] transition-colors hover:border-[#727272] disabled:opacity-60"
+            >
+              {t("markDoneConfirmCancel")}
+            </button>
+            <button
+              type="button"
+              disabled={isMarkingDone}
+              onClick={() => markDone({ params: { id: order.id } })}
+              className="flex h-10 items-center justify-center rounded bg-[#ffcf02] px-6 text-sm font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300] disabled:opacity-60"
+            >
+              {isMarkingDone ? t("markDoneLoading") : t("markDoneConfirmOk")}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
