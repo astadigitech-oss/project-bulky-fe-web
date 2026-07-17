@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@i18n/navigation";
 import { CartMyIcon } from "@svg/cart-icon";
-import { Avatar, AvatarFallback } from "@ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -98,6 +98,7 @@ export const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffcf02]">
                   <Avatar className={"size-8"}>
+                    <AvatarImage src={user.photo_url ?? undefined} alt={user.name} />
                     <AvatarFallback className="bg-[#ffcf02] text-black text-xs font-bold">
                       {getInitials(user.name)}
                     </AvatarFallback>

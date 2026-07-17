@@ -11,6 +11,10 @@ export type AuthUser = {
   email: string | null;
 };
 
+export type SessionUser = AuthUser & {
+  photo_url: string | null;
+};
+
 // ─── Login ────────────────────────────────────────────────────────────────────
 
 export type LoginBody = {
@@ -123,5 +127,5 @@ export type GoogleVerifyOtpResponse = {
 
 // ─── Check Session ────────────────────────────────────────────────────────────
 
-export type CheckSessionData = { expires_at: string; user: AuthUser };
+export type CheckSessionData = { expires_at: string; user: SessionUser };
 export type CheckSessionResponse = BaseAuthResponse<CheckSessionData | null>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Edit3,
   Eye,
@@ -43,6 +43,7 @@ import type {
   GetAddressesResponse,
   GetProfileResponse,
   PhoneVerifyOtpResponse,
+  UploadPhotoResponse,
 } from "@/services/profile/types";
 
 // ─── Edit Info Dialog ─────────────────────────────────────────────────────────
@@ -512,6 +513,23 @@ export function EditProfileClient() {
   const [changeEmailOpen, setChangeEmailOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
+  const photoInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadPhotoMutation = useMutate<UploadPhotoResponse>({ 
+    endpoint: "/user/profile/upload-photo",
+    method: "post",
+    onSuccess: () => onProfileUpdated(),
+    onError: { title: "Upload Foto" },
+  });
+
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("image", file);
+    uploadPhotoMutation.mutate({ body: formData as any });
+    e.target.value = "";
+  }
 
   const { data: profileData, isLoading: profileLoading } =
     useApiQuery<GetProfileResponse>({
@@ -559,7 +577,21 @@ export function EditProfileClient() {
           <AvatarFallback className="bg-[#f7f7f7] text-3xl font-bold text-black">{initials}</AvatarFallback>
         </Avatar>
         <div className="space-y-3">
-          <Button variant="outline" disabled className="h-9 px-5 text-sm font-bold text-black shadow-none">{t("changePhoto")}</Button>
+          <input
+            ref={photoInputRef}
+            type="file"
+            accept="image/jpg,image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={handlePhotoChange}
+          />
+          <Button
+            variant="outline"
+            className="h-9 px-5 text-sm font-bold text-black shadow-none hover:border-[#ffcf02] hover:bg-[#fff7cc]"
+            disabled={uploadPhotoMutation.isPending || profileLoading}
+            onClick={() => photoInputRef.current?.click()}
+          >
+            {uploadPhotoMutation.isPending ? t("saving") : t("changePhoto")}
+          </Button>
           <p className="whitespace-pre-line text-sm text-[#727272]">{t("photoHint")}</p>
         </div>
       </div>

@@ -13,6 +13,15 @@ export type ProfileData = {
 export type GetProfileResponse = BaseAuthResponse<ProfileData>;
 export type BaseProfileResponse = BaseAuthResponse<null>;
 
+// ─── Upload Photo ─────────────────────────────────────────────────────────────
+
+export type UploadPhotoData = {
+  path: string;
+  url: string;
+};
+
+export type UploadPhotoResponse = BaseAuthResponse<UploadPhotoData>;
+
 // ─── Change Phone ─────────────────────────────────────────────────────────────
 
 export type PhoneRequestOtpBody = { phone: string };

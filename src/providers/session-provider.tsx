@@ -8,12 +8,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cookiesKey } from "@/config";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query";
-import type { AuthUser, CheckSessionResponse } from "@/services/auth/types";
+import type { SessionUser, CheckSessionResponse } from "@/services/auth/types";
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
 type SessionContextValue = {
-  user: AuthUser | null;
+  user: SessionUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   logout: () => void;
