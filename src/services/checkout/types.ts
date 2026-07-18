@@ -116,6 +116,8 @@ export type PlaceOrderBody = {
   kupon_kode?: string;
   success_return_url?: string;
   slug?: string;
+  disclaimer_id: string;
+  disclaimer_agreed: boolean;
 };
 
 export type PlaceOrderData = {
@@ -165,3 +167,13 @@ export type PickupInfoData = {
 };
 
 export type GetPickupInfoResponse = BaseAuthResponse<PickupInfoData>;
+
+// ─── Disclaimer ───────────────────────────────────────────────────────────────
+
+export type DisclaimerData = {
+  id: string;
+  judul: string;
+  konten: string; // HTML string
+};
+
+export type GetDisclaimerResponse = BaseAuthResponse<DisclaimerData>;

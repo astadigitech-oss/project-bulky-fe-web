@@ -28,7 +28,9 @@ import type {
   ApplyVoucherResponse,
   CheckShippingCostBody,
   CheckShippingCostResponse,
+  DisclaimerData,
   GetCheckoutResponse,
+  GetDisclaimerResponse,
   GetPaymentMethodsResponse,
   GetPickupInfoResponse,
   PickupInfoData,
@@ -627,6 +629,101 @@ function PaymentMethodSelector({
   );
 }
 
+// ─── Disclaimer Consent Dialog ────────────────────────────────────────────────
+
+function DisclaimerConsentDialog({
+  open,
+  onOpenChange,
+  onAgree,
+  disclaimer,
+  isLoading,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onAgree: () => void;
+  disclaimer: DisclaimerData | null;
+  isLoading: boolean;
+}) {
+  const t = useTranslations("CheckoutPage");
+  const [checked, setChecked] = useState(false);
+
+  // Reset checkbox setiap kali dialog dibuka
+  useEffect(() => {
+    if (open) setChecked(false);
+  }, [open]);
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <ShieldCheck className="size-5 text-[#01798A]" />
+            {isLoading ? t("disclaimerTitle") : (disclaimer?.judul ?? t("disclaimerTitle"))}
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-4 flex-1 overflow-hidden">
+          {/* Konten HTML dari API */}
+          <div className="flex-1 overflow-y-auto rounded border border-gray-200 bg-gray-50 p-4">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-10">
+                <div className="h-6 w-6 animate-spin rounded-full border-4 border-[#ffcf02] border-t-black" />
+              </div>
+            ) : disclaimer?.konten ? (
+              <div
+                className="prose prose-sm max-w-none text-gray-700 [&_h1]:text-base [&_h1]:font-bold [&_h1]:mb-3 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:mt-4 [&_h2]:mb-2 [&_ul]:pl-4 [&_li]:mb-1 [&_p]:mb-2"
+                dangerouslySetInnerHTML={{ __html: disclaimer.konten }}
+              />
+            ) : (
+              <p className="text-sm text-gray-500">{t("disclaimerLoadError")}</p>
+            )}
+          </div>
+
+          {/* Checkbox persetujuan */}
+          <button
+            type="button"
+            onClick={() => setChecked((v) => !v)}
+            className="flex items-start gap-3 rounded border border-gray-200 bg-white px-4 py-3 text-left transition-colors hover:border-[#01798A] hover:bg-[#f0fafb]"
+          >
+            <span
+              className={[
+                "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded border-2 transition-colors",
+                checked ? "border-[#01798A] bg-[#01798A]" : "border-gray-300",
+              ].join(" ")}
+            >
+              {checked && (
+                <svg viewBox="0 0 10 8" className="size-2.5 fill-none stroke-white stroke-2">
+                  <polyline points="1,4 4,7 9,1" />
+                </svg>
+              )}
+            </span>
+            <span className="text-sm text-gray-700">{t("disclaimerCheckboxLabel")}</span>
+          </button>
+        </div>
+
+        <div className="flex gap-2 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1 h-10 text-sm shadow-none"
+            onClick={() => onOpenChange(false)}
+          >
+            {t("disclaimerCancel")}
+          </Button>
+          <Button
+            type="button"
+            disabled={!checked || isLoading || !disclaimer}
+            className="flex-1 h-10 bg-[#ffcf02] hover:bg-[#f0c300] text-black font-bold text-sm shadow-none disabled:opacity-50"
+            onClick={onAgree}
+          >
+            {t("disclaimerAgree")}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
 export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
@@ -647,6 +744,8 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
   const [voucherError, setVoucherError] = useState<string | null>(null);
   const [insuranceSelected, setInsuranceSelected] = useState(false);
   const [selectedPaymentKode, setSelectedPaymentKode] = useState<string | null>(null);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
+  const [disclaimerAgreed, setDisclaimerAgreed] = useState(false);
   const queryClient = useQueryClient();
 
   // ─── Query ──────────────────────────────────────────────────────────────────
@@ -669,6 +768,15 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
     endpoint: "/checkout/payment-methods",
     enabled: !sessionLoading,
   });
+
+  const disclaimerQuery = useApiQuery<GetDisclaimerResponse>({
+    key: ["checkout-disclaimer"],
+    endpoint: "/checkout/disclaimer",
+    searchParams: { locale },
+    enabled: !sessionLoading,
+  });
+
+  const disclaimerData = disclaimerQuery.data?.data ?? null;
 
   // ─── Mutations ──────────────────────────────────────────────────────────────
 
@@ -775,7 +883,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
-  const handlePlaceOrder = () => {
+  const executePlaceOrder = () => {
     if (!deliveryMode) {
       toast.error(t("deliveryModeRequired"));
       return;
@@ -825,8 +933,18 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
         ...(appliedVoucher ? { kupon_kode: appliedVoucher.kode } : {}),
         ...(productSlug ? { slug: productSlug } : {}),
         success_return_url: successReturnUrl,
+        disclaimer_id: disclaimerData!.id,
+        disclaimer_agreed: true,
       },
     });
+  };
+
+  const handlePlaceOrder = () => {
+    if (!disclaimerAgreed) {
+      setDisclaimerOpen(true);
+      return;
+    }
+    executePlaceOrder();
   };
 
   // ─── Render states ────────────────────────────────────────────────────────────
@@ -1263,6 +1381,18 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
         open={addressPickerOpen}
         onOpenChange={setAddressPickerOpen}
         onChanged={() => queryClient.invalidateQueries({ queryKey: ["checkout"] })}
+      />
+
+      <DisclaimerConsentDialog
+        open={disclaimerOpen}
+        onOpenChange={setDisclaimerOpen}
+        disclaimer={disclaimerData}
+        isLoading={disclaimerQuery.isLoading}
+        onAgree={() => {
+          setDisclaimerAgreed(true);
+          setDisclaimerOpen(false);
+          executePlaceOrder();
+        }}
       />
 
     </div>

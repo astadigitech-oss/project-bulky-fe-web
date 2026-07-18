@@ -20,6 +20,7 @@ import { Button } from "./button";
 type Testimonial = {
   description: string;
   name: string;
+  productName?: string;
   images: string[];
   date: string;
   src: string;
@@ -172,6 +173,11 @@ export const AnimatedTestimonials = ({
             <h3 className="text-lg xl:text-xl 2xl:text-2xl font-bold text-black dark:text-white">
               {testimonials[active].name}
             </h3>
+            {testimonials[active].productName && (
+              <p className="text-xs xl:text-sm text-gray-500 dark:text-neutral-400 mt-0.5">
+                {testimonials[active].productName}
+              </p>
+            )}
             {testimonials[active].rating !== undefined && (
               <div className="flex items-center gap-0.5 mt-1">
                 {Array.from({ length: 5 }, (_, i) => (

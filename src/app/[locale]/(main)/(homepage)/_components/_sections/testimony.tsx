@@ -8,6 +8,7 @@ type TestimoniItem = {
     nama: string;
     image: string;
   };
+  nama_produk: string;
   rating: number;
   deskripsi: string;
   image: string[];
@@ -43,6 +44,7 @@ export const TestimonySection = ({ testimonials }: TestimonySectionProps) => {
   const data = testimonials?.length
     ? testimonials.map((item) => ({
         name: item.buyer.nama,
+        productName: item.nama_produk,
         src: item.buyer.image || "/assets/images/avatar_img.svg",
         rating: item.rating,
         description: item.deskripsi,

@@ -18,7 +18,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -572,10 +572,13 @@ export function EditProfileClient() {
 
       {/* Avatar */}
       <div className="mb-9 flex items-center gap-8">
-        <Avatar className="size-24 bg-[#f7f7f7]">
-          {profile?.image && <AvatarImage src={profile.image} alt={profile.name} className="object-cover" />}
-          <AvatarFallback className="bg-[#f7f7f7] text-3xl font-bold text-black">{initials}</AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          src={profile?.image}
+          name={profile?.name ?? ""}
+          isLoading={profileLoading}
+          className="size-24"
+          fallbackClassName="bg-[#f7f7f7] text-3xl font-bold text-black"
+        />
         <div className="space-y-3">
           <input
             ref={photoInputRef}

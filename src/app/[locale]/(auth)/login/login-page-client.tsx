@@ -221,7 +221,7 @@ export default function LoginPage() {
             width={537}
             height={537}
             placeholderLabel="Hero image"
-            className="h-[537px] w-[537px] rounded-xl object-cover"
+            className="h-[537px] w-auto rounded-xl object-cover"
             sizes="(min-width: 1024px) 537px, 0px"
             priority
           />
@@ -242,7 +242,7 @@ export default function LoginPage() {
             width={156}
             height={37}
             placeholderLabel="Logo"
-            className="mb-[20px] h-[37px] w-auto object-contain"
+            className="mb-[20px] h-auto w-[156px] object-contain"
           />
 
           <h1 className="mb-[6px] w-full text-[30px] leading-none font-bold tracking-[-0.01em] text-[#222]">

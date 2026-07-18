@@ -46,6 +46,7 @@ type HomepageResponse = {
         nama: string;
         image: string;
       };
+      nama_produk: string;
       rating: number;
       deskripsi: string;
       image: string[];
