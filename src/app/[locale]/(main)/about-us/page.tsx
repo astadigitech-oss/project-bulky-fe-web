@@ -305,7 +305,7 @@ const AboutPage = () => {
             <div className="relative rounded-[18px] bg-[#ffcf02] shadow-[0_4px_8px_rgba(0,0,0,0.2)] lg:ml-[190px]">
               <div className="px-4 pb-6 pt-6 md:px-6 lg:pr-8 lg:pl-0 lg:-ml-10 lg:pb-8">
                 <div className="text-center lg:text-left">
-                  <h3 className="mx-auto mb-3 max-w-[36ch] text-4xl font-bold leading-tight text-black lg:ml-[178px]">
+                  <h3 className="mx-auto mb-3 max-w-[40ch] text-3xl font-bold leading-tight text-black md:text-4xl lg:ml-[178px]">
                     {t("section6.heading")}
                   </h3>
                   <p className="mx-auto mb-5 max-w-[58ch] text-xl leading-relaxed text-[#1f1f1f] lg:ml-[260px]">

@@ -369,12 +369,12 @@
     "seeAllProducts": "View All Products",
     "seeAllTV": "View All Contents",
     "infoBanner": {
-      "title": "Ship Across Indonesia",
+      "title": "Shipping Across Indonesia",
       "getNow": "Get It Now",
-      "package": "Cargo shipping (self-pickup) or delivery service",
+      "package": "Cargo Shipping Options: Self-Pickup or Delivery Service",
       "payment": "100% Secure Payment Guarantee",
-      "cs": "24/7 Dedicated Support",
-      "satisfied": "Satisfied Customers"
+      "cs": "24/7 Customer Support",
+      "satisfied": "Trusted by <b>5,000+</b> Customers"
     },
     "howItWorks": {
       "title": "How Does Bulky.id Work?",
@@ -413,7 +413,7 @@
   },
   "Footer": {
     "company": {
-      "description": "Indonesia’s First B2B Recommerce Platform",
+      "description": "Indonesia’s First Business-to-Business Recommerce Platform",
       "altCompany": "logo_bulky",
       "srCompany": "Bulky Logo",
       "srInstagram": "Bulky Instagram",
@@ -459,21 +459,21 @@
       "heading": "About Us",
       "card1": "We are committed to creating a sustainable, transparent, and mutually beneficial business ecosystem, connecting retailers, logistics partners, and resellers across Indonesia.",
       "card2": "<b>Bulky.id</b> is Indonesia's first online retail liquidation company, helping businesses efficiently manage excess stock, returned goods, and failed delivery products.",
-      "card3": "We deliver innovative stock management solutions so every product retains its value and creates new profit opportunities for business owners."
+      "card3": "We deliver innovative stock management solutions, ensuring every product retains its value while opening new profit opportunities for business owners."
     },
     "section2": {
       "heading": "We Provide Efficient",
       "headingLine2": "Business Solutions"
     },
     "section3": {
-      "heading": "We are here to support entrepreneurs, resellers, and SMEs",
+      "heading": "We Are Here to Support Entrepreneurs, Resellers, and SMEs",
       "p1": "Through Bulky.id, business owners can access quality wholesale stock at more affordable prices, while also having the opportunity to start a business without large capital.",
       "p2": "We also help partners increase profits through a transparent, efficient, and trusted distribution system."
     },
     "section4": {
       "heading": "Bulky.id Ecosystem",
-      "p1": "We collaborate with major retailers, distributors, and logistics partners across Indonesia. From collection, sorting, to distribution — all driven by a fast and reliable digital system.",
-      "p2": "Turning excess stock into new opportunities for business and sustainability."
+      "p1": "We collaborate with major retailers, distributors, and logistics partners across Indonesia. From collection and sorting to distribution, every step of the process runs on a fast and reliable digital system.",
+      "p2": "Turning excess stock into new, sustainable business opportunities."
     },
     "section5": {
       "heading": "Bulky News",
@@ -503,7 +503,7 @@
       ]
     },
     "section6": {
-      "heading": "At Bulky.id, every container and pallet is packed with care",
+      "heading": "At BULKY ID, every container and pallet is handled to the highest standard",
       "p": "As Indonesia's first online retail liquidation platform, <b>Bulky.id</b> is here to help business owners get the best stock, turning surplus goods into new profitable and sustainable business opportunities.",
       "badge1": "Secure",
       "badge2": "Fast",
@@ -887,7 +887,7 @@
     "pageTitle": "Contact Us - Bulky.id",
     "hero": {
       "heading": "Need Help?",
-      "subheading": "Questions? Message 24/7",
+      "subheading": "Our Team Is Ready to Help You 24/7",
       "cta": "Ask Now"
     },
     "form": {
@@ -906,7 +906,7 @@
       "successMessage": "\u2713 Your message has been sent. Our team will contact you shortly."
     },
     "sidebar": {
-      "greeting": "Hi, we are always here to help you",
+      "greeting": "Hi, our team is always ready to help you",
       "contact": "Contact",
       "smsWa": "SMS/WhatsApp",
       "phone": "Phone",

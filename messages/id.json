@@ -369,12 +369,12 @@
     "seeAllProducts": "Lihat Semua Produk",
     "seeAllTV": "Lihat Semua Konten",
     "infoBanner": {
-      "title": "Kirim ke Seluruh Indonesia",
+      "title": "Pengiriman ke Seluruh Indonesia",
       "getNow": "Dapatkan Sekarang",
-      "package": "Pengiriman kargo (ambil sendiri) atau layanan pengiriman",
+      "package": "Opsi Pengiriman Kargo: Ambil Sendiri atau Layanan Antar",
       "payment": "Pembayaran Terjamin 100% Aman",
-      "cs": "Dukungan Khusus 24 Jam",
-      "satisfied": "Pelanggan Puas"
+      "cs": "Dukungan Pelanggan 24 Jam",
+      "satisfied": "Dipercaya oleh <b>5.000+</b> Pelanggan"
     },
     "howItWorks": {
       "title": "Bagaimana Bulky.id Bekerja?",
@@ -413,7 +413,7 @@
   },
   "Footer": {
     "company": {
-      "description": "Platform Recommerce Antar Bisnis Pertama di Indonesia",
+      "description": "Platform Recommerce Business-to-Business Pertama di Indonesia",
       "altCompany": "logo_bulky",
       "srCompany": "Logo Bulky",
       "srInstagram": "Instagram Bulky",
@@ -459,21 +459,21 @@
       "heading": "Tentang Kami",
       "card1": "Kami berkomitmen menciptakan ekosistem bisnis yang berkelanjutan, transparan, dan saling menguntungkan, antara ritel, mitra logistik, dan reseller di seluruh Indonesia.",
       "card2": "<b>Bulky.id</b> adalah perusahaan likuidasi ritel online pertama di Indonesia yang membantu bisnis mengelola kelebihan stok, barang retur, dan produk gagal kirim secara efisien.",
-      "card3": "Kami menghadirkan solusi inovatif dalam pengelolaan stok agar setiap produk tetap memiliki nilai jual dan peluang keuntungan baru bagi pelaku usaha."
+      "card3": "Kami menghadirkan solusi inovatif dalam pengelolaan stok, memastikan setiap produk tetap memiliki nilai jual serta membuka peluang keuntungan baru bagi pelaku usaha."
     },
     "section2": {
       "heading": "Kami Menyediakan Solusi",
       "headingLine2": "Bisnis yang Efisien"
     },
     "section3": {
-      "heading": "Kami hadir untuk mendukung pelaku usaha, reseller, dan UMKM",
+      "heading": "Kami Hadir untuk Mendukung Pelaku Usaha, Reseller, dan UMKM",
       "p1": "Melalui Bulky.id, pelaku usaha dapat mendapatkan stok grosir berkualitas dengan harga lebih hemat, sekaligus memiliki kesempatan memulai bisnis tanpa modal besar.",
       "p2": "Kami juga membantu mitra meningkatkan keuntungan melalui sistem distribusi yang transparan, efisien, dan terpercaya."
     },
     "section4": {
       "heading": "Ekosistem Bulky.id",
-      "p1": "Kami bekerja sama dengan ritel besar, distributor, dan mitra logistik di seluruh Indonesia. Dari proses pengumpulan, sortir, hingga distribusi, semuanya kami jalankan dengan sistem digital yang cepat dan terpercaya.",
-      "p2": "Dari stok berlebih menjadi peluang baru untuk bisnis dan keberlanjutan."
+      "p1": "Kami bekerja sama dengan ritel besar, distributor, serta mitra logistik di seluruh Indonesia. Mulai dari proses pengumpulan, penyortiran, hingga distribusi, seluruh rangkaian proses kami jalankan melalui sistem digital yang cepat dan terpercaya.",
+      "p2": "Mengubah kelebihan stok menjadi peluang bisnis baru yang berkelanjutan."
     },
     "section5": {
       "heading": "Berita Bulky",
@@ -503,7 +503,7 @@
       ]
     },
     "section6": {
-      "heading": "Di Bulky.id, setiap kontainer dan palet kami kemas dengan hati-hati",
+      "heading": "Di BULKY ID setiap kontainer dan palet, kami tangani dengan standar terbaik",
       "p": "Sebagai platform likuidasi ritel online pertama di Indonesia, <b>Bulky.id</b> hadir untuk membantu pelaku usaha mendapatkan stok terbaik mengubah kelebihan barang menjadi peluang bisnis baru yang menguntungkan dan berkelanjutan.",
       "badge1": "Aman",
       "badge2": "Cepat",
@@ -886,8 +886,8 @@
   "ContactUs": {
     "pageTitle": "Hubungi Kami - Bulky.id",
     "hero": {
-      "heading": "Layanan Bantuan?",
-      "subheading": "Pertanyaan? Pesan 24/7",
+      "heading": "Butuh Bantuan?",
+      "subheading": "Tim Kami Siap Melayani Anda 24/7",
       "cta": "Tanya Sekarang"
     },
     "form": {
@@ -906,7 +906,7 @@
       "successMessage": "\u2713 Pesan kamu sudah terkirim. Tim kami akan menghubungi kamu segera."
     },
     "sidebar": {
-      "greeting": "Hi, Kami selalu ada disini untuk membantu kamu",
+      "greeting": "Hi, Tim kami selalu siap membantu Anda",
       "contact": "Kontak",
       "smsWa": "SMS/Wa",
       "phone": "Telepon",

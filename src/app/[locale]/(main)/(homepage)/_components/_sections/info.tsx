@@ -30,7 +30,7 @@ export const InfoSection = () => {
           <div className="px-14 xl:px-26 2xl:px-32 h-20 xl:h-22 2xl:h-24 w-full grid grid-cols-3 gap-3 xl:gap-4 2xl:gap-5">
             <div className="bg-white/60 h-full rounded-xl flex items-center gap-3 xl:gap-4 px-3 xl:px-4">
               <BoxMyIcon className="h-8 xl:h-9 2xl:h-10 flex-none" />
-              <p className="text-xs xl:text-sm 2xl:text-base leading-tight">
+              <p className="text-[11px] xl:text-xs 2xl:text-sm leading-snug">
                 {t("package")}
               </p>
             </div>
@@ -81,8 +81,11 @@ export const InfoSection = () => {
                 <AvatarFallback>ER</AvatarFallback>
               </Avatar>
             </AvatarGroup>
-            <p className="text-xl xl:text-2xl font-bold">5K</p>
-            <p className="text-lg xl:text-xl">{t("satisfied")}</p>
+            <p className="text-lg xl:text-xl [&_b]:text-xl xl:[&_b]:text-2xl [&_b]:font-bold">
+              {t.rich("satisfied", {
+                b: (chunks) => <b>{chunks}</b>,
+              })}
+            </p>
           </div>
         </div>
       </div>
