@@ -75,7 +75,7 @@ const AboutPage = () => {
               <div className="relative h-[200px] overflow-visible rounded-t-[18px] bg-[#ffcf02]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/6A (Tentang Kami,kiri) (1).png"
+                  src="/assets/images/about-us/6A (Tentang Kami kiri) (1).png"
                   alt="Tentang kami kiri"
                   width={280}
                   height={309}
@@ -93,7 +93,7 @@ const AboutPage = () => {
               <div className="relative h-[200px] overflow-visible rounded-t-[18px] bg-[#ffcf02]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/6B (Tentang Kami, tengah) (1).png"
+                  src="/assets/images/about-us/6B (Tentang Kami tengah) (1).png"
                   alt="Tentang kami tengah"
                   width={811}
                   height={583}
@@ -111,7 +111,7 @@ const AboutPage = () => {
               <div className="relative h-[200px] overflow-visible rounded-t-[18px] bg-[#ffcf02]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/6C (Tentang Kami, kanan) (1).png"
+                  src="/assets/images/about-us/6C (Tentang Kami kanan) (1).png"
                   alt="Tentang kami kanan"
                   width={220}
                   height={311}
