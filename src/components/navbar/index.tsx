@@ -36,6 +36,7 @@ function getInitials(name: string): string {
 export const Navbar = () => {
   const t = useTranslations("Header.auth");
   const topBarT = useTranslations("Header.topBar");
+  const headerT = useTranslations("Header");
   const { user, isAuthenticated, isLoading, logout } = useSession();
   const mounted = useSyncExternalStore(
     () => () => undefined,
@@ -84,6 +85,7 @@ export const Navbar = () => {
             <Link href={"/cart"}>
               <Button size={"icon"} variant={"outline"} className="relative">
                 <CartMyIcon />
+                <span className="sr-only">{headerT("cart")}</span>
                 {isAuthenticated && cartCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
                     {cartCount > 99 ? "99+" : cartCount}

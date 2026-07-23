@@ -1,7 +1,8 @@
 {
   "Root": {
     "nextSlide": "Slide Selanjutnya",
-    "prevSlide": "Slide Sebelumnya"
+    "prevSlide": "Slide Sebelumnya",
+    "slideProgress": "Progres Slide Promo"
   },
   "Header": {
     "search": {
@@ -19,6 +20,7 @@
       "about": "Tentang Kami",
       "contact": "Hubungi Kami"
     },
+    "cart": "Keranjang",
     "auth": {
       "login": "Masuk",
       "profile": "Edit Profil",
@@ -203,7 +205,13 @@
     "sortCheapest": "Termurah",
     "sortExpensive": "Termahal",
     "listError": "Gagal mengambil data produk.",
-    "sold": "Terjual"
+    "sold": "Terjual",
+    "resetFilter": "Hapus Filter",
+    "pagination": {
+      "previous": "Halaman Sebelumnya",
+      "next": "Halaman Berikutnya",
+      "morePages": "Lebih Banyak Halaman"
+    }
   },
   "ProductDetail": {
     "detailError": "Gagal mengambil detail produk.",

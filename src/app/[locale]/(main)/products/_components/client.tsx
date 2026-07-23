@@ -308,6 +308,7 @@ export const ProductClient = () => {
                 onClick={resetFilter}
               >
                 <FilterX className="size-3.5" />
+                <span className="sr-only">{t("resetFilter")}</span>
               </Button>
             </div>
             <div className="overflow-y-scroll max-h-[calc(100svh-64px-32px-40px)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden]">
@@ -800,6 +801,7 @@ export const ProductClient = () => {
                 onClick={() => updatePage((meta?.current_page ?? 1) - 1)}
               >
                 <ChevronLeft />
+                <span className="sr-only">{t("pagination.previous")}</span>
               </Button>
 
               {meta && (
@@ -814,6 +816,7 @@ export const ProductClient = () => {
                   {meta.last_page > 5 && (
                     <Button size={"icon"} variant={"ghost"} disabled>
                       <MoreHorizontal />
+                      <span className="sr-only">{t("pagination.morePages")}</span>
                     </Button>
                   )}
                   {Array.from(
@@ -856,6 +859,7 @@ export const ProductClient = () => {
                 onClick={() => updatePage((meta?.current_page ?? 1) + 1)}
               >
                 <ChevronRight />
+                <span className="sr-only">{t("pagination.next")}</span>
               </Button>
             </div>
           </div>

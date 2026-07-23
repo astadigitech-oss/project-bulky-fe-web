@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
+import { useTranslations } from "next-intl";
 
 type PromoItem = {
   banner_url: string;
@@ -27,6 +28,7 @@ const defaultList = [
 ];
 
 export const PromoSection = ({ promos }: PromoSectionProps) => {
+  const t = useTranslations("Root");
   const list = promos?.length
     ? promos.map((p, idx) => ({ id: idx + 1, image: p.banner_url }))
     : defaultList;
@@ -143,6 +145,7 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
               <div className="w-1/5 mx-auto rounded-full shadow-md p-0.5 bg-white">
                 <Progress
                   value={Math.round(progress)}
+                  aria-label={t("slideProgress")}
                   classIndicator="bg-yellow-700 rounded-r-full"
                   classTrack={"bg-yellow-400 h-1.5 rounded-full"}
                   className={"rounded-full"}

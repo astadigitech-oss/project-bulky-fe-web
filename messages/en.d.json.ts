@@ -4,7 +4,8 @@
 declare const messages: {
   "Root": {
     "nextSlide": "Next Slide",
-    "prevSlide": "Prev Slide"
+    "prevSlide": "Prev Slide",
+    "slideProgress": "Promo Slide Progress"
   },
   "Header": {
     "search": {
@@ -22,6 +23,7 @@ declare const messages: {
       "about": "About Us",
       "contact": "Contact Us"
     },
+    "cart": "Cart",
     "auth": {
       "login": "Login",
       "profile": "Edit Profile",
@@ -206,7 +208,13 @@ declare const messages: {
     "sortCheapest": "Cheapest",
     "sortExpensive": "Most Expensive",
     "listError": "Failed to fetch product list.",
-    "sold": "Sold"
+    "sold": "Sold",
+    "resetFilter": "Reset Filter",
+    "pagination": {
+      "previous": "Previous Page",
+      "next": "Next Page",
+      "morePages": "More Pages"
+    }
   },
   "ProductDetail": {
     "detailError": "Failed to fetch product detail.",
