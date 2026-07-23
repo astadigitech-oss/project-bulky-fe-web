@@ -30,6 +30,7 @@ export const WholesaleSection = () => {
             alt="Bulky wholesale container"
             width={620}
             height={540}
+            fetchPriority="high"
             className="w-full h-auto"
           />
         </div>

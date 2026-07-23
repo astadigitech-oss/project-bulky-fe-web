@@ -75,7 +75,7 @@ const AboutPage = () => {
               <div className="relative h-[200px] overflow-visible rounded-t-[18px] bg-[#ffcf02]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/people-left.svg"
+                  src="/assets/images/about-us/6A (Tentang Kami,kiri) (1).png"
                   alt="Tentang kami kiri"
                   width={280}
                   height={309}
@@ -93,7 +93,7 @@ const AboutPage = () => {
               <div className="relative h-[200px] overflow-visible rounded-t-[18px] bg-[#ffcf02]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/people-center.svg"
+                  src="/assets/images/about-us/6B (Tentang Kami, tengah) (1).png"
                   alt="Tentang kami tengah"
                   width={811}
                   height={583}
@@ -111,7 +111,7 @@ const AboutPage = () => {
               <div className="relative h-[200px] overflow-visible rounded-t-[18px] bg-[#ffcf02]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/people-right.svg"
+                  src="/assets/images/about-us/6C (Tentang Kami, kanan) (1).png"
                   alt="Tentang kami kanan"
                   width={220}
                   height={311}
@@ -135,14 +135,14 @@ const AboutPage = () => {
           <br />
           {t("section2.headingLine2")}
         </h2>
-        <div className="overflow-hidden rounded-3xl shadow-sm">
+        <div className="relative aspect-[21/9] w-full overflow-hidden rounded-3xl shadow-sm">
           <Image
             unoptimized
-            src="/assets/images/about-us/people-meeting.svg"
+            src="/assets/images/about-us/5A (Solusi Bisnis Efisien).jpg"
             alt={t("section2.heading")}
-            width={1240}
-            height={479}
-            className="h-auto w-full object-cover"
+            fill
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            className="object-cover"
           />
         </div>
       </section>
@@ -164,7 +164,7 @@ const AboutPage = () => {
           <div className="overflow-hidden rounded-3xl shadow-sm">
             <Image
               unoptimized
-              src="/assets/images/about-us/people-in-warehouse.svg"
+              src="/assets/images/about-us/4A (Dukungan untuk Pelaku Usaha) (1).png"
               alt={t("section3.heading")}
               width={564}
               height={443}
@@ -176,7 +176,7 @@ const AboutPage = () => {
 
       {/* 4) Ekosistem */}
       <section className="mt-4 w-full">
-        <div className="relative w-full overflow-hidden bg-[#ffcf02] md:min-h-[480px] lg:min-h-[520px]">
+        <div className="relative w-full overflow-hidden bg-[#ffcf02]">
           <Image
             unoptimized
             src="/assets/images/Looper-kiri.svg"
@@ -186,21 +186,21 @@ const AboutPage = () => {
             className="pointer-events-none absolute -left-[210px] -top-[120px] hidden h-auto w-[48%] opacity-80 lg:block"
           />
 
-          <div className="absolute bottom-0 left-0 right-0 h-[120px] bg-[#ffec9a]" />
+          <div className="absolute bottom-0 left-0 right-0 h-[36px] bg-[#ffec9a] lg:h-[66px]" />
 
-          <div className="relative z-10 mx-auto grid w-full max-w-[1280px] items-center gap-6 px-4 pt-10 pb-10 md:px-8 lg:grid-cols-2 lg:px-12 lg:pb-16">
-            <div className="relative z-20 overflow-hidden rounded-[18px] shadow-sm">
+          <div className="relative z-10 mx-auto grid w-full max-w-[1280px] items-start gap-8 px-4 pt-10 pb-16 md:px-8 lg:grid-cols-2 lg:gap-14 lg:px-12 lg:pb-24 lg:pt-14">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-sm lg:-mb-10">
               <Image
                 unoptimized
-                src="/assets/images/about-us/warehouse-vibe.svg"
+                src="/assets/images/about-us/3B (Ekosistem Bulky.id).jpg"
                 alt={t("section4.heading")}
-                width={564}
-                height={471}
-                className="h-auto w-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="object-cover"
               />
             </div>
 
-            <div className="relative z-20 pr-2 lg:pr-6">
+            <div className="relative z-20 pr-2 lg:pr-6 xl:pr-[120px]">
               <h3 className="mb-4 text-3xl font-bold leading-tight text-black md:text-4xl">
                 {t("section4.heading")}
               </h3>
@@ -213,14 +213,14 @@ const AboutPage = () => {
             </div>
           </div>
 
-          <div className="pointer-events-none absolute bottom-0 right-0 z-30 hidden lg:block">
+          <div className="pointer-events-none absolute bottom-0 right-0 z-30 hidden h-[360px] w-[360px] xl:block">
             <Image
               unoptimized
-              src="/assets/images/about-us/girl-with-boxes.svg"
-              alt="Girl with boxes"
-              width={475}
-              height={415}
-              className="h-auto w-[520px]"
+              src="/assets/images/about-us/3A (Ekosistem Bulky.id) (1).png"
+              alt=""
+              fill
+              sizes="340px"
+              className="object-contain object-bottom drop-shadow-lg"
             />
           </div>
         </div>
@@ -308,7 +308,7 @@ const AboutPage = () => {
                   <h3 className="mx-auto mb-3 max-w-[40ch] text-3xl font-bold leading-tight text-black md:text-4xl lg:ml-[178px]">
                     {t("section6.heading")}
                   </h3>
-                  <p className="mx-auto mb-5 max-w-[58ch] text-xl leading-relaxed text-[#1f1f1f] lg:ml-[260px]">
+                  <p className="mx-auto mb-5 max-w-[58ch] text-xl leading-relaxed text-[#1f1f1f] lg:ml-[300px]">
                     {t.rich("section6.p", { b: (chunks) => <strong>{chunks}</strong> })}
                   </p>
 
@@ -351,10 +351,10 @@ const AboutPage = () => {
               </div>
               <div className="h-7 rounded-b-[18px] bg-[#ffec9a]" />
             </div>
-            <div className="pointer-events-none absolute bottom-0 left-0 hidden w-[700px] lg:-left-16 lg:block">
+            <div className="pointer-events-none absolute bottom-0 left-0 hidden w-[540px] lg:-left-4 lg:block">
               <Image
                 unoptimized
-                src="/assets/images/about-us/people-wrapping-box.svg"
+                src="/assets/images/about-us/2A (Komitmen Pengemasan) (1).png"
                 alt="Di Bulky"
                 width={811}
                 height={583}

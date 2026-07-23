@@ -120,7 +120,7 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
         >
           <div className="overflow-hidden shadow-lg rounded-xl relative">
             <CarouselContent>
-              {list?.map((item) => (
+              {list?.map((item, idx) => (
                 <CarouselItem key={item.id}>
                   <div className="relative aspect-4/1 rounded-xl shadow-lg overflow-hidden">
                     <Image
@@ -129,6 +129,8 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
                       fill
                       sizes={"100vw"}
                       className="object-cover"
+                      priority={idx === 0}
+                      fetchPriority={idx === 0 ? "high" : "auto"}
                     />
                   </div>
                 </CarouselItem>

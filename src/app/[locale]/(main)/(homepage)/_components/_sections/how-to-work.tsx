@@ -7,13 +7,15 @@ export const HowToWorkSecttion = () => {
   const t = useTranslations("Homepage.howItWorks");
   return (
     <section className="py-20 xl:py-22.5 2xl:py-25 w-full grid grid-cols-3 gap-10 xl:gap-15 2xl:gap-20">
-      <div className="relative aspect-7/10 w-full">
+      <div className="relative w-full">
         <Image
-          src={"/assets/images/htw-stagging.webp"}
+          // src={"/assets/images/htw-stagging.webp"}
+          src={"/assets/images/8A (Cara Kerja Bulky.id).webp"}
           alt="how_to_work"
-          fill
+          width={1254}
+          height={1254}
           sizes="33vw"
-          className="object-contain"
+          className="h-auto w-full object-contain"
         />
       </div>
       <div className="col-span-2 pr-20 xl:pr-32 2xl:pr-42 flex flex-col gap-5 xl:gap-7 2xl:gap-10 justify-center">
@@ -22,47 +24,50 @@ export const HowToWorkSecttion = () => {
           {t("description")}
         </p>
         <div className="flex items-center gap-3 xl:gap-4.5 2xl:gap-6 w-full">
-          <div className="w-full aspect-square flex-1 border rounded-xl p-4 relative flex justify-center">
-            <div className="relative overflow-hidden size-full">
+          <div className="w-full aspect-square flex-1 border rounded-xl p-3 flex flex-col items-center justify-between gap-1">
+            <div className="relative w-full min-h-0 flex-1">
               <Image
-                src={"/assets/images/warehouse.webp"}
+                // src={"/assets/images/warehouse.webp"}
+                src={"/assets/images/8B (Cara Kerja Bulky.id) GUDANG (1).png"}
                 fill
                 alt="warehouse"
                 className="object-contain"
                 sizes="20vw"
               />
             </div>
-            <p className="absolute bottom-1.5 text-lg xl:text-xl">
+            <p className="shrink-0 text-lg xl:text-xl">
               {t("warehouse")}
             </p>
           </div>
           <Triangle className="rotate-90 fill-yellow-400 flex-none size-4 xl:size-5 2xl:size-6 text-yellow-400" />
-          <div className="w-full aspect-square flex-1 border rounded-xl p-4 relative flex justify-center">
-            <div className="relative overflow-hidden size-full">
+          <div className="w-full aspect-square flex-1 border rounded-xl p-3 flex flex-col items-center justify-between gap-1">
+            <div className="relative w-full min-h-0 flex-1">
               <Image
-                src={"/assets/images/sortir.webp"}
+                // src={"/assets/images/sortir.webp"}
+                src={"/assets/images/8C (Cara Kerja Bulky.id) SORTIR (1).png"}
                 fill
                 alt="warehouse"
                 className="object-contain"
                 sizes="20vw"
               />
             </div>
-            <p className="absolute bottom-1.5 text-lg xl:text-xl">
+            <p className="shrink-0 text-lg xl:text-xl">
               {t("sort")}
             </p>
           </div>
           <Triangle className="rotate-90 fill-yellow-400 flex-none size-4 xl:size-5 2xl:size-6 text-yellow-400" />
-          <div className="w-full aspect-square flex-1 border rounded-xl p-4 relative flex justify-center">
-            <div className="relative overflow-hidden size-full">
+          <div className="w-full aspect-square flex-1 border rounded-xl p-3 flex flex-col items-center justify-between gap-1">
+            <div className="relative w-full min-h-0 flex-1">
               <Image
-                src={"/assets/images/distribute.webp"}
+                // src={"/assets/images/distribute.webp"}
+                src={"/assets/images/8D (Cara Kerja Bulky.id) DISTRIBUSI (1).png"}
                 fill
                 alt="warehouse"
                 className="object-contain"
                 sizes="20vw"
               />
             </div>
-            <p className="absolute bottom-1.5 text-lg xl:text-xl">
+            <p className="shrink-0 text-lg xl:text-xl">
               {t("distribution")}
             </p>
           </div>

@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
       { protocol: "http", hostname: "127.0.0.1" },
     ],
   },
+  allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS?.split(",").map((origin) =>
+    origin.trim(),
+  ),
 };
 
 const withNextIntl = createNextIntlPlugin({

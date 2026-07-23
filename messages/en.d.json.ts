@@ -911,7 +911,7 @@ declare const messages: {
     "sidebar": {
       "greeting": "Hi, our team is always ready to help you",
       "contact": "Contact",
-      "smsWa": "SMS/WhatsApp",
+      "smsWa": "WhatsApp",
       "phone": "Phone",
       "email": "Email",
       "address": "Address",

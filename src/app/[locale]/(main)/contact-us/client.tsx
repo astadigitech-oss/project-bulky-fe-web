@@ -13,7 +13,8 @@ import { useTranslations } from "next-intl";
 // ============================================================================
 const IMG_LOOPER_LEFT  = "/assets/images/Looper-kiri.svg";
 const IMG_LOOPER_RIGHT = "/assets/images/Looper-kanan.svg";
-const IMG_HERO_LEFT    = "/assets/images/contact-us/hero-left.svg";
+// const IMG_HERO_LEFT    = "/assets/images/contact-us/hero-left.svg";
+const IMG_HERO_LEFT    = "/assets/images/contact-us/7A (Hubungi Kami) (1).png";
 const IMG_HERO_RIGHT   = "/assets/images/contact-us/hero-right.svg";
 
 
@@ -157,20 +158,24 @@ export default function ContactUsClient() {
               alt=""
               aria-hidden
               unoptimized
-              width={300}
+              priority
+              fetchPriority="high"
+              width={250}
               height={302}
-              className="absolute left-0 -top-[50px] h-[calc(100%+50px)] w-[300px] object-cover object-center"
+              className="absolute left-0 -top-[50px] h-[calc(100%+50px)] w-[250px] object-cover object-center"
             />
             <Image
               src={IMG_HERO_RIGHT}
               alt=""
               aria-hidden
               unoptimized
+              priority
+              fetchPriority="high"
               width={300}
               height={280}
               className="absolute right-0 bottom-0 h-full w-auto object-contain object-bottom"
             />
-            <div className="relative z-10 pl-[344px]">
+            <div className="relative z-10 pl-[284px]">
               <h1 className="text-[52px] font-black leading-tight text-black">
                 {t("hero.heading")}
               </h1>
@@ -301,10 +306,10 @@ export default function ContactUsClient() {
                 >
                   +62 811-833-164
                 </a>
-                <span className="font-medium">{t("sidebar.phone")}</span>
+                {/* <span className="font-medium">{t("sidebar.phone")}</span>
                 <a href="tel:+62811833164" className="transition-colors hover:text-[#f90]">
                   +62 811-833-164
-                </a>
+                </a> */}
                 <span className="font-medium">{t("sidebar.email")}</span>
                 <a href="mailto:admin@bulky.id" className="transition-colors hover:text-[#f90]">
                   admin@bulky.id
