@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import NextLink from "next/link";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
-import { Eye, EyeOff, X } from "lucide-react";
+import { Eye, EyeOff, KeyRound, X } from "lucide-react";
 import { setCookie } from "cookies-next/client";
 
 import { Button } from "@/components/ui/button";
@@ -342,6 +343,19 @@ export default function LoginPage() {
                 onClick={handleGoogleLogin}
               />
             </div>
+
+            {/* Plain anchor (not the locale-aware Link) because /recovery is a
+                standalone route outside [locale], meant to be opened from the
+                native app's WebView without a locale prefix. Styled as a
+                bordered pill (not plain text) so it reads as tappable even
+                without hover, since most entries to this page are touch-only. */}
+            <NextLink
+              href="/recovery"
+              className="mt-[6px] inline-flex h-9 w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-[#f90] px-3 text-[12px] font-semibold text-[#f90] hover:bg-[#fff8e6] active:bg-[#fff1cc]"
+            >
+              <KeyRound className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
+              {t("recoverOldAccount")}
+            </NextLink>
           </form>
         </div>
       </section>

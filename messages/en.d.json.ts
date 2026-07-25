@@ -48,6 +48,7 @@ declare const messages: {
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "forgotPassword": "Forgot Password?",
+    "recoverOldAccount": "Recover Old Account Access",
     "processing": "Processing...",
     "submit": "Login",
     "or": "Or",
