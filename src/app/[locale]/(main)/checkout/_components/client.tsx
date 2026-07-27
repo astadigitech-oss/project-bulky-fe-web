@@ -6,12 +6,13 @@ import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
-import { Clock, Edit3, HelpCircle, MapPin, Package, Phone, Plus, ShieldCheck, ShieldOff, Star, Store, Tag, Trash2, Truck, X } from "lucide-react";
+import { Clock, Edit3, HelpCircle, MapPin, Package, Phone, Plus, Search, ShieldCheck, ShieldOff, Star, Store, Tag, Trash2, Truck, UserRound, Users, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useProtectRoute } from "@/providers/session-provider";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query/use-mutate";
+import { useSearch } from "@/hooks/use-serach";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,9 +36,12 @@ import type {
   GetPickupInfoResponse,
   PickupInfoData,
   PaymentGroup,
+  PaymentType,
   PlaceOrderBody,
   PlaceOrderResponse,
+  SearchFriendResponse,
   ShippingCostData,
+  SplitPaymentFriend,
   VoucherData,
 } from "@/services/checkout/types";
 import type {
@@ -323,6 +327,111 @@ function AddressPickerDialog({
   );
 }
 
+// ─── Friend Search Dialog (Patungan) ───────────────────────────────────────────
+
+function FriendSearchDialog({
+  open,
+  onOpenChange,
+  addedIds,
+  onAdd,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  addedIds: string[];
+  onAdd: (friend: SplitPaymentFriend) => void;
+}) {
+  const t = useTranslations("CheckoutPage");
+  const { search, searchValue, setSearch } = useSearch();
+
+  useEffect(() => {
+    if (open) setSearch("");
+  }, [open, setSearch]);
+
+  const trimmed = searchValue.trim();
+
+  const friendsQuery = useApiQuery<SearchFriendResponse>({
+    key: ["checkout-friends-search", trimmed],
+    endpoint: "/checkout/friends/search",
+    searchParams: { phone: trimmed },
+    enabled: open && trimmed.length >= 4,
+  });
+
+  const results = friendsQuery.data?.data ?? [];
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{t("searchFriendTitle")}</DialogTitle>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-3">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="tel"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("searchFriendPlaceholder")}
+              className="h-10 w-full rounded border border-gray-200 bg-white pl-9 pr-3 text-sm outline-none transition-colors focus:border-[#01798A] focus:ring-1 focus:ring-[#01798A]"
+              autoFocus
+            />
+          </div>
+
+          {search.trim().length > 0 && search.trim().length < 4 ? (
+            <p className="py-6 text-center text-sm text-gray-400">{t("searchFriendMinChars")}</p>
+          ) : friendsQuery.isFetching ? (
+            <div className="flex items-center justify-center gap-2 py-6">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#ffcf02] border-t-black" />
+              <span className="text-sm text-gray-600">{t("searchFriendLoading")}</span>
+            </div>
+          ) : trimmed.length >= 4 && results.length === 0 ? (
+            <p className="py-6 text-center text-sm text-gray-400">{t("searchFriendEmpty")}</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {results.map((friend) => {
+                const isAdded = addedIds.includes(friend.buyer_id);
+                return (
+                  <div
+                    key={friend.buyer_id}
+                    className="flex items-center gap-3 rounded border border-gray-200 bg-white px-3 py-2.5"
+                  >
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+                      <UserRound className="size-5" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-black">{friend.nama}</p>
+                      <p className="text-xs text-gray-500">{friend.telepon}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={isAdded}
+                      onClick={() => onAdd(friend)}
+                      className="h-8 shrink-0 bg-[#ffcf02] px-3 text-xs font-bold text-black shadow-none hover:bg-[#f0c300] disabled:opacity-50"
+                    >
+                      {isAdded ? t("searchFriendAlreadyAdded") : t("searchFriendAdd")}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-2 h-9 w-full text-sm shadow-none"
+          onClick={() => onOpenChange(false)}
+        >
+          {t("searchFriendDone")}
+        </Button>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ─── Pickup Info Card ─────────────────────────────────────────────────────────
 
 const DAY_NAMES_ID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -439,11 +548,11 @@ function PickupInfoCard({
 
 // ─── Payment Logo ──────────────────────────────────────────────────────────────
 
-const LOGO_EXT: Record<string, string> = {
+export const LOGO_EXT: Record<string, string> = {
   gopay: "png",
 };
 
-const LOGO_COLORS: Record<string, string> = {
+export const LOGO_COLORS: Record<string, string> = {
   bca: "bg-blue-600",
   mandiri: "bg-yellow-500",
   bni: "bg-orange-600",
@@ -462,7 +571,7 @@ const LOGO_COLORS: Record<string, string> = {
   qris: "bg-red-600",
 };
 
-function PaymentLogo({ logoValue, nama }: { logoValue: string; nama: string }) {
+export function PaymentLogo({ logoValue, nama }: { logoValue: string; nama: string }) {
   const [imgError, setImgError] = React.useState(false);
   const colorClass = LOGO_COLORS[logoValue] ?? "bg-gray-500";
   const initials = nama
@@ -499,7 +608,7 @@ function PaymentLogo({ logoValue, nama }: { logoValue: string; nama: string }) {
 
 // ─── Payment Method Selector ───────────────────────────────────────────────────
 
-function PaymentMethodSelector({
+export function PaymentMethodSelector({
   groups,
   isLoading,
   isError,
@@ -746,6 +855,9 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
   const [selectedPaymentKode, setSelectedPaymentKode] = useState<string | null>(null);
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false);
+  const [paymentType, setPaymentType] = useState<PaymentType>("single_payment");
+  const [splitFriends, setSplitFriends] = useState<SplitPaymentFriend[]>([]);
+  const [friendSearchOpen, setFriendSearchOpen] = useState(false);
   const queryClient = useQueryClient();
 
   // ─── Query ──────────────────────────────────────────────────────────────────
@@ -784,9 +896,13 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
     endpoint: "/place-order",
     method: "post",
     onSuccess: (res) => {
-      const paymentUrl = res.data?.data?.payment_url;
-      if (paymentUrl) {
-        window.location.href = paymentUrl;
+      const orderData = res.data?.data;
+      if (paymentType === "split_payment" && orderData?.kode) {
+        router.push(`/checkout/split/${orderData.kode}`);
+        return;
+      }
+      if (orderData?.payment_url) {
+        window.location.href = orderData.payment_url;
       } else {
         router.push("/profile");
       }
@@ -904,6 +1020,10 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
       toast.error(t("paymentMethodRequired"));
       return;
     }
+    if (paymentType === "split_payment" && splitFriends.length === 0) {
+      toast.error(t("splitFriendsRequired"));
+      return;
+    }
 
     const deliveryType: "PICKUP" | "DELIVEREE" | "FORWARDER" =
       deliveryMode === "PICKUP" ? "PICKUP" : selectedProvider!;
@@ -935,6 +1055,10 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
         success_return_url: successReturnUrl,
         disclaimer_id: disclaimerData!.id,
         disclaimer_agreed: true,
+        payment_type: paymentType,
+        ...(paymentType === "split_payment"
+          ? { friend_ids: splitFriends.map((f) => f.buyer_id) }
+          : {}),
       },
     });
   };
@@ -1208,6 +1332,88 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
             )}
           </section>
 
+          {/* Tipe Pembayaran */}
+          <section className="flex flex-col gap-3">
+            <SectionTitle>{t("paymentTypeTitle")}</SectionTitle>
+
+            <div className="flex overflow-hidden rounded border border-gray-200">
+              <button
+                type="button"
+                onClick={() => setPaymentType("single_payment")}
+                className={[
+                  "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
+                  paymentType === "single_payment"
+                    ? "bg-[#ffcf02] text-black"
+                    : "bg-white text-gray-600 hover:bg-gray-50",
+                ].join(" ")}
+              >
+                <UserRound className="size-4" />
+                {t("paymentTypeSelf")}
+              </button>
+              <div className="w-px bg-gray-200" />
+              <button
+                type="button"
+                onClick={() => setPaymentType("split_payment")}
+                className={[
+                  "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
+                  paymentType === "split_payment"
+                    ? "bg-[#ffcf02] text-black"
+                    : "bg-white text-gray-600 hover:bg-gray-50",
+                ].join(" ")}
+              >
+                <Users className="size-4" />
+                {t("paymentTypeSplit")}
+              </button>
+            </div>
+
+            {paymentType === "split_payment" && (
+              <div className="flex flex-col gap-2 rounded border border-gray-200 bg-white p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-black">{t("splitFriendsLabel")}</span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="h-8 gap-1.5 bg-[#ffcf02] px-3 text-xs font-bold text-black shadow-none hover:bg-[#f0c300]"
+                    onClick={() => setFriendSearchOpen(true)}
+                  >
+                    <Search className="size-3.5" /> {t("splitAddFriend")}
+                  </Button>
+                </div>
+
+                {splitFriends.length === 0 ? (
+                  <p className="text-sm text-gray-400">{t("splitFriendsEmpty")}</p>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {splitFriends.map((friend) => (
+                      <div
+                        key={friend.buyer_id}
+                        className="flex items-center gap-3 rounded border border-gray-200 bg-gray-50 px-3 py-2"
+                      >
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-gray-500">
+                          <UserRound className="size-4" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-black">{friend.nama}</p>
+                          <p className="text-xs text-gray-500">{friend.telepon}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSplitFriends((prev) => prev.filter((f) => f.buyer_id !== friend.buyer_id))
+                          }
+                          className="shrink-0 rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
+                          aria-label={t("splitFriendRemove")}
+                        >
+                          <X className="size-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+
           {/* Pilih Cara Bayar */}
           <section className="flex flex-col gap-3">
             <SectionTitle>{t("paymentMethod")}</SectionTitle>
@@ -1381,6 +1587,13 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
         open={addressPickerOpen}
         onOpenChange={setAddressPickerOpen}
         onChanged={() => queryClient.invalidateQueries({ queryKey: ["checkout"] })}
+      />
+
+      <FriendSearchDialog
+        open={friendSearchOpen}
+        onOpenChange={setFriendSearchOpen}
+        addedIds={splitFriends.map((f) => f.buyer_id)}
+        onAdd={(friend) => setSplitFriends((prev) => [...prev, friend])}
       />
 
       <DisclaimerConsentDialog
