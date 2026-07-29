@@ -2,32 +2,47 @@
 
 import Image from "next/image";
 import { Link, useRouter } from "@/i18n/navigation";
-import { Eye, EyeOff } from "lucide-react";
+import { CircleCheck, Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { setCookie } from "cookies-next/client";
+import { motion, useReducedMotion } from "motion/react";
 
+import { Button } from "@/components/ui/button";
+import { AuthField } from "../_components/auth-field";
+import { BrandFlowField } from "../_components/brand-flow-field";
 import { useMutate } from "@/lib/query";
 import { cookiesKey } from "@/config";
 import type { RegisterBody, RegisterResponse } from "@/services/auth/types";
 
-interface FormFieldProps {
-  id: string;
-  label: string;
-  children: React.ReactNode;
-}
+/**
+ * Sibling surface to the login page, and deliberately identical to it in
+ * everything but content: same yellow field, same flow lines, same 24px card on
+ * a warm-tinted shadow, same 10px controls with the icon inside on the left.
+ *
+ * Radius scale, no exceptions: card and framed hero 24px, controls 10px, pill
+ * only for the rule under the wordmark. Accent is #f90 for links and focus;
+ * #ffcf02 is reserved for the page field and the single primary action. Red and
+ * green appear only as validation state, never as decoration.
+ */
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-function FormField({ id, label, children }: FormFieldProps) {
-  return (
-    <div className="flex flex-col gap-[6px]">
-      <label htmlFor={id} className="text-[13px] font-bold text-[#727272]">
-        {label}
-      </label>
-      {children}
-    </div>
-  );
-}
+/* Four tiers, matching the four segments. The label matters as much as the
+   colour: a bar that communicates only through hue fails WCAG 1.4.1 for anyone
+   who cannot separate the reds from the greens. */
+const STRENGTH_TIERS = [
+  { min: 12, filled: 4, color: "bg-[#12b76a]", key: "strengthStrong" },
+  { min: 10, filled: 3, color: "bg-[#eaaa08]", key: "strengthGood" },
+  { min: 8, filled: 2, color: "bg-[#f79009]", key: "strengthFair" },
+  { min: 0, filled: 1, color: "bg-[#d92d20]", key: "strengthWeak" },
+] as const;
+
+const strengthOf = (value: string) =>
+  STRENGTH_TIERS.find((tier) => value.length >= tier.min) ?? STRENGTH_TIERS[3];
+
+/** Stashed by the OTP step, consumed here. */
+const REG_TOKEN_KEY = "bulky_reg_token";
 
 interface RegisterFormPageProps {
   verifiedPhone?: string;
@@ -39,6 +54,7 @@ export default function RegisterFormPage({
   const t = useTranslations("RegisterForm");
   const router = useRouter();
   const { locale } = useParams<{ locale: string }>();
+  const reduceMotion = useReducedMotion();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -46,7 +62,6 @@ export default function RegisterFormPage({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
-  const [regToken, setRegToken] = useState("");
 
   const [errors, setErrors] = useState<{
     name?: string;
@@ -60,21 +75,17 @@ export default function RegisterFormPage({
   const assets = useMemo(
     () => ({
       logo: "/assets/images/logo-bulky.webp",
-      looperLeft: "/assets/images/Looper-kiri.svg",
-      looperRight: "/assets/images/Looper-kanan.svg",
       hero: "/assets/images/hero-register-form.svg",
     }),
     [],
   );
 
-  // Read OTP token from sessionStorage (set after verify-otp)
+  // Guard the route: without a verified-OTP token there is nothing to submit.
+  // The token itself is read at submit time rather than mirrored into state,
+  // since it is never rendered and copying it in on mount was a setState-in-
+  // effect cascade.
   useEffect(() => {
-    const token = sessionStorage.getItem("bulky_reg_token");
-    if (!token) {
-      router.replace("/register");
-      return;
-    }
-    setRegToken(token);
+    if (!sessionStorage.getItem(REG_TOKEN_KEY)) router.replace("/register");
   }, [router]);
 
   const registerMutation = useMutate<RegisterResponse, RegisterBody>({
@@ -85,7 +96,7 @@ export default function RegisterFormPage({
       const authToken = data.data.data?.token;
       if (authToken) {
         setCookie(cookiesKey, authToken, { path: "/" });
-        sessionStorage.removeItem("bulky_reg_token");
+        sessionStorage.removeItem(REG_TOKEN_KEY);
         window.location.href = `/${locale}`;
       }
     },
@@ -109,7 +120,7 @@ export default function RegisterFormPage({
     const next: typeof errors = {};
 
     if (!name.trim()) next.name = t("errors.nameRequired");
-    if (!verifiedPhone.trim()) next.phone = "Nomor telepon wajib diisi";
+    if (!verifiedPhone.trim()) next.phone = t("errors.phoneRequired");
 
     const emailErr = validateEmail(email);
     if (emailErr) next.email = emailErr;
@@ -118,9 +129,9 @@ export default function RegisterFormPage({
     if (passErr) next.password = passErr;
 
     if (!confirmPassword) {
-      next.confirmPassword = "Konfirmasi password wajib diisi";
+      next.confirmPassword = t("errors.confirmPasswordRequired");
     } else if (confirmPassword !== password) {
-      next.confirmPassword = "Konfirmasi password tidak sama";
+      next.confirmPassword = t("errors.confirmPasswordMismatch");
     }
 
     setErrors(next);
@@ -135,7 +146,7 @@ export default function RegisterFormPage({
     registerMutation.mutate({
       body: {
         name,
-        token: regToken,
+        token: sessionStorage.getItem(REG_TOKEN_KEY) ?? "",
         password,
         confirm_password: confirmPassword,
         email: email || undefined,
@@ -143,47 +154,97 @@ export default function RegisterFormPage({
     });
   }
 
+  // One entry transition, staggered brand-then-form so the reading order is
+  // established on a page users always land on cold. Collapses to static under
+  // prefers-reduced-motion.
+  const enter = (delay: number) => ({
+    initial: reduceMotion ? false : ({ opacity: 0, y: 16 } as const),
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: reduceMotion ? 0 : 0.5, delay, ease: EASE },
+  });
+
+  const strength = strengthOf(password);
+  const showStrength = password.length > 0 && !errors.password;
+
+  const eyeButton = (shown: boolean, toggle: () => void) => (
+    <button
+      type="button"
+      onClick={toggle}
+      className="absolute top-1/2 right-3 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-md text-[#757575] transition-colors hover:text-[#1f1f1f]"
+      aria-label={shown ? t("hidePassword") : t("showPassword")}
+    >
+      {shown ? (
+        <EyeOff className="h-[18px] w-[18px]" strokeWidth={2} />
+      ) : (
+        <Eye className="h-[18px] w-[18px]" strokeWidth={2} />
+      )}
+    </button>
+  );
+
   return (
-    <main className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-[#ffcf02] px-5 py-4 md:px-10 md:py-6 lg:px-0 lg:py-0">
-      <Image
-        src={assets.looperLeft}
-        alt=""
-        width={902}
-        height={768}
-        className="pointer-events-none absolute left-0 top-0 h-screen w-auto select-none opacity-80"
-      />
-      <Image
-        src={assets.looperRight}
-        alt=""
-        width={684}
-        height={768}
-        className="pointer-events-none absolute right-0 top-0 h-screen w-auto select-none opacity-80"
-      />
+    <main className="relative min-h-[100dvh] w-full overflow-hidden bg-[#ffcf02]">
+      <BrandFlowField />
 
-      <section className="relative z-10 flex h-full w-full items-center justify-center lg:mx-auto lg:h-[calc(100vh-40px)] lg:max-w-[1320px] lg:grid lg:grid-cols-[500px_1fr] lg:items-stretch lg:overflow-hidden lg:rounded-[20px]">
-        <div className="flex h-[calc(100vh-32px)] w-full max-w-[492px] min-h-0 flex-col rounded-[20px] bg-white px-[26px] py-[28px] shadow-sm md:h-[calc(100vh-48px)] lg:h-full lg:max-w-none lg:rounded-none lg:px-[28px] lg:py-[24px]">
-          <Image
-            src={assets.logo}
-            alt="Bulky"
-            width={156}
-            height={37}
-            className="mb-[30px] h-[37px] w-auto object-contain"
-            priority
-          />
+      <section className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-1 items-center gap-y-8 px-5 py-10 md:px-8 lg:min-h-[100dvh] lg:grid-cols-[1fr_380px] lg:gap-x-10 lg:pl-12 xl:gap-x-16">
+        {/* Brand column. The warehouse shot is a rectangular photo rather than a
+            cutout like the login couriers, so it sits in a framed panel on the
+            card's radius instead of standing on the yellow. */}
+        <motion.div {...enter(0)} className="flex flex-col">
+          <div className="text-center lg:pl-2 lg:text-left">
+            <p className="text-[22px] leading-tight font-medium text-white drop-shadow-[0_1px_6px_rgba(150,100,0,0.3)] sm:text-[26px] lg:text-[30px]">
+              {t("welcomePrefix")}
+            </p>
+            <p className="mt-1 text-[44px] leading-[0.98] font-extrabold tracking-[-0.02em] text-white drop-shadow-[0_2px_10px_rgba(150,100,0,0.32)] sm:text-[56px] lg:text-[64px]">
+              Bulky.id
+            </p>
+            <span className="mx-auto mt-4 block h-[5px] w-[86px] rounded-full bg-white lg:mx-0" />
+          </div>
 
-          <h1 className="mb-[18px] text-[24px] leading-tight font-bold text-[#222]">
-            {t("title")}
-          </h1>
+          <div className="relative mt-8 hidden aspect-[700/637] w-full max-w-[560px] overflow-hidden rounded-[24px] shadow-[0_24px_60px_-20px_rgba(122,84,0,0.45)] lg:block lg:max-h-[52dvh] xl:max-w-[620px]">
+            <Image
+              src={assets.hero}
+              alt={t("heroAlt")}
+              fill
+              className="object-cover"
+              sizes="(min-width: 1280px) 620px, (min-width: 1024px) 560px, 0px"
+              priority
+            />
+          </div>
+        </motion.div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex min-h-0 flex-1 flex-col gap-[12px] overflow-y-auto pr-1 pb-2"
-            noValidate
-          >
-            <FormField id="name" label={t("nameLabel")}>
-              <input
+        {/* Form column */}
+        <motion.div
+          {...enter(0.08)}
+          className="mx-auto w-full max-w-[380px] lg:mx-0 lg:py-10"
+        >
+          <div className="flex w-full flex-col rounded-[24px] bg-white px-7 pt-8 pb-8 shadow-[0_24px_60px_-20px_rgba(122,84,0,0.45)]">
+            <Image
+              src={assets.logo}
+              alt="Bulky"
+              width={156}
+              height={37}
+              className="mx-auto mb-7 h-auto w-[140px] object-contain"
+              priority
+            />
+
+            <h1 className="text-[26px] leading-tight font-extrabold tracking-[-0.015em] text-[#1f1f1f]">
+              {t("title")}
+            </h1>
+            <p className="mt-2 text-[13px] leading-snug text-[#4a4a4a]">
+              {t("subtitle")}
+            </p>
+
+            <form
+              onSubmit={handleSubmit}
+              className="mt-6 flex w-full flex-col gap-4"
+              noValidate
+            >
+              <AuthField
                 id="name"
                 type="text"
+                autoComplete="name"
+                label={t("nameLabel")}
+                icon={<User className="h-4 w-4" strokeWidth={2} />}
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -192,60 +253,34 @@ export default function RegisterFormPage({
                 }}
                 placeholder={t("namePlaceholder")}
                 required
-                className={[
-                  "h-[36px] rounded border px-[12px] text-[14px] font-light text-black",
-                  "placeholder:text-[#727272] focus:outline-none focus:ring-1 transition-colors",
-                  errors.name
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-[#f90] focus:ring-[#f90]",
-                ].join(" ")}
+                error={errors.name}
               />
-              {errors.name && (
-                <p className="text-[12px] text-red-500">{errors.name}</p>
-              )}
-            </FormField>
 
-            <FormField id="phone" label={t("phoneLabel")}>
-              <div className="relative">
-                <input
-                  id="phone"
-                  type="tel"
-                  value={verifiedPhone}
-                  readOnly
-                  required
-                  className={[
-                    "h-[36px] w-full cursor-not-allowed rounded border bg-[#fffbf0] px-[12px] text-[14px] font-light text-black",
-                    errors.phone ? "border-red-400" : "border-[#f90]",
-                  ].join(" ")}
-                />
-                <span className="absolute right-[10px] top-1/2 flex -translate-y-1/2 items-center gap-[4px] text-[11px] font-bold text-green-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="h-[13px] w-[13px]"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {t("verified")}
-                </span>
-              </div>
-              {errors.phone && (
-                <p className="text-[12px] text-red-500">{errors.phone}</p>
-              )}
-              <p className="text-[11px] text-[#727272]">
-                {t("phoneVerifiedHint")}
-              </p>
-            </FormField>
+              <AuthField
+                id="phone"
+                type="tel"
+                label={t("phoneLabel")}
+                icon={<Phone className="h-4 w-4" strokeWidth={2} />}
+                value={verifiedPhone}
+                readOnly
+                required
+                error={errors.phone}
+                hint={t("phoneVerifiedHint")}
+                className="cursor-not-allowed bg-[#fafafa] pr-28 text-[#4a4a4a]"
+                trailing={
+                  <span className="pointer-events-none absolute top-1/2 right-3 flex -translate-y-1/2 items-center gap-1 text-[11px] font-semibold text-[#12b76a]">
+                    <CircleCheck className="h-3.5 w-3.5" strokeWidth={2.2} />
+                    {t("verified")}
+                  </span>
+                }
+              />
 
-            <FormField id="email" label={t("emailLabel")}>
-              <input
+              <AuthField
                 id="email"
                 type="email"
+                autoComplete="email"
+                label={t("emailLabel")}
+                icon={<Mail className="h-4 w-4" strokeWidth={2} />}
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -253,180 +288,114 @@ export default function RegisterFormPage({
                     setErrors((prev) => ({ ...prev, email: undefined }));
                 }}
                 placeholder={t("emailPlaceholder")}
-                className={[
-                  "h-[36px] rounded border px-[12px] text-[14px] font-light text-black",
-                  "placeholder:text-[#727272] focus:outline-none focus:ring-1 transition-colors",
-                  errors.email
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-[#f90] focus:ring-[#f90]",
-                ].join(" ")}
+                error={errors.email}
               />
-              {errors.email && (
-                <p className="text-[12px] text-red-500">{errors.email}</p>
-              )}
-            </FormField>
 
-            <FormField id="password" label={t("passwordLabel")}>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPass ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (errors.password || errors.confirmPassword)
-                      setErrors((prev) => ({
-                        ...prev,
-                        password: undefined,
-                        confirmPassword: undefined,
-                      }));
-                  }}
-                  placeholder={t("passwordPlaceholder")}
-                  required
-                  className={[
-                    "h-[36px] w-full rounded border px-[12px] pr-[40px] text-[14px] font-light text-black",
-                    "placeholder:text-[#727272] focus:outline-none focus:ring-1 transition-colors",
-                    errors.password
-                      ? "border-red-400 focus:ring-red-400"
-                      : "border-[#f90] focus:ring-[#f90]",
-                  ].join(" ")}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPass((v) => !v)}
-                  className="absolute right-[12px] top-1/2 -translate-y-1/2"
-                  aria-label={showPass ? t("hidePassword") : t("showPassword")}
-                >
-                  {showPass ? (
-                    <EyeOff className="h-[16px] w-[20px] text-[#727272]" />
-                  ) : (
-                    <Eye className="h-[16px] w-[20px] text-[#727272]" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-[12px] text-red-500">{errors.password}</p>
-              )}
-              {password.length > 0 && !errors.password && (
-                <div className="mt-[2px] flex gap-[4px]">
-                  {[...Array(4)].map((_, i) => (
+              <AuthField
+                id="password"
+                type={showPass ? "text" : "password"}
+                autoComplete="new-password"
+                label={t("passwordLabel")}
+                icon={<Lock className="h-4 w-4" strokeWidth={2} />}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password || errors.confirmPassword)
+                    setErrors((prev) => ({
+                      ...prev,
+                      password: undefined,
+                      confirmPassword: undefined,
+                    }));
+                }}
+                placeholder={t("passwordPlaceholder")}
+                required
+                error={errors.password}
+                className="pr-11"
+                trailing={eyeButton(showPass, () => setShowPass((v) => !v))}
+              >
+                {showStrength && (
+                  <div className="mt-1 flex items-center gap-2">
                     <div
-                      key={i}
-                      className={[
-                        "h-[3px] flex-1 rounded-full transition-colors",
-                        password.length >= 12
-                          ? "bg-green-500"
-                          : password.length >= 10
-                            ? i < 3
-                              ? "bg-yellow-400"
-                              : "bg-[#d9d9d9]"
-                            : password.length >= 8
-                              ? i < 2
-                                ? "bg-orange-400"
-                                : "bg-[#d9d9d9]"
-                              : i < 1
-                                ? "bg-red-400"
-                                : "bg-[#d9d9d9]",
-                      ].join(" ")}
-                    />
-                  ))}
-                </div>
-              )}
-            </FormField>
+                      className="flex flex-1 gap-1"
+                      role="img"
+                      aria-label={`${t("strengthLabel")}: ${t(strength.key)}`}
+                    >
+                      {[0, 1, 2, 3].map((i) => (
+                        <span
+                          key={i}
+                          className={`h-1 flex-1 rounded-full transition-colors ${
+                            i < strength.filled ? strength.color : "bg-[#ececec]"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[11px] font-medium text-[#757575]">
+                      {t(strength.key)}
+                    </span>
+                  </div>
+                )}
+              </AuthField>
 
-            <FormField id="confirmPassword" label="Konfirmasi Password">
-              <div className="relative">
-                <input
-                  id="confirmPassword"
-                  type={showConfirmPass ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                    if (errors.confirmPassword)
-                      setErrors((prev) => ({
-                        ...prev,
-                        confirmPassword: undefined,
-                      }));
-                  }}
-                  placeholder="Ulangi password"
-                  required
-                  className={[
-                    "h-[36px] w-full rounded border px-[12px] pr-[40px] text-[14px] font-light text-black",
-                    "placeholder:text-[#727272] focus:outline-none focus:ring-1 transition-colors",
-                    errors.confirmPassword
-                      ? "border-red-400 focus:ring-red-400"
-                      : "border-[#f90] focus:ring-[#f90]",
-                  ].join(" ")}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPass((v) => !v)}
-                  className="absolute right-[12px] top-1/2 -translate-y-1/2"
-                  aria-label={
-                    showConfirmPass
-                      ? "Sembunyikan password"
-                      : "Tampilkan password"
-                  }
+              <AuthField
+                id="confirmPassword"
+                type={showConfirmPass ? "text" : "password"}
+                autoComplete="new-password"
+                label={t("confirmPasswordLabel")}
+                icon={<Lock className="h-4 w-4" strokeWidth={2} />}
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  if (errors.confirmPassword)
+                    setErrors((prev) => ({
+                      ...prev,
+                      confirmPassword: undefined,
+                    }));
+                }}
+                placeholder={t("confirmPasswordPlaceholder")}
+                required
+                error={errors.confirmPassword}
+                className="pr-11"
+                trailing={eyeButton(showConfirmPass, () =>
+                  setShowConfirmPass((v) => !v),
+                )}
+              />
+
+              {errors.general && (
+                <p
+                  role="alert"
+                  className="rounded-[10px] border border-[#fecdca] bg-[#fffbfa] px-3 py-2 text-[12px] leading-snug text-[#b42318]"
                 >
-                  {showConfirmPass ? (
-                    <EyeOff className="h-[16px] w-[20px] text-[#727272]" />
-                  ) : (
-                    <Eye className="h-[16px] w-[20px] text-[#727272]" />
-                  )}
-                </button>
-              </div>
-              {errors.confirmPassword && (
-                <p className="text-[12px] text-red-500">
-                  {errors.confirmPassword}
+                  {errors.general}
                 </p>
               )}
-            </FormField>
 
-            {errors.general && (
-              <p className="text-center text-[13px] text-red-500">
-                {errors.general}
+              <Button
+                type="submit"
+                disabled={registerMutation.isPending}
+                className="mt-1 h-11 w-full rounded-[10px] bg-[#ffcf02] text-[14px] font-bold text-[#1f1f1f] transition-[background-color,transform] hover:bg-[#f5c500] active:translate-y-px active:bg-[#e8b900] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {registerMutation.isPending ? t("processing") : t("submit")}
+              </Button>
+
+              <p className="text-center text-[11px] leading-[18px] text-[#757575]">
+                {t("termsPrefix")}{" "}
+                <Link
+                  href="/syarat-ketentuan"
+                  className="font-semibold text-[#f90] underline-offset-2 hover:underline"
+                >
+                  {t("terms")}
+                </Link>{" "}
+                {t("and")}{" "}
+                <Link
+                  href="/kebijakan-privasi"
+                  className="font-semibold text-[#f90] underline-offset-2 hover:underline"
+                >
+                  {t("privacy")}
+                </Link>
               </p>
-            )}
-
-            <div className="flex-1" />
-
-            <button
-              type="submit"
-              disabled={registerMutation.isPending}
-              className="h-[39px] min-h-[39px] w-full shrink-0 rounded-[4px] bg-[#ffcf02] text-[14px] font-bold text-black transition-colors hover:bg-[#f5c800] active:bg-[#e8bb00] disabled:opacity-60"
-            >
-              {registerMutation.isPending ? t("processing") : t("submit")}
-            </button>
-
-            <p className="shrink-0 text-center text-[11px] leading-[18px] text-black">
-              {t("termsPrefix")}{" "}
-              <Link
-                href="/syarat-ketentuan"
-                className="text-[#f90] hover:underline"
-              >
-                {t("terms")}
-              </Link>{" "}
-              {t("and")}{" "}
-              <Link
-                href="/kebijakan-privasi"
-                className="text-[#f90] hover:underline"
-              >
-                {t("privacy")}
-              </Link>
-            </p>
-          </form>
-        </div>
-
-        <div className="relative hidden h-full w-full lg:block">
-          <Image
-            src={assets.hero}
-            alt={t("heroAlt")}
-            fill
-            className="object-cover"
-            sizes="50vw"
-            priority
-          />
-        </div>
+            </form>
+          </div>
+        </motion.div>
       </section>
     </main>
   );

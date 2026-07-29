@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Phone, MapPin, Clock } from "lucide-react";
+import { Phone, MapPin, Clock, ArrowRight } from "lucide-react";
 import { BoxMyIcon } from "@/components/svgs/box-icon";
 import { HeadsetMyIcon } from "@/components/svgs/cs-icon";
 import { CreditCartMyIcon } from "@/components/svgs/cc-icon";
@@ -13,9 +13,7 @@ import { useTranslations } from "next-intl";
 // ============================================================================
 const IMG_LOOPER_LEFT  = "/assets/images/Looper-kiri.svg";
 const IMG_LOOPER_RIGHT = "/assets/images/Looper-kanan.svg";
-// const IMG_HERO_LEFT    = "/assets/images/contact-us/hero-left.svg";
-const IMG_HERO_LEFT    = "/assets/images/contact-us/7A (Hubungi Kami) (1).png";
-const IMG_HERO_RIGHT   = "/assets/images/contact-us/hero-right.svg";
+const IMG_HERO_AGENT   = "/assets/images/contact-us/7A (Hubungi Kami) (1).png";
 
 
 const ICON_IG     = "/assets/images/contact-us/logo-instagram.svg";
@@ -89,6 +87,126 @@ function TextField({
   );
 }
 
+/**
+ * Hero backdrop.
+ *
+ * The yellow field is drawn inline instead of being shipped as a raster/heavy
+ * SVG backdrop (the old hero-right.svg was 3.8 MB). Three motifs carry it, and
+ * they are deliberately NOT the same weight:
+ *
+ *   - a tight halftone wedge pinned to the top-left corner, only a shade off
+ *     the yellow, so it reads as texture rather than as a graphic;
+ *   - a thin, light ring family behind the agent, acting as a halo;
+ *   - a heavy warm-gold ring family running off the right edge. These are the
+ *     loud ones. They are cropped by the card so they read as one big arc
+ *     passing behind it, not as a decoration parked in the corner.
+ *
+ * Each family carries its own mask that dies out before the copy column, so
+ * nothing competes with the headline for contrast.
+ */
+const RINGS_LEFT  = [150, 178, 207, 243, 288];
+const RINGS_RIGHT = [92, 134, 182, 236, 296];
+
+function HeroBackdrop() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[20px]">
+      <svg
+        aria-hidden
+        viewBox="0 0 1200 340"
+        preserveAspectRatio="xMidYMid slice"
+        className="h-full w-full"
+      >
+        <defs>
+          {/* Halftone. The fill is only a step down from #ffcf02 on purpose:
+              at full contrast the corner turns into a second focal point and
+              starts fighting the agent. */}
+          <pattern id="cu-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="4" cy="4" r="2.5" fill="#eeb200" />
+          </pattern>
+          <radialGradient id="cu-dot-fade" gradientUnits="userSpaceOnUse" cx="0" cy="6" r="215">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="0.45" stopColor="#ffffff" stopOpacity="0.8" />
+            <stop offset="0.78" stopColor="#ffffff" stopOpacity="0.28" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+          </radialGradient>
+          <mask id="cu-dot-mask">
+            <rect x="-30" y="-30" width="290" height="290" fill="url(#cu-dot-fade)" />
+          </mask>
+
+          {/* Left halo: white, thin, fades before it reaches the headline. */}
+          <linearGradient id="cu-halo-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="0.85" />
+            <stop offset="0.2" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="0.34" stopColor="#ffffff" stopOpacity="0.45" />
+            <stop offset="0.46" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+          <mask id="cu-halo-mask">
+            <rect x="-300" y="-300" width="1800" height="940" fill="url(#cu-halo-fade)" />
+          </mask>
+
+          {/* Right arcs: heavy, warm, and confined to the right third. */}
+          <linearGradient id="cu-arc-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset="0.58" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset="0.72" stopColor="#ffffff" stopOpacity="0.55" />
+            <stop offset="0.86" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="1" />
+          </linearGradient>
+          <mask id="cu-arc-mask">
+            <rect x="-300" y="-300" width="1800" height="940" fill="url(#cu-arc-fade)" />
+          </mask>
+
+          {/* lit surface, so the yellow is not a flat fill */}
+          <radialGradient id="cu-gloss" gradientUnits="userSpaceOnUse" cx="330" cy="40" r="1000">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="0.18" />
+            <stop offset="0.5" stopColor="#ffffff" stopOpacity="0.04" />
+            <stop offset="1" stopColor="#c98600" stopOpacity="0.12" />
+          </radialGradient>
+        </defs>
+
+        <rect x="-200" y="-200" width="1600" height="740" fill="url(#cu-gloss)" />
+        <rect
+          x="-30"
+          y="-30"
+          width="290"
+          height="290"
+          fill="url(#cu-dots)"
+          mask="url(#cu-dot-mask)"
+        />
+
+        {/* halo behind the agent */}
+        <g mask="url(#cu-halo-mask)" fill="none" stroke="#ffffff">
+          {RINGS_LEFT.map((r, i) => (
+            <circle
+              key={`halo-${r}`}
+              cx="248"
+              cy="262"
+              r={r}
+              strokeOpacity={i % 2 === 0 ? 0.5 : 0.32}
+              strokeWidth={i % 2 === 0 ? 3 : 2}
+            />
+          ))}
+        </g>
+
+        {/* the big arc sweeping off the right edge */}
+        <g mask="url(#cu-arc-mask)" fill="none" stroke="#efb100">
+          {RINGS_RIGHT.map((r, i) => (
+            <circle
+              key={`arc-${r}`}
+              cx="1128"
+              cy="158"
+              r={r}
+              strokeOpacity={i % 2 === 0 ? 0.62 : 0.4}
+              strokeWidth={i % 2 === 0 ? 11 : 6}
+            />
+          ))}
+        </g>
+      </svg>
+    </div>
+  );
+}
+
 function InfoBlock({
   icon: Icon,
   title,
@@ -150,45 +268,57 @@ export default function ContactUsClient() {
     <main className="w-full">
 
       {/* ═══════════════════ SECTION 1 — Hero ═══════════════════════════ */}
-      <section className="w-full bg-white pb-16 pt-16">
+      {/* pt clears the agent, who breaks ~44px above the card's top edge */}
+      <section className="w-full bg-white pb-12 pt-14 md:pb-16 md:pt-16">
         <div className="mx-auto max-w-[1232px] px-5">
-          <div className="relative flex h-[302px] items-center rounded-[20px] bg-[#ffcf02]">
-            <Image
-              src={IMG_HERO_LEFT}
-              alt=""
-              aria-hidden
-              unoptimized
-              priority
-              fetchPriority="high"
-              width={250}
-              height={302}
-              className="absolute left-0 -top-[50px] h-[calc(100%+50px)] w-[250px] object-cover object-center"
-            />
-            <Image
-              src={IMG_HERO_RIGHT}
-              alt=""
-              aria-hidden
-              unoptimized
-              priority
-              fetchPriority="high"
-              width={300}
-              height={280}
-              className="absolute right-0 bottom-0 h-full w-auto object-contain object-bottom"
-            />
-            <div className="relative z-10 pl-[284px]">
-              <h1 className="text-[52px] font-black leading-tight text-black">
+          {/* No overflow-hidden here: the agent is meant to break the top edge.
+              The decoration clips itself instead. */}
+          <div className="relative rounded-[20px] bg-[#ffcf02] md:min-h-[320px]">
+            <HeroBackdrop />
+
+            {/* Agent. Stacked above the copy on mobile, anchored to the bottom
+                left corner from md up. */}
+            <div className="relative mx-auto -mt-10 h-[220px] w-[170px] md:absolute md:bottom-0 md:left-6 md:mx-0 md:mt-0 md:h-[calc(100%+2.75rem)] md:w-[250px] lg:left-10 lg:w-[280px]">
+              <Image
+                src={IMG_HERO_AGENT}
+                alt=""
+                aria-hidden
+                unoptimized
+                priority
+                fetchPriority="high"
+                fill
+                sizes="(max-width: 768px) 150px, 280px"
+                className="object-contain object-bottom"
+              />
+            </div>
+
+            <div className="relative px-6 pb-9 pt-5 md:py-12 md:pl-[300px] md:pr-10 lg:pl-[380px] lg:pr-16">
+              <h1 className="text-[32px] font-black leading-[1.05] tracking-tight text-black md:text-[44px] xl:text-[52px]">
                 {t("hero.heading")}
               </h1>
-              <p className="mb-7 mt-2 text-[24px] text-black">
+
+              {/* runs to roughly the width of the headline, not the column */}
+              <div className="mt-5 h-[2px] w-full max-w-[300px] rounded-full bg-white/85 md:max-w-[400px]" />
+
+              <p className="mt-4 text-[15px] font-semibold text-black md:text-base">
                 {t("hero.subheading")}
               </p>
+              <p className="mt-3 max-w-[54ch] text-[14px] leading-relaxed text-black/80 md:text-[15px]">
+                {t("hero.description")}
+              </p>
+
               <a
                 href="https://wa.me/62811833164"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-black px-[42px] py-4 text-[20px] font-bold text-white transition-colors hover:bg-gray-900"
+                className="group mt-7 inline-flex items-center gap-3 rounded-full bg-white px-8 py-3.5 text-[16px] font-bold text-black shadow-sm transition-colors hover:bg-white/90 active:scale-[0.98] md:gap-5 md:text-[18px]"
               >
                 {t("hero.cta")}
+                {/* decorative: the label carries the meaning and the contrast */}
+                <ArrowRight
+                  aria-hidden
+                  className="size-5 stroke-[2.5] text-[#f0a800] transition-transform group-hover:translate-x-1"
+                />
               </a>
             </div>
           </div>

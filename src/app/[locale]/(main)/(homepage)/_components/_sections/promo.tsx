@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ImageOff } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -22,16 +23,12 @@ type PromoSectionProps = {
   promos?: PromoItem[];
 };
 
-const defaultList = [
-  { id: 1, image: "/assets/images/hero-stagging.webp" },
-  { id: 2, image: "/assets/images/event-stagging.webp" },
-];
-
 export const PromoSection = ({ promos }: PromoSectionProps) => {
   const t = useTranslations("Root");
-  const list = promos?.length
-    ? promos.map((p, idx) => ({ id: idx + 1, image: p.banner_url }))
-    : defaultList;
+  const hasPromos = !!promos?.length;
+  const list = hasPromos
+    ? promos!.map((p, idx) => ({ id: idx + 1, image: p.banner_url }))
+    : [];
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(true);
   const [api, setApi] = useState<CarouselApi>();
@@ -106,6 +103,18 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
     };
   }, [api, list.length]);
 
+  if (!hasPromos) {
+    return (
+      <section className="py-16 px-17 w-full mx-auto xl:max-w-7xl max-w-5xl">
+        <div className="flex flex-col w-full gap-4">
+          <div className="relative aspect-4/1 rounded-xl shadow-lg overflow-hidden bg-gray-300 flex items-center justify-center">
+            <ImageOff className="size-12 stroke-[1.25]" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 px-17 w-full mx-auto xl:max-w-7xl max-w-5xl">
       <div className="flex flex-col w-full gap-4">
@@ -125,15 +134,21 @@ export const PromoSection = ({ promos }: PromoSectionProps) => {
               {list?.map((item, idx) => (
                 <CarouselItem key={item.id}>
                   <div className="relative aspect-4/1 rounded-xl shadow-lg overflow-hidden">
-                    <Image
-                      src={item.image}
-                      alt={item.id.toString()}
-                      fill
-                      sizes={"100vw"}
-                      className="object-cover"
-                      priority={idx === 0}
-                      fetchPriority={idx === 0 ? "high" : "auto"}
-                    />
+                    {item.image ? (
+                      <Image
+                        src={item.image}
+                        alt={item.id.toString()}
+                        fill
+                        sizes={"100vw"}
+                        className="object-cover"
+                        priority={idx === 0}
+                        fetchPriority={idx === 0 ? "high" : "auto"}
+                      />
+                    ) : (
+                      <div className="size-full bg-gray-300 flex items-center justify-center">
+                        <ImageOff className="size-12 stroke-[1.25]" />
+                      </div>
+                    )}
                   </div>
                 </CarouselItem>
               ))}

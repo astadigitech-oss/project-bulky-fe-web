@@ -42,9 +42,9 @@ declare const messages: {
     "title": "Login",
     "register": "Register",
     "phoneLabel": "Phone Number",
-    "phonePlaceholder": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
     "passwordLabel": "Password",
-    "passwordPlaceholder": "Password",
+    "passwordPlaceholder": "Enter your password",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "forgotPassword": "Forgot Password?",
@@ -57,7 +57,9 @@ declare const messages: {
     "noAccount": "Don't have an account?",
     "authRequired": "Please log in first to continue.",
     "authRequiredAddToCart": "Please log in first to add this product to your cart.",
-    "authRequiredBuyNow": "Please log in first to continue purchasing this product."
+    "authRequiredBuyNow": "Please log in first to continue purchasing this product.",
+    "welcomePrefix": "Welcome to",
+    "heroAlt": "Two Bulky couriers carrying boxes"
   },
   "ForgotPassword": {
     "title": "Forgot Password",
@@ -99,11 +101,11 @@ declare const messages: {
     "title": "Register Now",
     "alreadyHaveAccount": "Already have an account?",
     "login": "Login",
-    "registerWithGoogle": "Google",
+    "registerWithGoogle": "Sign up with Google",
     "registerWithApple": "Apple",
     "or": "Or",
     "phoneLabel": "Phone Number",
-    "phonePlaceholder": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
     "processing": "Processing...",
     "submit": "Register",
     "termsPrefix": "By registering, I agree to the",
@@ -112,7 +114,8 @@ declare const messages: {
     "privacy": "Privacy Policy",
     "errors": {
       "mustAgree": "Please agree to the Terms & Conditions first."
-    }
+    },
+    "welcomePrefix": "Join"
   },
   "Otp": {
     "title": "Account Verification",
@@ -159,8 +162,20 @@ declare const messages: {
       "emailInvalid": "Invalid email format.",
       "passwordRequired": "Password is required.",
       "passwordMin": "Password must be at least 8 characters.",
-      "general": "Something went wrong. Please try again."
-    }
+      "general": "Something went wrong. Please try again.",
+      "phoneRequired": "Phone number is required.",
+      "confirmPasswordRequired": "Confirm password is required.",
+      "confirmPasswordMismatch": "Passwords do not match."
+    },
+    "welcomePrefix": "One Step Away From",
+    "subtitle": "Fill in the details below to finish signing up.",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter password",
+    "strengthWeak": "Weak",
+    "strengthFair": "Fair",
+    "strengthGood": "Good",
+    "strengthStrong": "Strong",
+    "strengthLabel": "Password strength"
   },
   "OAuthAddPhone": {
     "title": "One More Step!",
@@ -373,6 +388,7 @@ declare const messages: {
     "paymentTypeTitle": "Payment Type",
     "paymentTypeSelf": "Pay Alone",
     "paymentTypeSplit": "Split Payment",
+    "paymentMethodSplitInfo": "You'll choose a payment method after placing the order, on the split payment amount page.",
     "splitFriendsLabel": "Split Payment Friends",
     "splitFriendsEmpty": "No friends invited yet.",
     "splitAddFriend": "Search Friend",
@@ -410,6 +426,8 @@ declare const messages: {
   "Homepage": {
     "hero": {
       "title": "Build Your Future with Bulky.id",
+      "titleLine1": "Build Your Future",
+      "titleLine2": "with <accent>Bulky.id</accent>",
       "description": "Shop hundreds of liquidation auctions across dozens of categories. All sizes and conditions available.",
       "startNow": "Get Started"
     },
@@ -418,10 +436,10 @@ declare const messages: {
     "seeAllTV": "View All Contents",
     "infoBanner": {
       "title": "Shipping Across Indonesia",
+      "titleLine1": "Shipping",
+      "titleLine2": "Across <accent>Indonesia</accent>",
+      "description": "We're ready to help your business needs with fast, safe, and reliable shipping across all of Indonesia.",
       "getNow": "Get It Now",
-      "package": "Cargo Shipping Options: Self-Pickup or Delivery Service",
-      "payment": "100% Secure Payment Guarantee",
-      "cs": "24/7 Customer Support",
       "satisfied": "Trusted by <b>5,000+</b> Customers"
     },
     "howItWorks": {
@@ -433,7 +451,13 @@ declare const messages: {
     },
     "testimony": {
       "title": "Testimonials",
-      "description": "What do customers say about our products and services? See their experiences here."
+      "description": "What do customers say about our products and services? See their experiences here.",
+      "productPurchased": "Product purchased:",
+      "ratingLabel": "Rated {rating} out of 5",
+      "goToSlide": "Go to testimonial {number}",
+      "viewPhoto": "View review photo {number}",
+      "photoPreview": "Photo Preview",
+      "closePreview": "Close"
     },
     "wholesale": {
       "title": "Register to Become",
@@ -505,8 +529,12 @@ declare const messages: {
     "pageTitle": "About Us - Bulky.id",
     "section1": {
       "heading": "About Us",
+      "subheading": "Get to know Bulky.id more closely and our commitment to delivering the best for your business.",
+      "card1Title": "Our Commitment",
       "card1": "We are committed to creating a sustainable, transparent, and mutually beneficial business ecosystem, connecting retailers, logistics partners, and resellers across Indonesia.",
+      "card2Title": "About Bulky.id",
       "card2": "<b>Bulky.id</b> is Indonesia's first online retail liquidation company, helping businesses efficiently manage excess stock, returned goods, and failed delivery products.",
+      "card3Title": "Innovation for Solutions",
       "card3": "We deliver innovative stock management solutions, ensuring every product retains its value while opening new profit opportunities for business owners."
     },
     "section2": {
@@ -551,11 +579,16 @@ declare const messages: {
       ]
     },
     "section6": {
-      "heading": "At BULKY ID, every container and pallet is handled to the highest standard",
+      "heading": "At <brand>Bulky.id</brand>, every container and pallet is handled to the highest standard",
       "p": "As Indonesia's first online retail liquidation platform, <b>Bulky.id</b> is here to help business owners get the best stock, turning surplus goods into new profitable and sustainable business opportunities.",
       "badge1": "Secure",
+      "badge1Desc": "Safe and trusted transactions",
       "badge2": "Fast",
-      "badge3": "24/7 Support"
+      "badge2Desc": "Fast processing for your business needs",
+      "badge3": "24/7 Support",
+      "badge3Desc": "Our team is ready to help anytime",
+      "badge4": "Best Stock",
+      "badge4Desc": "Quality stock for the best opportunities"
     }
   },
   "ProfilePages": {
@@ -935,7 +968,8 @@ declare const messages: {
     "pageTitle": "Contact Us - Bulky.id",
     "hero": {
       "heading": "Need Help?",
-      "subheading": "Our Team Is Ready to Help You 24/7",
+      "subheading": "Our team is ready to help you 24/7",
+      "description": "Reach out for information, advice, or support on anything to do with bulky products and services.",
       "cta": "Ask Now"
     },
     "form": {
@@ -951,7 +985,7 @@ declare const messages: {
       "messagePlaceholder": "Write a message",
       "sending": "Sending...",
       "submit": "Send Message",
-      "successMessage": "\u2713 Your message has been sent. Our team will contact you shortly."
+      "successMessage": "✓ Your message has been sent. Our team will contact you shortly."
     },
     "sidebar": {
       "greeting": "Hi, our team is always ready to help you",
@@ -961,12 +995,12 @@ declare const messages: {
       "email": "Email",
       "address": "Address",
       "officeHours": "Office Hours",
-      "monFri": "Mon\u2013Fri",
-      "satSun": "Sat\u2013Sun",
+      "monFri": "Mon–Fri",
+      "satSun": "Sat–Sun",
       "socialMedia": "Our Social Media"
     },
     "map": {
-      "openMaps": "Open in Google Maps \u2192"
+      "openMaps": "Open in Google Maps →"
     },
     "points": {
       "shipping": "Cargo shipping (self-pickup) or delivery service",

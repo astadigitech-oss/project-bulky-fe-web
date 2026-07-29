@@ -38,10 +38,10 @@
     "close": "Tutup",
     "title": "Masuk",
     "register": "Daftar",
-    "phoneLabel": "No Telepon",
-    "phonePlaceholder": "No Handphone",
+    "phoneLabel": "No. Telepon",
+    "phonePlaceholder": "Masukkan nomor telepon",
     "passwordLabel": "Password",
-    "passwordPlaceholder": "Password",
+    "passwordPlaceholder": "Masukkan password",
     "showPassword": "Tampilkan password",
     "hidePassword": "Sembunyikan password",
     "forgotPassword": "Lupa Kata Sandi?",
@@ -54,7 +54,9 @@
     "noAccount": "Belum punya akun?",
     "authRequired": "Silakan masuk terlebih dahulu untuk melanjutkan.",
     "authRequiredAddToCart": "Silakan masuk terlebih dahulu untuk menambahkan produk ke keranjang.",
-    "authRequiredBuyNow": "Silakan masuk terlebih dahulu untuk melanjutkan pembelian produk ini."
+    "authRequiredBuyNow": "Silakan masuk terlebih dahulu untuk melanjutkan pembelian produk ini.",
+    "welcomePrefix": "Selamat Datang di",
+    "heroAlt": "Dua kurir Bulky membawa kardus"
   },
   "ForgotPassword": {
     "title": "Lupa Kata Sandi",
@@ -96,11 +98,11 @@
     "title": "Daftar Sekarang",
     "alreadyHaveAccount": "Sudah Punya Akun?",
     "login": "Masuk",
-    "registerWithGoogle": "Google",
+    "registerWithGoogle": "Daftar dengan Google",
     "registerWithApple": "Apple",
     "or": "Atau",
-    "phoneLabel": "Nomor Telepon",
-    "phonePlaceholder": "Nomor Handphone",
+    "phoneLabel": "No. Telepon",
+    "phonePlaceholder": "Masukkan nomor telepon",
     "processing": "Memproses...",
     "submit": "Daftar",
     "termsPrefix": "Dengan Mendaftar, Saya menyetujui",
@@ -109,7 +111,8 @@
     "privacy": "Kebijakan Privasi",
     "errors": {
       "mustAgree": "Harap setujui Syarat & Ketentuan terlebih dahulu."
-    }
+    },
+    "welcomePrefix": "Gabung Bersama"
   },
   "Otp": {
     "title": "Verifikasi Akun",
@@ -156,8 +159,20 @@
       "emailInvalid": "Format email tidak valid.",
       "passwordRequired": "Password wajib diisi.",
       "passwordMin": "Password minimal 8 karakter.",
-      "general": "Terjadi kesalahan. Coba lagi."
-    }
+      "general": "Terjadi kesalahan. Coba lagi.",
+      "phoneRequired": "Nomor telepon wajib diisi.",
+      "confirmPasswordRequired": "Konfirmasi password wajib diisi.",
+      "confirmPasswordMismatch": "Konfirmasi password tidak sama."
+    },
+    "welcomePrefix": "Satu Langkah Lagi Menuju",
+    "subtitle": "Lengkapi data berikut untuk menyelesaikan pendaftaran.",
+    "confirmPasswordLabel": "Konfirmasi Password",
+    "confirmPasswordPlaceholder": "Ulangi password",
+    "strengthWeak": "Lemah",
+    "strengthFair": "Cukup",
+    "strengthGood": "Baik",
+    "strengthStrong": "Kuat",
+    "strengthLabel": "Kekuatan password"
   },
   "OAuthAddPhone": {
     "title": "Satu Langkah Lagi!",
@@ -370,6 +385,7 @@
     "paymentTypeTitle": "Tipe Pembayaran",
     "paymentTypeSelf": "Bayar Sendiri",
     "paymentTypeSplit": "Patungan",
+    "paymentMethodSplitInfo": "Metode pembayaran akan dipilih setelah pesanan dibuat, di halaman atur nominal patungan.",
     "splitFriendsLabel": "Teman Patungan",
     "splitFriendsEmpty": "Belum ada teman yang diundang.",
     "splitAddFriend": "Cari Teman",
@@ -407,6 +423,8 @@
   "Homepage": {
     "hero": {
       "title": "Bangun Masa Depan Di Bulky.id",
+      "titleLine1": "Bangun Masa Depan",
+      "titleLine2": "Di <accent>Bulky.id</accent>",
       "description": "Belanja ratusan lelang likuidasi. Puluhan kategori produk. Semua ukuran dan kondisi.",
       "startNow": "Mulai Sekarang"
     },
@@ -415,10 +433,10 @@
     "seeAllTV": "Lihat Semua Konten",
     "infoBanner": {
       "title": "Pengiriman ke Seluruh Indonesia",
+      "titleLine1": "Pengiriman",
+      "titleLine2": "Ke Seluruh <accent>Indonesia</accent>",
+      "description": "Kami siap membantu kebutuhan bisnis Anda dengan pengiriman cepat, aman dan terpercaya ke seluruh wilayah Indonesia.",
       "getNow": "Dapatkan Sekarang",
-      "package": "Opsi Pengiriman Kargo: Ambil Sendiri atau Layanan Antar",
-      "payment": "Pembayaran Terjamin 100% Aman",
-      "cs": "Dukungan Pelanggan 24 Jam",
       "satisfied": "Dipercaya oleh <b>5.000+</b> Pelanggan"
     },
     "howItWorks": {
@@ -430,7 +448,13 @@
     },
     "testimony": {
       "title": "Testimoni",
-      "description": "Apa kata pelanggan tentang produk dan layanan kami? Lihat pengalaman mereka di sini."
+      "description": "Apa kata pelanggan tentang produk dan layanan kami? Lihat pengalaman mereka di sini.",
+      "productPurchased": "Produk yang dibeli:",
+      "ratingLabel": "Rating {rating} dari 5",
+      "goToSlide": "Lihat testimoni ke-{number}",
+      "viewPhoto": "Lihat foto ulasan ke-{number}",
+      "photoPreview": "Pratinjau Foto",
+      "closePreview": "Tutup"
     },
     "wholesale": {
       "title": "Ayo! Daftarkan Diri Menjadi",
@@ -502,8 +526,12 @@
     "pageTitle": "Tentang Kami - Bulky.id",
     "section1": {
       "heading": "Tentang Kami",
+      "subheading": "Kenali lebih dekat Bulky.id dan komitmen kami untuk memberikan yang terbaik bagi bisnis Anda.",
+      "card1Title": "Komitmen Kami",
       "card1": "Kami berkomitmen menciptakan ekosistem bisnis yang berkelanjutan, transparan, dan saling menguntungkan, antara ritel, mitra logistik, dan reseller di seluruh Indonesia.",
+      "card2Title": "Tentang Bulky.id",
       "card2": "<b>Bulky.id</b> adalah perusahaan likuidasi ritel online pertama di Indonesia yang membantu bisnis mengelola kelebihan stok, barang retur, dan produk gagal kirim secara efisien.",
+      "card3Title": "Inovasi untuk Solusi",
       "card3": "Kami menghadirkan solusi inovatif dalam pengelolaan stok, memastikan setiap produk tetap memiliki nilai jual serta membuka peluang keuntungan baru bagi pelaku usaha."
     },
     "section2": {
@@ -548,11 +576,16 @@
       ]
     },
     "section6": {
-      "heading": "Di BULKY ID setiap kontainer dan palet, kami tangani dengan standar terbaik",
+      "heading": "Di <brand>Bulky.id</brand> setiap kontainer dan palet, kami tangani dengan standar terbaik",
       "p": "Sebagai platform likuidasi ritel online pertama di Indonesia, <b>Bulky.id</b> hadir untuk membantu pelaku usaha mendapatkan stok terbaik mengubah kelebihan barang menjadi peluang bisnis baru yang menguntungkan dan berkelanjutan.",
       "badge1": "Aman",
+      "badge1Desc": "Transaksi aman dan terpercaya",
       "badge2": "Cepat",
-      "badge3": "24/7 Dukungan"
+      "badge2Desc": "Proses cepat untuk kebutuhan bisnis Anda",
+      "badge3": "24/7 Dukungan",
+      "badge3Desc": "Tim kami siap membantu kapan saja",
+      "badge4": "Stok Terbaik",
+      "badge4Desc": "Stok berkualitas untuk peluang terbaik"
     }
   },
   "ProfilePages": {
@@ -932,7 +965,8 @@
     "pageTitle": "Hubungi Kami - Bulky.id",
     "hero": {
       "heading": "Butuh Bantuan?",
-      "subheading": "Tim Kami Siap Melayani Anda 24/7",
+      "subheading": "Tim kami siap melayani Anda 24/7",
+      "description": "Hubungi kami untuk mendapatkan informasi, konsultasi, atau bantuan seputar produk dan layanan bulky.",
       "cta": "Tanya Sekarang"
     },
     "form": {
@@ -948,7 +982,7 @@
       "messagePlaceholder": "Tulis pesan",
       "sending": "Mengirim...",
       "submit": "Kirim Pesan",
-      "successMessage": "\u2713 Pesan kamu sudah terkirim. Tim kami akan menghubungi kamu segera."
+      "successMessage": "✓ Pesan kamu sudah terkirim. Tim kami akan menghubungi kamu segera."
     },
     "sidebar": {
       "greeting": "Hi, Tim kami selalu siap membantu Anda",
@@ -958,12 +992,12 @@
       "email": "Email",
       "address": "Alamat",
       "officeHours": "Jam Operasi Kantor",
-      "monFri": "Senin\u2013Jumat",
-      "satSun": "Sabtu\u2013Minggu",
+      "monFri": "Senin–Jumat",
+      "satSun": "Sabtu–Minggu",
       "socialMedia": "Sosial Media Kami"
     },
     "map": {
-      "openMaps": "Buka di Google Maps \u2192"
+      "openMaps": "Buka di Google Maps →"
     },
     "points": {
       "shipping": "Pengiriman kargo (ambil sendiri) atau layanan pengiriman",

@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
-import { Clock, Edit3, HelpCircle, MapPin, Package, Phone, Plus, Search, ShieldCheck, ShieldOff, Star, Store, Tag, Trash2, Truck, UserRound, Users, X } from "lucide-react";
+import { Clock, Edit3, HelpCircle, Info, MapPin, Package, Phone, Plus, Search, ShieldCheck, ShieldOff, Star, Store, Tag, Trash2, Truck, UserRound, Users, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useProtectRoute } from "@/providers/session-provider";
@@ -1016,7 +1016,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
       toast.error(t("deliveryShippingCostRequired"));
       return;
     }
-    if (!selectedPaymentKode) {
+    if (paymentType === "single_payment" && !selectedPaymentKode) {
       toast.error(t("paymentMethodRequired"));
       return;
     }
@@ -1417,14 +1417,21 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
           {/* Pilih Cara Bayar */}
           <section className="flex flex-col gap-3">
             <SectionTitle>{t("paymentMethod")}</SectionTitle>
-            <PaymentMethodSelector
-              groups={paymentMethodsQuery.data?.data ?? []}
-              isLoading={paymentMethodsQuery.isLoading}
-              isError={paymentMethodsQuery.isError}
-              selectedKode={selectedPaymentKode}
-              onSelect={setSelectedPaymentKode}
-              qrisDisabled={isQrisDisabled}
-            />
+            {paymentType === "single_payment" ? (
+              <PaymentMethodSelector
+                groups={paymentMethodsQuery.data?.data ?? []}
+                isLoading={paymentMethodsQuery.isLoading}
+                isError={paymentMethodsQuery.isError}
+                selectedKode={selectedPaymentKode}
+                onSelect={setSelectedPaymentKode}
+                qrisDisabled={isQrisDisabled}
+              />
+            ) : (
+              <div className="flex items-start gap-3 rounded border border-[#01798A]/30 bg-[#f0fafb] px-4 py-3">
+                <Info className="mt-0.5 size-4 shrink-0 text-[#01798A]" />
+                <span className="text-sm text-[#01798A]">{t("paymentMethodSplitInfo")}</span>
+              </div>
+            )}
           </section>
 
           {/* Voucher */}
