@@ -1,5 +1,8 @@
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { EmptyState, ProfileShell } from "../_components/profile-shell";
+import { ProfileShell } from "../_components/profile-shell";
+import { PaymentSuccessModal } from "../orders/_components/payment-success-modal";
+import { GroupBuyList } from "./_components/group-buy-list";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -8,15 +11,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PembayaranPatunganPage() {
-  const t = await getTranslations("ProfilePages.patungan");
   return (
     <ProfileShell activeTab="group-buy">
-      <p className="text-base text-[#727272]">{t("heading")}</p>
-      <EmptyState
-        icon="split"
-        title={t("emptyTitle")}
-        actionLabel={t("emptyAction")}
-      />
+      <Suspense>
+        <PaymentSuccessModal redirectTo="/profile/group-buy" />
+      </Suspense>
+      <GroupBuyList />
     </ProfileShell>
   );
 }

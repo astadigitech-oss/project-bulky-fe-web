@@ -104,7 +104,7 @@ export const SplitPaymentClient = ({ kode }: { kode: string }) => {
       return;
     }
 
-    const successReturnUrl = `${window.location.origin}/${locale}/profile/orders?payment_success=1`;
+    const successReturnUrl = `${window.location.origin}/${locale}/profile/group-buy?payment_success=1`;
 
     createSplitPayment.mutate({
       body: {

@@ -9,7 +9,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@/i18n/navigation";
 
-export function PaymentSuccessModal() {
+export function PaymentSuccessModal({ redirectTo = "/profile/orders" }: { redirectTo?: string }) {
   const t = useTranslations("ProfilePages.orders");
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -23,7 +23,7 @@ export function PaymentSuccessModal() {
 
   const handleClose = () => {
     setOpen(false);
-    router.replace("/profile/orders");
+    router.replace(redirectTo);
   };
 
   return (

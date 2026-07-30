@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Package, Warehouse } from "lucide-react";
+import { Package, Warehouse, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { Order } from "@/services/orders/types";
@@ -78,7 +78,15 @@ export function OrderCard({ order, hideKode }: { order: Order; hideKode?: boolea
             )}
           </div>
           <div className="flex min-w-0 h-[120px] flex-col">
-            {!hideKode && <p className="mb-0.5 text-xs text-[#727272]">{order.kode}</p>}
+            <div className="mb-0.5 flex items-center gap-2">
+              {!hideKode && <p className="text-xs text-[#727272]">{order.kode}</p>}
+              {order.payment_type === "SPLIT" && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-[#01798a] px-2 py-0.5 text-[10px] font-semibold text-[#01798a]">
+                  <Users className="size-2.5" />
+                  {t("splitPaymentBadge")}
+                </span>
+              )}
+            </div>
             <h3 className="mb-2 text-sm text-black">{order.nama_produk}</h3>
             <p className="text-xl font-bold text-[#ff9900]">
               {order.harga_sesudah_diskon_formatted}
@@ -99,7 +107,7 @@ export function OrderCard({ order, hideKode }: { order: Order; hideKode?: boolea
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
-              href={`/profile/orders/${order.kode}`}
+              href={`/profile/${order.payment_type === "SPLIT" ? "group-buy" : "orders"}/${order.kode}`}
               className="flex h-10 items-center justify-center whitespace-nowrap rounded border border-[#d9d9d9] px-5 text-sm text-[#1d1d1d] transition-colors hover:border-[#ffcf02] hover:bg-[#fff8df]"
             >
               {t("viewDetail")}

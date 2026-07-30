@@ -8,15 +8,15 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("pageTitle") };
 }
 
-export default async function OrderDetailPage({
+export default async function GroupBuyOrderDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   return (
-    <ProfileShell activeTab="orders">
-      <OrderDetail code={id} variant="orders" />
+    <ProfileShell activeTab="group-buy">
+      <OrderDetail code={id} variant="group-buy" />
     </ProfileShell>
   );
 }

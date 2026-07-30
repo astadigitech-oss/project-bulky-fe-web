@@ -627,7 +627,8 @@
         "trackOrder": "Lacak Pesanan",
         "pickupInfo": "Info Pickup",
         "statusPacking": "Dikemas",
-        "statusDone": "Selesai"
+        "statusDone": "Selesai",
+        "splitPaymentBadge": "Patungan"
       },
       "pickupModal": {
         "title": "Informasi Pickup",
@@ -642,6 +643,7 @@
     "orderDetail": {
       "pageTitle": "Detail Pesanan",
       "back": "Kembali ke Pesanan",
+      "backGroupBuy": "Kembali ke Group Buy",
       "orderId": "Nomor Pesanan",
       "createdAt": "Dibuat pada",
       "palletType": "Tipe Palet Online",
@@ -662,6 +664,24 @@
       "markDoneConfirmDesc": "Pastikan kamu sudah menerima pesanan dalam kondisi baik sebelum mengkonfirmasi. Tindakan ini tidak dapat dibatalkan.",
       "markDoneConfirmOk": "Ya, Sudah Diterima",
       "markDoneConfirmCancel": "Batal",
+      "markDoneOwnerOnlyNote": "Hanya pemilik pesanan yang bisa mengonfirmasi pesanan diterima.",
+      "splitPaymentBadge": "Patungan",
+      "expiredNotice": "Pembayaran kadaluarsa pada",
+      "participants": {
+        "title": "Peserta Patungan",
+        "subtitle": "Setiap peserta membayar bagiannya masing-masing untuk pesanan ini.",
+        "you": "Kamu",
+        "owner": "Pemilik",
+        "payMyPart": "Bayar Bagian Saya",
+        "paidAt": "Dibayar pada",
+        "expiredAt": "Kadaluarsa pada",
+        "status": {
+          "PAID": "Lunas",
+          "PENDING": "Menunggu",
+          "PARTIAL": "Sebagian",
+          "EXPIRED": "Kadaluarsa"
+        }
+      },
       "orderStatus": {
         "PROCESSING": "Diproses",
         "READY": "Siap Kirim",
@@ -720,7 +740,7 @@
     },
     "patungan": {
       "pageTitle": "Pembayaran Patungan",
-      "heading": "Patungan",
+      "heading": "Pantau pesanan patungan kamu di sini.",
       "emptyTitle": "Tidak ada pembayaran patungan",
       "emptyAction": "Buat Pembayaran Patungan"
     },

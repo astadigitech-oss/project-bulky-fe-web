@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useMutate } from "@/lib/query/use-mutate";
 import type { MarkDoneResponse, OrderDetailProduct } from "@/services/orders/types";
@@ -27,13 +26,19 @@ function formatTimestampWIB(timestamp: string | null | undefined, locale: string
     timeZone: "Asia/Jakarta",
   });
 }
-import { Loader2, Package, Warehouse, Truck, CheckCircle2, MapPin, FileText, Store, Ship } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { Loader2, Package, Warehouse, Truck, CheckCircle2, MapPin, FileText, Store, Ship, Users } from "lucide-react";
+import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { useApiQuery } from "@/lib/query/use-query";
-import type { GetOrderDetailResponse, OrderStepperStep, DeliveryType } from "@/services/orders/types";
-import { PickupInfoModal } from "../../_components/pickup-info-modal";
-import { TrackingModal } from "../../_components/tracking-modal";
+import type {
+  GetOrderDetailResponse,
+  OrderStepperStep,
+  DeliveryType,
+  OrderParticipant,
+  PaymentStatus,
+} from "@/services/orders/types";
+import { PickupInfoModal } from "../orders/_components/pickup-info-modal";
+import { TrackingModal } from "../orders/_components/tracking-modal";
 
 // ─── Stepper ──────────────────────────────────────────────────────────────────
 
@@ -149,9 +154,114 @@ function DeliveryBadge({ type }: { type: DeliveryType }) {
   );
 }
 
+// ─── Split payment participants ────────────────────────────────────────────────
+
+const PARTICIPANT_STATUS_STYLE: Record<PaymentStatus, string> = {
+  PAID: "bg-[#e8f5e9] text-[#2e7d32]",
+  PARTIAL: "bg-[#fff8df] text-[#ff9900]",
+  PENDING: "bg-[#f5f5f5] text-[#727272]",
+  EXPIRED: "bg-[#fdecea] text-[#b3261e]",
+};
+
+function ParticipantStatusBadge({ status }: { status: PaymentStatus }) {
+  const t = useTranslations("ProfilePages.orderDetail.participants.status");
+  return (
+    <span className={cn("shrink-0 rounded-full px-3 py-1 text-xs font-semibold", PARTICIPANT_STATUS_STYLE[status])}>
+      {t(status)}
+    </span>
+  );
+}
+
+function ParticipantRow({
+  participant,
+  orderCode,
+  orderPayable,
+  locale,
+}: {
+  participant: OrderParticipant;
+  orderCode: string;
+  orderPayable: boolean;
+  locale: string;
+}) {
+  const t = useTranslations("ProfilePages.orderDetail.participants");
+  const initial = participant.name.trim().charAt(0).toUpperCase() || "?";
+  const canPay = orderPayable && participant.is_me && (participant.payment_status === "PENDING" || participant.payment_status === "PARTIAL");
+
+  return (
+    <div className="flex flex-wrap items-center gap-3 py-3">
+      <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f5f5f5] text-sm font-bold text-[#01798a]">
+        {initial}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <p className="truncate text-sm font-semibold text-black">
+            {participant.name}
+            {participant.is_me && <span className="text-[#727272] font-normal"> ({t("you")})</span>}
+          </p>
+          {participant.role === "OWNER" && (
+            <span className="rounded-full border border-[#d9d9d9] px-2 py-0.5 text-[10px] font-semibold text-[#727272]">
+              {t("owner")}
+            </span>
+          )}
+        </div>
+        <p className="text-sm font-bold text-[#ff9900]">{participant.amount_formatted}</p>
+        {participant.payment_status === "PAID" && participant.paid_at && (
+          <p className="text-xs text-[#727272]">{t("paidAt")} {formatTimestampWIB(participant.paid_at, locale)}</p>
+        )}
+        {participant.payment_status === "EXPIRED" && participant.expired_at && (
+          <p className="text-xs text-[#b3261e]">{t("expiredAt")} {formatTimestampWIB(participant.expired_at, locale)}</p>
+        )}
+      </div>
+      <ParticipantStatusBadge status={participant.payment_status} />
+      {canPay && (
+        <Link
+          href={`/checkout/split/${orderCode}`}
+          className="flex h-9 shrink-0 items-center justify-center rounded bg-[#ffcf02] px-4 text-xs font-bold text-[#1d1d1d] transition-colors hover:bg-[#f0c300]"
+        >
+          {t("payMyPart")}
+        </Link>
+      )}
+    </div>
+  );
+}
+
+function ParticipantsSection({
+  participants,
+  orderCode,
+  orderPayable,
+  locale,
+}: {
+  participants: OrderParticipant[];
+  orderCode: string;
+  orderPayable: boolean;
+  locale: string;
+}) {
+  const t = useTranslations("ProfilePages.orderDetail.participants");
+
+  return (
+    <div className="rounded-xl border border-[#d9d9d9] p-5">
+      <p className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-black">
+        <Users className="size-4 text-[#01798a]" /> {t("title")}
+      </p>
+      <p className="mb-3 text-xs text-[#727272]">{t("subtitle")}</p>
+      <div className="divide-y divide-[#d9d9d9]">
+        {participants.map((participant, idx) => (
+          <ParticipantRow
+            key={`${participant.buyer_id}-${idx}`}
+            participant={participant}
+            orderCode={orderCode}
+            orderPayable={orderPayable}
+            locale={locale}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function OrderDetail({ code }: { code: string }) {
+export function OrderDetail({ code, variant = "orders" }: { code: string; variant?: "orders" | "group-buy" }) {
   const t = useTranslations("ProfilePages.orderDetail");
   const locale = useLocale();
   const router = useRouter();
@@ -159,6 +269,9 @@ export function OrderDetail({ code }: { code: string }) {
   const [pickupOpen, setPickupOpen] = useState(false);
   const [trackingOpen, setTrackingOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const backHref = variant === "group-buy" ? "/profile/group-buy" : "/profile/orders";
+  const backLabel = variant === "group-buy" ? t("backGroupBuy") : t("back");
 
   const { mutate: markDone, isPending: isMarkingDone } = useMutate<
     MarkDoneResponse,
@@ -189,6 +302,19 @@ export function OrderDetail({ code }: { code: string }) {
 
   const order = data?.data;
 
+  // Split-payment orders live under Group Buy, regular orders under Orders.
+  // If this order was reached through the wrong tab (old link, bookmark, etc.),
+  // send the user to the route that actually owns this order type.
+  useEffect(() => {
+    if (!order) return;
+    const belongsToGroupBuy = order.payment_type === "SPLIT";
+    if (belongsToGroupBuy && variant !== "group-buy") {
+      router.replace(`/profile/group-buy/${order.code}`);
+    } else if (!belongsToGroupBuy && variant === "group-buy") {
+      router.replace(`/profile/orders/${order.code}`);
+    }
+  }, [order, variant, router]);
+
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
@@ -205,14 +331,29 @@ export function OrderDetail({ code }: { code: string }) {
     );
   }
 
+  const isSplit = order.payment_type === "SPLIT";
+  const needsRedirect = isSplit !== (variant === "group-buy");
+
+  if (needsRedirect) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-[#ffcf02]" />
+      </div>
+    );
+  }
+
+  const myParticipant = order.participants?.find((p) => p.is_me);
+  const canMarkDone = order.order_status === "SHIPPED" && (!isSplit || myParticipant?.role === "OWNER");
+  const markDoneHiddenForMember = order.order_status === "SHIPPED" && isSplit && myParticipant?.role !== "OWNER";
+
   return (
     <div className="space-y-6">
       {/* Back */}
       <Link
-        href="/profile/orders"
+        href={backHref}
         className="inline-flex items-center text-sm text-[#727272] hover:text-black"
       >
-        ← {t("back")}
+        ← {backLabel}
       </Link>
 
       {/* Header */}
@@ -228,6 +369,12 @@ export function OrderDetail({ code }: { code: string }) {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <DeliveryBadge type={order.delivery_type} />
+          {isSplit && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#01798a] px-3 py-1 text-sm text-[#01798a]">
+              <Users className="size-3.5" />
+              {t("splitPaymentBadge")}
+            </span>
+          )}
           <span className="rounded-full bg-[#fff8df] px-3 py-1 text-sm font-semibold text-[#ff9900]">
             {order.delivery_type === "PICKUP" && (order.order_status === "READY" || order.order_status === "SHIPPED")
               ? t(`orderStatusPickup.${order.order_status}`)
@@ -236,11 +383,18 @@ export function OrderDetail({ code }: { code: string }) {
         </div>
       </div>
 
+      {/* Expired notice */}
+      {order.payment_status === "EXPIRED" && (
+        <div className="rounded-lg bg-[#fdecea] px-4 py-3 text-sm text-[#b3261e]">
+          {t("expiredNotice")} {order.expired_at && formatTimestampWIB(order.expired_at, locale)}
+        </div>
+      )}
+
       {/* Products */}
       <div className="rounded-xl border border-[#d9d9d9]">
         {order.products.map((product: OrderDetailProduct, idx: number) => (
           <div
-            key={product.order_item_id}
+            key={`${product.order_item_id}-${idx}`}
             className={cn("flex gap-4 p-4", idx > 0 && "border-t border-[#d9d9d9]")}
           >
             <div className="flex size-[100px] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#d9d9d9] bg-[#efefef]">
@@ -277,6 +431,16 @@ export function OrderDetail({ code }: { code: string }) {
         <p className="mb-5 text-sm font-semibold text-black">{t("progress")}</p>
         <Stepper stepper={order.stepper} deliveryType={order.delivery_type} />
       </div>
+
+      {/* Split payment participants */}
+      {isSplit && order.participants.length > 0 && (
+        <ParticipantsSection
+          participants={order.participants}
+          orderCode={order.code}
+          orderPayable={order.order_status !== "CANCELLED" && order.payment_status !== "EXPIRED"}
+          locale={locale}
+        />
+      )}
 
       {/* History + Costs */}
       <div className="grid gap-5 md:grid-cols-2">
@@ -362,7 +526,11 @@ export function OrderDetail({ code }: { code: string }) {
 
       {/* Footer actions */}
       {(order.payment_status === "PENDING" && order.payment_url) || order.order_status !== "CANCELLED" ? (
-        <div className="flex flex-wrap justify-end gap-3 border-t border-[#d9d9d9] pt-5">
+        <div className="flex flex-wrap items-center justify-end gap-3 border-t border-[#d9d9d9] pt-5">
+          {markDoneHiddenForMember && (
+            <p className="mr-auto text-xs text-[#727272]">{t("markDoneOwnerOnlyNote")}</p>
+          )}
+
           {/* Delivery action */}
           {order.delivery_type === "PICKUP" && (
             <>
@@ -404,7 +572,7 @@ export function OrderDetail({ code }: { code: string }) {
           )}
 
           {/* Mark Done */}
-          {order.order_status === "SHIPPED" && (
+          {canMarkDone && (
             <button
               type="button"
               onClick={() => setConfirmOpen(true)}

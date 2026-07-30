@@ -630,7 +630,8 @@ declare const messages: {
         "trackOrder": "Track Order",
         "pickupInfo": "Pickup Info",
         "statusPacking": "Packing",
-        "statusDone": "Done"
+        "statusDone": "Done",
+        "splitPaymentBadge": "Split Payment"
       },
       "pickupModal": {
         "title": "Pickup Information",
@@ -645,6 +646,7 @@ declare const messages: {
     "orderDetail": {
       "pageTitle": "Order Detail",
       "back": "Back to Orders",
+      "backGroupBuy": "Back to Group Buy",
       "orderId": "Order Number",
       "createdAt": "Created on",
       "palletType": "Online Pallet Type",
@@ -665,6 +667,24 @@ declare const messages: {
       "markDoneConfirmDesc": "Please make sure you have received your order in good condition before confirming. This action cannot be undone.",
       "markDoneConfirmOk": "Yes, I've Received It",
       "markDoneConfirmCancel": "Cancel",
+      "markDoneOwnerOnlyNote": "Only the order owner can confirm this order as received.",
+      "splitPaymentBadge": "Split Payment",
+      "expiredNotice": "Payment expired on",
+      "participants": {
+        "title": "Split Payment Participants",
+        "subtitle": "Each participant pays their own portion of this order.",
+        "you": "You",
+        "owner": "Owner",
+        "payMyPart": "Pay My Part",
+        "paidAt": "Paid on",
+        "expiredAt": "Expired on",
+        "status": {
+          "PAID": "Paid",
+          "PENDING": "Pending",
+          "PARTIAL": "Partial",
+          "EXPIRED": "Expired"
+        }
+      },
       "orderStatus": {
         "PROCESSING": "In Process",
         "READY": "Ready to Ship",
@@ -723,7 +743,7 @@ declare const messages: {
     },
     "patungan": {
       "pageTitle": "Group Payment",
-      "heading": "Group Buy",
+      "heading": "Track your group buy orders here.",
       "emptyTitle": "No group payments",
       "emptyAction": "Create Group Payment"
     },

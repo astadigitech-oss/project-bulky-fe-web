@@ -7,18 +7,27 @@ export type OrderStatus =
   | "COMPLETED"
   | "CANCELLED";
 
-export type PaymentStatus = "PENDING" | "PAID";
+export type PaymentStatus = "PENDING" | "PAID" | "PARTIAL" | "EXPIRED";
 export type DeliveryType = "PICKUP" | "DELIVEREE" | "FORWARDER" | "FORWARDER_LCL";
+export type OrderPaymentType = "SINGLE" | "SPLIT";
+
+// The order-list endpoint (`GET /web/orders`) reports payment type as
+// "REGULAR" | "SPLIT" while the order-detail endpoint reports "SINGLE" | "SPLIT".
+export type OrderListPaymentType = "REGULAR" | "SPLIT";
+export type OrderListPaymentTypeFilter = "all" | "single" | "split";
 
 export type Order = {
   id: string;
   kode: string;
   nama_produk: string;
   gambar_url: string | null;
-  harga_sesudah_diskon_formatted: string;
+  harga_sebelum_diskon: number;
   harga_sebelum_diskon_formatted: string | null;
+  harga_sesudah_diskon: number;
+  harga_sesudah_diskon_formatted: string;
   order_status: OrderStatus;
   payment_status: PaymentStatus;
+  payment_type: OrderListPaymentType;
   delivery_type: DeliveryType;
   delivery_status_label: string;
   tracking_url: string | null;
@@ -36,6 +45,7 @@ export type GetOrdersParams = {
   locale?: string;
   payment_status?: PaymentStatus;
   order_status?: OrderStatus;
+  payment_type?: OrderListPaymentTypeFilter;
   halaman?: number;
   per_halaman?: number;
 };
@@ -106,11 +116,32 @@ export type OrderDetailShippingAddress = {
   postal_code: string;
 };
 
+// ─── Split Payment (Patungan) participants ─────────────────────────────────────
+
+export type OrderParticipantRole = "OWNER" | "MEMBER";
+
+export type OrderParticipant = {
+  buyer_id: string;
+  name: string;
+  role: OrderParticipantRole;
+  amount: number;
+  amount_formatted: string;
+  payment_status: PaymentStatus;
+  method: string | null;
+  provider: string | null;
+  invoice_id: string | null;
+  payment_url: string | null;
+  expired_at: string | null;
+  paid_at: string | null;
+  is_me: boolean;
+};
+
 export type OrderDetail = {
   id: string;
   code: string;
   order_status: OrderStatus;
   payment_status: PaymentStatus;
+  payment_type: OrderPaymentType;
   delivery_type: DeliveryType;
   deliveree_booking_id: string | null;
   forwarder_tracking_no: string | null;
@@ -121,6 +152,7 @@ export type OrderDetail = {
   stepper: OrderStepper;
   status_history: OrderStatusHistoryItem[];
   payment_url: string | null;
+  participants: OrderParticipant[];
   expired_at: string | null;
   created_at: string;
 };

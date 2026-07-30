@@ -30,8 +30,8 @@ export async function ProfileShell({
 
   return (
     <main className="bg-[#f0f0f0] px-6 py-6 lg:px-16">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 lg:flex-row">
-        <aside className="relative overflow-hidden rounded-lg bg-[#ffcf02] p-7 text-center lg:w-72 lg:shrink-0">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 lg:flex-row lg:items-start">
+        <aside className="relative overflow-hidden rounded-lg bg-[#ffcf02] p-7 text-center lg:sticky lg:top-24 lg:h-[calc(100vh-9rem)] lg:w-72 lg:shrink-0">
           {/* Looper decorations */}
           <Image
             src="/assets/images/Looper-kiri.svg"
@@ -55,26 +55,24 @@ export async function ProfileShell({
           </div>
         </aside>
 
-        <section className="min-h-[640px] flex-1 overflow-hidden rounded-lg bg-white shadow-sm lg:h-[calc(100vh-9rem)]">
-          <div className="h-full overflow-y-auto p-6">
-            <nav className="mb-8 flex gap-2">
-              {tabs.map((tab) => (
-                <Link
-                  key={tab.value}
-                  href={tab.href}
-                  className={cn(
-                    "flex h-9 flex-1 items-center justify-center whitespace-nowrap rounded-lg text-base font-normal text-black transition-colors",
-                    activeTab === tab.value
-                      ? "bg-[#ffcf02] font-bold hover:bg-[#ffcf02]"
-                      : "bg-[#efefef] hover:bg-[#e5e5e5]",
-                  )}
-                >
-                  {tab.label}
-                </Link>
-              ))}
-            </nav>
-            {children}
-          </div>
+        <section className="min-h-[640px] flex-1 rounded-lg bg-white p-6 shadow-sm">
+          <nav className="mb-8 flex gap-2">
+            {tabs.map((tab) => (
+              <Link
+                key={tab.value}
+                href={tab.href}
+                className={cn(
+                  "flex h-9 flex-1 items-center justify-center whitespace-nowrap rounded-lg text-base font-normal text-black transition-colors",
+                  activeTab === tab.value
+                    ? "bg-[#ffcf02] font-bold hover:bg-[#ffcf02]"
+                    : "bg-[#efefef] hover:bg-[#e5e5e5]",
+                )}
+              >
+                {tab.label}
+              </Link>
+            ))}
+          </nav>
+          {children}
         </section>
       </div>
     </main>
