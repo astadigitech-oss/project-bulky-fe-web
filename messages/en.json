@@ -1024,5 +1024,37 @@
       "payment": "100% Secure Payment Guaranteed",
       "support": "24/7 Dedicated Support"
     }
+  },
+  "Faq": {
+    "pageTitle": "Frequently Asked Questions - Bulky.id",
+    "heading": "Frequently Asked Questions",
+    "subheading": "Answers to the most common questions about shopping on Bulky.id",
+    "home": "Home",
+    "breadcrumbLabel": "FAQ",
+    "loading": "Loading FAQ...",
+    "loadError": "Failed to load FAQ. Please try again later.",
+    "empty": "No FAQ available yet.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
+  },
+  "HowToBuy": {
+    "pageTitle": "How to Buy - Bulky.id",
+    "heading": "How to Buy",
+    "home": "Home",
+    "breadcrumbLabel": "How to Buy",
+    "loading": "Loading content...",
+    "loadError": "Failed to load content. Please try again later.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
+  },
+  "PaymentInformation": {
+    "pageTitle": "Payment Information - Bulky.id",
+    "heading": "Payment Information",
+    "home": "Home",
+    "breadcrumbLabel": "Payment Information",
+    "loading": "Loading content...",
+    "loadError": "Failed to load content. Please try again later.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
   }
 }

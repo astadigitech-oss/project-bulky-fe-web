@@ -1024,5 +1024,37 @@
       "payment": "Pembayaran Terjamin 100% Aman",
       "support": "Dukungan Khusus 24 Jam"
     }
+  },
+  "Faq": {
+    "pageTitle": "Pertanyaan Umum - Bulky.id",
+    "heading": "Pertanyaan Umum",
+    "subheading": "Jawaban atas pertanyaan yang paling sering diajukan seputar belanja di Bulky.id",
+    "home": "Beranda",
+    "breadcrumbLabel": "FAQ",
+    "loading": "Memuat FAQ...",
+    "loadError": "Gagal memuat FAQ. Silakan coba lagi nanti.",
+    "empty": "Belum ada FAQ tersedia.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "HowToBuy": {
+    "pageTitle": "Cara Membeli - Bulky.id",
+    "heading": "Cara Membeli",
+    "home": "Beranda",
+    "breadcrumbLabel": "Cara Membeli",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "PaymentInformation": {
+    "pageTitle": "Informasi Pembayaran - Bulky.id",
+    "heading": "Informasi Pembayaran",
+    "home": "Beranda",
+    "breadcrumbLabel": "Informasi Pembayaran",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
   }
 }
