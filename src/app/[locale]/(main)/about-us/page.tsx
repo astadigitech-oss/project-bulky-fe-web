@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Headset, Lightbulb, Package, ShieldCheck, Truck, Users, Warehouse } from "lucide-react";
 import { InfoSection } from "../(homepage)/_components/_sections/info";
+import { NewsSection } from "./_components/news-section";
 
 export const generateMetadata = async ({
   params,
@@ -17,33 +18,6 @@ export const generateMetadata = async ({
 
 const AboutPage = () => {
   const t = useTranslations("AboutUs");
-
-  const newsList = [
-    {
-      title: t("section5.news.0.title"),
-      excerpt: t("section5.news.0.excerpt"),
-      date: t("section5.news.0.date"),
-      image: "/assets/images/about-us/warehouse-vibe.svg",
-    },
-    {
-      title: t("section5.news.1.title"),
-      excerpt: t("section5.news.1.excerpt"),
-      date: t("section5.news.1.date"),
-      image: "/assets/images/about-us/people-in-warehouse.svg",
-    },
-    {
-      title: t("section5.news.2.title"),
-      excerpt: t("section5.news.2.excerpt"),
-      date: t("section5.news.2.date"),
-      image: "/assets/images/about-us/people-left.svg",
-    },
-    {
-      title: t("section5.news.3.title"),
-      excerpt: t("section5.news.3.excerpt"),
-      date: t("section5.news.3.date"),
-      image: "/assets/images/about-us/people-right.svg",
-    },
-  ];
 
   const commitmentBadges = [
     { title: t("section6.badge1"), desc: t("section6.badge1Desc"), Icon: ShieldCheck },
@@ -260,59 +234,7 @@ const AboutPage = () => {
       </section>
 
       {/* 5) Berita */}
-      <section className="mx-auto w-full max-w-[1280px] px-4 py-12 md:px-8 lg:px-12">
-        <h3 className="mb-6 text-4xl font-bold text-black">{t("section5.heading")}</h3>
-
-        <div className="grid gap-6 lg:grid-cols-[1.45fr_1fr]">
-          <article>
-            <div className="overflow-hidden rounded-3xl">
-              <Image
-                unoptimized
-                src="/assets/images/about-us/people-meeting.svg"
-                alt={t("section5.featuredTitle")}
-                width={1240}
-                height={479}
-                className="h-auto w-full object-cover"
-              />
-            </div>
-            <h4 className="mt-4 text-3xl font-semibold leading-tight text-black">
-              {t("section5.featuredTitle")}
-            </h4>
-            <p className="mt-3 text-sm text-[#8a8a8a]">{t("section5.featuredDate")}</p>
-          </article>
-
-          <div className="space-y-4">
-            {newsList.map((item, idx) => (
-              <article
-                key={idx}
-                className="grid grid-cols-[140px_1fr] gap-3 rounded-2xl"
-              >
-                <div className="overflow-hidden rounded-2xl">
-                  <Image
-                    unoptimized
-                    src={item.image}
-                    alt={item.title}
-                    width={280}
-                    height={200}
-                    className="h-[95px] w-full object-cover"
-                  />
-                </div>
-                <div>
-                  <h5 className="line-clamp-1 text-base font-semibold text-black">
-                    {item.title}
-                  </h5>
-                  <p className="line-clamp-2 text-sm text-[#5f5f5f]">
-                    {item.excerpt}
-                  </p>
-                  <p className="mt-2 text-xs text-[#9a9a9a]">{item.date}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        {/* <div className="mt-8 border-b border-[#d9d9d9]" /> */}
-      </section>
+      <NewsSection />
 
       {/* 6) Di Bulky */}
       <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#FFF6DC] via-[#FFFDF7] to-white lg:min-h-[720px] lg:max-h-[780px]">

@@ -573,7 +573,13 @@
           "excerpt": "Bulky terus meningkatkan akurasi dan kecepatan proses sortir di gudang.",
           "date": "05 Agustus 2025"
         }
-      ]
+      ],
+      "empty": "Belum ada berita.",
+      "detailError": "Gagal memuat detail berita.",
+      "home": "Beranda",
+      "breadcrumbLabel": "Berita",
+      "relatedTitle": "Artikel Lainnya",
+      "viewAll": "Lihat Semua"
     },
     "section6": {
       "heading": "Di <brand>Bulky.id</brand> setiap kontainer dan palet, kami tangani dengan standar terbaik",
@@ -971,6 +977,14 @@
         "category": "Tutorial",
         "description": "Banyak yang tanya soal discrepancy dan produk rusak. Di video ini kita jawab pertanyaan paling sering dari buyer Bulky tentang kondisi produk dalam palet."
       }
+    }
+  },
+  "BulkyNews": {
+    "pageTitle": "Berita Bulky",
+    "subtitle": "Kabar terbaru seputar grosir, logistik, dan operasional Bulky",
+    "empty": "Belum ada berita di kategori ini.",
+    "categories": {
+      "all": "Semua"
     }
   },
   "MobileRedirectModal": {

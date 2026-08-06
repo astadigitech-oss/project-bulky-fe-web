@@ -573,7 +573,13 @@
           "excerpt": "Bulky continues to improve accuracy and speed of the warehouse sorting process.",
           "date": "August 5, 2025"
         }
-      ]
+      ],
+      "empty": "No news available.",
+      "detailError": "Failed to load news detail.",
+      "home": "Home",
+      "breadcrumbLabel": "News",
+      "relatedTitle": "Related Articles",
+      "viewAll": "View All"
     },
     "section6": {
       "heading": "At <brand>Bulky.id</brand>, every container and pallet is handled to the highest standard",
@@ -971,6 +977,14 @@
         "category": "Tutorial",
         "description": "Many people ask about discrepancy and damaged products. In this video we answer the most frequently asked questions from Bulky buyers about product conditions in pallets."
       }
+    }
+  },
+  "BulkyNews": {
+    "pageTitle": "Bulky News",
+    "subtitle": "Latest updates on wholesale, logistics, and Bulky operations",
+    "empty": "No news in this category yet.",
+    "categories": {
+      "all": "All"
     }
   },
   "MobileRedirectModal": {

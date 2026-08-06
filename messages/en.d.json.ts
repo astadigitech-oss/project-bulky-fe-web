@@ -576,7 +576,13 @@ declare const messages: {
           "excerpt": "Bulky continues to improve accuracy and speed of the warehouse sorting process.",
           "date": "August 5, 2025"
         }
-      ]
+      ],
+      "empty": "No news available.",
+      "detailError": "Failed to load news detail.",
+      "home": "Home",
+      "breadcrumbLabel": "News",
+      "relatedTitle": "Related Articles",
+      "viewAll": "View All"
     },
     "section6": {
       "heading": "At <brand>Bulky.id</brand>, every container and pallet is handled to the highest standard",
@@ -976,6 +982,14 @@ declare const messages: {
       }
     }
   },
+  "BulkyNews": {
+    "pageTitle": "Bulky News",
+    "subtitle": "Latest updates on wholesale, logistics, and Bulky operations",
+    "empty": "No news in this category yet.",
+    "categories": {
+      "all": "All"
+    }
+  },
   "MobileRedirectModal": {
     "from": "Presented by",
     "title": "Shop Easier on the App",
@@ -1027,6 +1041,38 @@ declare const messages: {
       "payment": "100% Secure Payment Guaranteed",
       "support": "24/7 Dedicated Support"
     }
+  },
+  "Faq": {
+    "pageTitle": "Frequently Asked Questions - Bulky.id",
+    "heading": "Frequently Asked Questions",
+    "subheading": "Answers to the most common questions about shopping on Bulky.id",
+    "home": "Home",
+    "breadcrumbLabel": "FAQ",
+    "loading": "Loading FAQ...",
+    "loadError": "Failed to load FAQ. Please try again later.",
+    "empty": "No FAQ available yet.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
+  },
+  "HowToBuy": {
+    "pageTitle": "How to Buy - Bulky.id",
+    "heading": "How to Buy",
+    "home": "Home",
+    "breadcrumbLabel": "How to Buy",
+    "loading": "Loading content...",
+    "loadError": "Failed to load content. Please try again later.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
+  },
+  "PaymentInformation": {
+    "pageTitle": "Payment Information - Bulky.id",
+    "heading": "Payment Information",
+    "home": "Home",
+    "breadcrumbLabel": "Payment Information",
+    "loading": "Loading content...",
+    "loadError": "Failed to load content. Please try again later.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
   }
 };
 export default messages;
