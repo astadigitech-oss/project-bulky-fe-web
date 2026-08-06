@@ -693,6 +693,7 @@ declare const messages: {
       },
       "orderStatus": {
         "PROCESSING": "In Process",
+        "PENDING": "Pending",
         "READY": "Ready to Ship",
         "SHIPPED": "Shipped",
         "COMPLETED": "Completed",

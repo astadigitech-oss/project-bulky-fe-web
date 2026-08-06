@@ -44,9 +44,12 @@ function VideoCard({
   onClick: () => void;
 }) {
   const isNew = () => {
-    const now = new Date();
-    const published = new Date(video.published_at);
-    return now.getTime() - published.getTime() < 7 * 24 * 60 * 60 * 1000;
+    // Bandingkan selalu dalam zona WIB agar konsisten dengan data BE (UTC)
+    const nowWIB = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+    const publishedWIB = new Date(
+      new Date(video.published_at).toLocaleString("en-US", { timeZone: "Asia/Jakarta" }),
+    );
+    return nowWIB.getTime() - publishedWIB.getTime() < 7 * 24 * 60 * 60 * 1000;
   };
 
   return (

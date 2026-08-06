@@ -30,10 +30,11 @@ function formatArticleDate(date: string, locale: Locale): string {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "Asia/Jakarta",
   });
 }
 
-function RecommendationCard({ item }: { item: NewsListItem }) {
+function RecommendationCard({ item, locale }: { item: NewsListItem; locale: Locale }) {
   return (
     <Link
       href={`/news/${item.slug}`}
@@ -55,7 +56,7 @@ function RecommendationCard({ item }: { item: NewsListItem }) {
         <h5 className="line-clamp-2 text-sm font-semibold leading-snug text-black group-hover:text-[#b45309]">
           {item.title}
         </h5>
-        <p className="mt-1 text-xs text-[#9a9a9a]">{item.date}</p>
+        <p className="mt-1 text-xs text-[#9a9a9a]">{formatArticleDate(item.date, locale)}</p>
       </div>
     </Link>
   );
@@ -179,7 +180,7 @@ export function NewsDetailClient({
             </div>
             <div className="mt-4 space-y-5">
               {recommendations.map((item) => (
-                <RecommendationCard key={item.id} item={item} />
+                <RecommendationCard key={item.id} item={item} locale={locale} />
               ))}
             </div>
           </aside>

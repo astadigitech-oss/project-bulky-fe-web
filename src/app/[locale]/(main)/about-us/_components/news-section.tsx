@@ -12,7 +12,17 @@ type Locale = "id" | "en";
 
 const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
 
-function NewsCard({ item }: { item: NewsListItem }) {
+function formatArticleDate(date: string, locale: Locale): string {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return date;
+  return d.toLocaleDateString(locale === "id" ? "id-ID" : "en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function NewsCard({ item, locale }: { item: NewsListItem; locale: Locale }) {
   return (
     <Link
       href={`/news/${item.slug}`}
@@ -37,7 +47,7 @@ function NewsCard({ item }: { item: NewsListItem }) {
           {item.title}
         </h5>
         <p className="line-clamp-2 text-sm text-[#5f5f5f]">{item.highlight}</p>
-        <p className="mt-2 text-xs text-[#9a9a9a]">{item.date}</p>
+        <p className="mt-2 text-xs text-[#9a9a9a]">{formatArticleDate(item.date, locale)}</p>
       </div>
     </Link>
   );
@@ -102,13 +112,13 @@ export function NewsSection() {
               <p className="mt-2 line-clamp-2 text-sm text-[#8a8a8a]">
                 {featured.highlight}
               </p>
-              <p className="mt-3 text-sm text-[#8a8a8a]">{featured.date}</p>
+              <p className="mt-3 text-sm text-[#8a8a8a]">{formatArticleDate(featured.date, locale)}</p>
             </Link>
           )}
 
           <div className="space-y-4">
             {rest.map((item) => (
-              <NewsCard key={item.id} item={item} />
+              <NewsCard key={item.id} item={item} locale={locale} />
             ))}
           </div>
         </div>

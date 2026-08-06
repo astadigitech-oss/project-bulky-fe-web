@@ -690,6 +690,7 @@
       },
       "orderStatus": {
         "PROCESSING": "Diproses",
+        "PENDING": "Menunggu",
         "READY": "Siap Kirim",
         "SHIPPED": "Dikirim",
         "COMPLETED": "Selesai",
