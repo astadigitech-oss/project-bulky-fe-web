@@ -506,11 +506,11 @@ declare const messages: {
       "termsCondition": "Terms and Conditions",
       "privacyPolicy": "Privacy Policy"
     },
-    "service": {
-      "title": "Services",
-      "otherProducts": "Other Products",
-      "order": "Orders",
-      "userProfile": "Profile"
+    "others": {
+      "title": "Others",
+      "products": "Products",
+      "news": "News",
+      "bulkyLive": "Bulky Live"
     },
     "getItOn": {
       "title": "Get It On",
@@ -1070,6 +1070,26 @@ declare const messages: {
     "heading": "Payment Information",
     "home": "Home",
     "breadcrumbLabel": "Payment Information",
+    "loading": "Loading content...",
+    "loadError": "Failed to load content. Please try again later.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
+  },
+  "TermsConditions": {
+    "pageTitle": "Terms and Conditions - Bulky.id",
+    "heading": "Terms and Conditions",
+    "home": "Home",
+    "breadcrumbLabel": "Terms and Conditions",
+    "loading": "Loading content...",
+    "loadError": "Failed to load content. Please try again later.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
+  },
+  "PrivacyPolicy": {
+    "pageTitle": "Privacy Policy - Bulky.id",
+    "heading": "Privacy Policy",
+    "home": "Home",
+    "breadcrumbLabel": "Privacy Policy",
     "loading": "Loading content...",
     "loadError": "Failed to load content. Please try again later.",
     "stillNeedHelp": "Still have questions?",

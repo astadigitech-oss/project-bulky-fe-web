@@ -122,6 +122,7 @@ function VideoModal({
   onSelect: (slug: string) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const lastPlayedUrlRef = useRef<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
 
@@ -142,6 +143,22 @@ function VideoModal({
       videoRef.current.currentTime = 0;
     }
   }, [slug]);
+
+  // Auto-play saat video detail termuat, atau saat pindah ke video lain.
+  // Guard ref mencegah memutar ulang video lama saat slug berubah tapi data belum selesai dimuat.
+  useEffect(() => {
+    const url = video?.video_url;
+    if (url && url !== lastPlayedUrlRef.current && videoRef.current) {
+      lastPlayedUrlRef.current = url;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay diblokir browser (mis. deep link tanpa interaksi user).
+          // Pengguna tetap bisa memutar manual lewat tombol play.
+        });
+      }
+    }
+  }, [video?.video_url]);
 
   const handlePlayPause = () => {
     if (!videoRef.current) return;
@@ -185,9 +202,12 @@ function VideoModal({
                 ref={videoRef}
                 src={video.video_url}
                 className="absolute inset-0 w-full h-full object-contain"
+                autoPlay
+                playsInline
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
                 onEnded={() => setIsPlaying(false)}
                 onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
-                playsInline
               />
             )}
             <button

@@ -24,12 +24,12 @@ export const Help = () => {
         <Link href={"/faq"}>
           <li className="hover:underline underline-offset-2">{t("faq")}</li>
         </Link>
-        <Link href={"#"}>
+        <Link href={"/terms-conditions"}>
           <li className="hover:underline underline-offset-2">
             {t("termsCondition")}
           </li>
         </Link>
-        <Link href={"#"}>
+        <Link href={"/privacy-policy"}>
           <li className="hover:underline underline-offset-2">
             {t("privacyPolicy")}
           </li>

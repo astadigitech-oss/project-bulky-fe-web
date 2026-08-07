@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Company } from "./company";
 import { Contact } from "./contact";
 import { Help } from "./help";
-import { Service } from "./service";
+import { Others } from "./others";
 import { Payment } from "./payment";
 import { Mobile } from "./mobile";
 
@@ -23,7 +23,7 @@ export const Footer = () => {
           <Help />
           <div className="col-span-2 flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-4">
-              <Service />
+              <Others />
               <Payment />
             </div>
             <Mobile />

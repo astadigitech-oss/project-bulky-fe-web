@@ -503,11 +503,11 @@
       "termsCondition": "Syarat dan Ketentuan",
       "privacyPolicy": "Kebijakan Privasi"
     },
-    "service": {
-      "title": "Layanan",
-      "otherProducts": "Produk Lainnya",
-      "order": "Pesanan",
-      "userProfile": "Profil"
+    "others": {
+      "title": "Lainnya",
+      "products": "Produk",
+      "news": "Berita",
+      "bulkyLive": "Bulky Live"
     },
     "getItOn": {
       "title": "Dapatkan di",
@@ -1067,6 +1067,26 @@
     "heading": "Informasi Pembayaran",
     "home": "Beranda",
     "breadcrumbLabel": "Informasi Pembayaran",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "TermsConditions": {
+    "pageTitle": "Syarat dan Ketentuan - Bulky.id",
+    "heading": "Syarat dan Ketentuan",
+    "home": "Beranda",
+    "breadcrumbLabel": "Syarat dan Ketentuan",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "PrivacyPolicy": {
+    "pageTitle": "Kebijakan Privasi - Bulky.id",
+    "heading": "Kebijakan Privasi",
+    "home": "Beranda",
+    "breadcrumbLabel": "Kebijakan Privasi",
     "loading": "Memuat konten...",
     "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
     "stillNeedHelp": "Masih ada pertanyaan?",
