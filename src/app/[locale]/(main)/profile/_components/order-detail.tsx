@@ -363,7 +363,7 @@ export function OrderDetail({ code, variant = "orders" }: { code: string; varian
           <p className="mt-0.5 text-base font-bold text-black">{order.code}</p>
           <p className="mt-1 text-xs text-[#727272]">
             {t("createdAt")}: {new Date(order.created_at).toLocaleDateString(locale === "id" ? "id-ID" : "en-US", {
-              day: "numeric", month: "long", year: "numeric",
+              day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Jakarta",
             })}
           </p>
         </div>

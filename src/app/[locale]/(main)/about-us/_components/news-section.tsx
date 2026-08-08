@@ -19,6 +19,7 @@ function formatArticleDate(date: string, locale: Locale): string {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "Asia/Jakarta",
   });
 }
 
