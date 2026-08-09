@@ -6,11 +6,15 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },
-      { protocol: "https", hostname: "api.bulky.id" },
+      { protocol: "https", hostname: "**.bulky.id" },
+      { protocol: "https", hostname: "**.astadigitalagency.com" },
       { protocol: "http", hostname: "localhost" },
       { protocol: "http", hostname: "127.0.0.1" },
     ],
   },
+  allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS?.split(",").map((origin) =>
+    origin.trim(),
+  ),
 };
 
 const withNextIntl = createNextIntlPlugin({

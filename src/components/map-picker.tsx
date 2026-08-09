@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Map,
   AdvancedMarker,
@@ -62,6 +63,7 @@ function PlacesSearch({
 }: {
   onPlaceSelected: (pos: LatLng, resolved: ResolvedAddress) => void;
 }) {
+  const t = useTranslations("Profile.mapPickerDialog");
   const placesLib = useMapsLibrary("places");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -97,7 +99,7 @@ function PlacesSearch({
       <input
         ref={inputRef}
         type="text"
-        placeholder="Cari alamat di peta..."
+        placeholder={t("searchPlaceholder")}
         className="h-10 w-full rounded-md border border-gray-200 bg-white pl-9 pr-4 text-sm outline-none transition-colors focus:border-[#ffcf02] focus:ring-1 focus:ring-[#ffcf02]"
       />
     </div>
@@ -204,6 +206,7 @@ export function MapPickerDialog({
   longitude: string;
   onConfirm: (lat: string, lng: string, resolved?: ResolvedAddress) => void;
 }) {
+  const t = useTranslations("Profile.mapPickerDialog");
   const initialLat = parseFloat(latitude) || -6.2;
   const initialLng = parseFloat(longitude) || 106.816;
 
@@ -226,12 +229,14 @@ export function MapPickerDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl gap-0 p-0">
+      <DialogContent
+        className="max-w-2xl gap-0 p-0 z-[60]"
+        overlayClassName="z-[60] bg-black/40"
+        overlayStyle={{ backdropFilter: "blur(8px)" }}
+      >
         <DialogHeader className="px-6 pt-6 pb-3">
-          <DialogTitle>Pilih Lokasi</DialogTitle>
-          <p className="text-sm text-[#727272]">
-            Cari alamat atau klik/seret pin untuk menentukan titik lokasi.
-          </p>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <p className="text-sm text-[#727272]">{t("description")}</p>
         </DialogHeader>
 
         <div className="h-[400px] w-full px-6">
@@ -249,21 +254,21 @@ export function MapPickerDialog({
           </span>
           {Object.values(resolved).some(Boolean) && (
             <span className="ml-auto rounded-full bg-[#fff7cc] px-2 py-0.5 text-[10px] font-semibold text-[#b38a00]">
-              Alamat terdeteksi
+              {t("addressDetected")}
             </span>
           )}
         </div>
 
         <DialogFooter className="px-6 pb-6">
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-            Batal
+            {t("cancel")}
           </Button>
           <Button
             type="button"
             className="bg-[#ffcf02] text-black shadow-none hover:bg-[#f0c300]"
             onClick={handleConfirm}
           >
-            Konfirmasi Lokasi
+            {t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -282,6 +287,7 @@ export function MapPickerTrigger({
   longitude: string;
   onConfirm: (lat: string, lng: string, resolved?: ResolvedAddress) => void;
 }) {
+  const tTrigger = useTranslations("Profile.mapPickerDialog");
   const [open, setOpen] = useState(false);
 
   const hasCoords = parseFloat(latitude) !== 0 || parseFloat(longitude) !== 0;
@@ -300,7 +306,7 @@ export function MapPickerTrigger({
             {parseFloat(latitude).toFixed(5)}, {parseFloat(longitude).toFixed(5)}
           </span>
         ) : (
-          "Pilih Titik Lokasi di Peta"
+          tTrigger("selectPin")
         )}
       </Button>
 

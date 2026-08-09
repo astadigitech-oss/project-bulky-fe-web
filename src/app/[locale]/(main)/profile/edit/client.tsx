@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Edit3,
   Eye,
@@ -18,7 +18,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -43,6 +43,7 @@ import type {
   GetAddressesResponse,
   GetProfileResponse,
   PhoneVerifyOtpResponse,
+  UploadPhotoResponse,
 } from "@/services/profile/types";
 
 // ─── Edit Info Dialog ─────────────────────────────────────────────────────────
@@ -85,7 +86,7 @@ function EditInfoDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{t("editInfoDialog.title")}</DialogTitle>
           <DialogDescription>{t("editInfoDialog.description")}</DialogDescription>
@@ -176,7 +177,7 @@ function ChangePhoneDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
@@ -267,7 +268,7 @@ function ChangeEmailDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
@@ -343,7 +344,7 @@ function ChangePasswordDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
@@ -406,7 +407,7 @@ function DeleteAccountDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
@@ -512,6 +513,23 @@ export function EditProfileClient() {
   const [changeEmailOpen, setChangeEmailOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
+  const photoInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadPhotoMutation = useMutate<UploadPhotoResponse>({ 
+    endpoint: "/user/profile/upload-photo",
+    method: "post",
+    onSuccess: () => onProfileUpdated(),
+    onError: { title: "Upload Foto" },
+  });
+
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("image", file);
+    uploadPhotoMutation.mutate({ body: formData as any });
+    e.target.value = "";
+  }
 
   const { data: profileData, isLoading: profileLoading } =
     useApiQuery<GetProfileResponse>({
@@ -554,12 +572,29 @@ export function EditProfileClient() {
 
       {/* Avatar */}
       <div className="mb-9 flex items-center gap-8">
-        <Avatar className="size-24 bg-[#f7f7f7]">
-          {profile?.image && <AvatarImage src={profile.image} alt={profile.name} className="object-cover" />}
-          <AvatarFallback className="bg-[#f7f7f7] text-3xl font-bold text-black">{initials}</AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          src={profile?.image}
+          name={profile?.name ?? ""}
+          isLoading={profileLoading}
+          className="size-24"
+          fallbackClassName="bg-[#f7f7f7] text-3xl font-bold text-black"
+        />
         <div className="space-y-3">
-          <Button variant="outline" disabled className="h-9 px-5 text-sm font-bold text-black shadow-none">{t("changePhoto")}</Button>
+          <input
+            ref={photoInputRef}
+            type="file"
+            accept="image/jpg,image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={handlePhotoChange}
+          />
+          <Button
+            variant="outline"
+            className="h-9 px-5 text-sm font-bold text-black shadow-none hover:border-[#ffcf02] hover:bg-[#fff7cc]"
+            disabled={uploadPhotoMutation.isPending || profileLoading}
+            onClick={() => photoInputRef.current?.click()}
+          >
+            {uploadPhotoMutation.isPending ? t("saving") : t("changePhoto")}
+          </Button>
           <p className="whitespace-pre-line text-sm text-[#727272]">{t("photoHint")}</p>
         </div>
       </div>

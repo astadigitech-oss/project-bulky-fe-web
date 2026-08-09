@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@i18n/navigation";
 import { CartMyIcon } from "@svg/cart-icon";
-import { Avatar, AvatarFallback } from "@ui/avatar";
+import { UserAvatar } from "@ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,6 +36,7 @@ function getInitials(name: string): string {
 export const Navbar = () => {
   const t = useTranslations("Header.auth");
   const topBarT = useTranslations("Header.topBar");
+  const headerT = useTranslations("Header");
   const { user, isAuthenticated, isLoading, logout } = useSession();
   const mounted = useSyncExternalStore(
     () => () => undefined,
@@ -84,6 +85,7 @@ export const Navbar = () => {
             <Link href={"/cart"}>
               <Button size={"icon"} variant={"outline"} className="relative">
                 <CartMyIcon />
+                <span className="sr-only">{headerT("cart")}</span>
                 {isAuthenticated && cartCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
                     {cartCount > 99 ? "99+" : cartCount}
@@ -97,11 +99,12 @@ export const Navbar = () => {
             ) : isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffcf02]">
-                  <Avatar className={"size-8"}>
-                    <AvatarFallback className="bg-[#ffcf02] text-black text-xs font-bold">
-                      {getInitials(user.name)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    src={user.photo_url}
+                    name={user.name}
+                    className="size-8"
+                    fallbackClassName="bg-[#ffcf02] text-black text-xs font-bold"
+                  />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52">
                   <DropdownMenuGroup>

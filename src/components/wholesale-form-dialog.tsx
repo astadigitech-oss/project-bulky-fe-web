@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { toast } from "sonner";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
-import { Textarea } from "@ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -13,26 +13,29 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@ui/dialog";
+import { useApiQuery } from "@/lib/query/use-query";
+import { useMutate } from "@/lib/query";
 
 type WholesaleFormBody = {
   full_name: string;
-  business_name: string;
-  phone: string;
-  email: string;
-  business_type: string;
+  phone_number: string;
   address: string;
-  notes: string;
+  budget: string;
+  categories: string[];
 };
 
 const EMPTY_FORM: WholesaleFormBody = {
   full_name: "",
-  business_name: "",
-  phone: "",
-  email: "",
-  business_type: "",
+  phone_number: "",
   address: "",
-  notes: "",
+  budget: "",
+  categories: [],
 };
+
+type BudgetResponse = { success: boolean; message: string; data: string[] };
+type CategoryItem = { label: string; value: string };
+type CategoriesResponse = { success: boolean; message: string; data: CategoryItem[] };
+type RegisterResponse = { success: boolean; message: string; data: null };
 
 export function WholesaleFormDialog({
   open,
@@ -42,96 +45,152 @@ export function WholesaleFormDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const t = useTranslations("Homepage.wholesale.form");
+  const locale = useLocale();
   const [form, setForm] = useState<WholesaleFormBody>(EMPTY_FORM);
-  const [isPending, setIsPending] = useState(false);
 
-  function setField(key: keyof WholesaleFormBody, value: string) {
+  const { data: budgetData, isLoading: budgetLoading } = useApiQuery<BudgetResponse>({
+    key: ["wholesale-budget"],
+    endpoint: "/web/general/wholesale-form/budget",
+    enabled: open,
+  });
+
+  const { data: categoriesData, isLoading: categoriesLoading } = useApiQuery<CategoriesResponse>({
+    key: ["wholesale-categories", locale],
+    endpoint: "/web/general/wholesale-form/categories",
+    searchParams: { lang: locale },
+    enabled: open,
+  });
+
+  const { mutate: submitForm, isPending } = useMutate<RegisterResponse, WholesaleFormBody>({
+    endpoint: "/web/general/wholesale-form/register",
+    method: "post",
+    isPublic: true,
+    onSuccess: (res) => {
+      toast.success(res.data.message);
+      onOpenChange(false);
+      setForm(EMPTY_FORM);
+    },
+    errorCustom: (err: any) => {
+      const msg = err?.response?.data?.message ?? t("errorMessage");
+      toast.error(msg);
+    },
+  });
+
+  function setField<K extends keyof WholesaleFormBody>(key: K, value: WholesaleFormBody[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function toggleCategory(value: string) {
+    setForm((prev) => ({
+      ...prev,
+      categories: prev.categories.includes(value)
+        ? prev.categories.filter((c) => c !== value)
+        : [...prev.categories, value],
+    }));
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // TODO: connect to API endpoint when ready
-    setIsPending(true);
-    setTimeout(() => {
-      setIsPending(false);
-      onOpenChange(false);
-      setForm(EMPTY_FORM);
-    }, 500);
+    if (form.categories.length === 0) {
+      toast.error(t("categoriesRequired"));
+      return;
+    }
+    submitForm({ body: form });
   }
 
-  const textFields: {
-    key: keyof WholesaleFormBody;
-    label: string;
-    placeholder: string;
-    type?: string;
-    required?: boolean;
-  }[] = [
-    { key: "full_name", label: t("fullNameLabel"), placeholder: t("fullNamePlaceholder"), required: true },
-    { key: "business_name", label: t("businessNameLabel"), placeholder: t("businessNamePlaceholder"), required: true },
-    { key: "phone", label: t("phoneLabel"), placeholder: t("phonePlaceholder"), type: "tel", required: true },
-    { key: "email", label: t("emailLabel"), placeholder: t("emailPlaceholder"), type: "email", required: true },
-    { key: "address", label: t("addressLabel"), placeholder: t("addressPlaceholder"), required: true },
-  ];
-
-  const businessTypes = [
-    { value: "retailer", label: t("businessTypes.retailer") },
-    { value: "distributor", label: t("businessTypes.distributor") },
-    { value: "reseller", label: t("businessTypes.reseller") },
-    { value: "other", label: t("businessTypes.other") },
-  ];
+  const budgets = budgetData?.data ?? [];
+  const categories = categoriesData?.data ?? [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-lg lg:max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-3 pt-2">
-          {textFields.map(({ key, label, placeholder, type, required }) => (
-            <div key={key} className="space-y-1.5">
-              <label className="text-sm font-medium text-black">
-                {label}
-                {required && <span className="text-red-500 ml-0.5">*</span>}
-              </label>
-              <Input
-                type={type ?? "text"}
-                value={form[key]}
-                onChange={(e) => setField(key, e.target.value)}
-                placeholder={placeholder}
-                required={required}
-              />
-            </div>
-          ))}
-
+          {/* Full Name */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-black">
-              {t("businessTypeLabel")}
-              <span className="text-red-500 ml-0.5">*</span>
+              {t("fullNameLabel")}<span className="text-red-500 ml-0.5">*</span>
+            </label>
+            <Input
+              value={form.full_name}
+              onChange={(e) => setField("full_name", e.target.value)}
+              placeholder={t("fullNamePlaceholder")}
+              required
+            />
+          </div>
+
+          {/* Phone Number */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-black">
+              {t("phoneLabel")}<span className="text-red-500 ml-0.5">*</span>
+            </label>
+            <Input
+              type="tel"
+              value={form.phone_number}
+              onChange={(e) => setField("phone_number", e.target.value)}
+              placeholder={t("phonePlaceholder")}
+              required
+            />
+          </div>
+
+          {/* Address */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-black">
+              {t("addressLabel")}<span className="text-red-500 ml-0.5">*</span>
+            </label>
+            <Input
+              value={form.address}
+              onChange={(e) => setField("address", e.target.value)}
+              placeholder={t("addressPlaceholder")}
+              required
+            />
+          </div>
+
+          {/* Budget */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-black">
+              {t("budgetLabel")}<span className="text-red-500 ml-0.5">*</span>
             </label>
             <select
-              value={form.business_type}
-              onChange={(e) => setField("business_type", e.target.value)}
+              value={form.budget}
+              onChange={(e) => setField("budget", e.target.value)}
               required
+              disabled={budgetLoading}
               className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <option value="" disabled>{t("businessTypePlaceholder")}</option>
-              {businessTypes.map((bt) => (
-                <option key={bt.value} value={bt.value}>{bt.label}</option>
+              <option value="" disabled>{budgetLoading ? "..." : t("budgetPlaceholder")}</option>
+              {budgets.map((b) => (
+                <option key={b} value={b}>{b}</option>
               ))}
             </select>
           </div>
 
+          {/* Product Categories */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-black">{t("notesLabel")}</label>
-            <Textarea
-              value={form.notes}
-              onChange={(e) => setField("notes", e.target.value)}
-              placeholder={t("notesPlaceholder")}
-              rows={3}
-            />
+            <label className="text-sm font-medium text-black">
+              {t("categoriesLabel")}<span className="text-red-500 ml-0.5">*</span>
+            </label>
+            {categoriesLoading ? (
+              <p className="text-sm text-muted-foreground">...</p>
+            ) : (
+              <div className="max-h-40 overflow-y-auto rounded-md border p-2 grid grid-cols-2 gap-1">
+                {categories.map((cat) => (
+                  <label key={cat.value} className="flex items-center gap-2 text-sm cursor-pointer py-0.5">
+                    <input
+                      type="checkbox"
+                      checked={form.categories.includes(cat.value)}
+                      onChange={() => toggleCategory(cat.value)}
+                      className="rounded"
+                    />
+                    {cat.label}
+                  </label>
+                ))}
+              </div>
+            )}
           </div>
 
           <DialogFooter className="pt-2">

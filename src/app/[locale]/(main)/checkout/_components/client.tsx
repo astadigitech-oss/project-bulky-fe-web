@@ -6,12 +6,13 @@ import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
-import { Clock, Edit3, HelpCircle, MapPin, Package, Phone, Plus, ShieldCheck, ShieldOff, Star, Store, Tag, Trash2, Truck, X } from "lucide-react";
+import { Clock, Edit3, HelpCircle, Info, MapPin, Package, Phone, Plus, Search, ShieldCheck, ShieldOff, Star, Store, Tag, Trash2, Truck, UserRound, Users, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useProtectRoute } from "@/providers/session-provider";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query/use-mutate";
+import { useSearch } from "@/hooks/use-serach";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,14 +29,19 @@ import type {
   ApplyVoucherResponse,
   CheckShippingCostBody,
   CheckShippingCostResponse,
+  DisclaimerData,
   GetCheckoutResponse,
+  GetDisclaimerResponse,
   GetPaymentMethodsResponse,
   GetPickupInfoResponse,
   PickupInfoData,
   PaymentGroup,
+  PaymentType,
   PlaceOrderBody,
   PlaceOrderResponse,
+  SearchFriendResponse,
   ShippingCostData,
+  SplitPaymentFriend,
   VoucherData,
 } from "@/services/checkout/types";
 import type {
@@ -226,7 +232,7 @@ function AddressPickerDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-lg lg:max-w-2xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t("addressSection")}</DialogTitle>
           </DialogHeader>
@@ -318,6 +324,111 @@ function AddressPickerDialog({
         onSuccess={() => { setEditAddress(null); refetch(); onChanged(); }}
       />
     </>
+  );
+}
+
+// ─── Friend Search Dialog (Patungan) ───────────────────────────────────────────
+
+function FriendSearchDialog({
+  open,
+  onOpenChange,
+  addedIds,
+  onAdd,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  addedIds: string[];
+  onAdd: (friend: SplitPaymentFriend) => void;
+}) {
+  const t = useTranslations("CheckoutPage");
+  const { search, searchValue, setSearch } = useSearch();
+
+  useEffect(() => {
+    if (open) setSearch("");
+  }, [open, setSearch]);
+
+  const trimmed = searchValue.trim();
+
+  const friendsQuery = useApiQuery<SearchFriendResponse>({
+    key: ["checkout-friends-search", trimmed],
+    endpoint: "/checkout/friends/search",
+    searchParams: { phone: trimmed },
+    enabled: open && trimmed.length >= 4,
+  });
+
+  const results = friendsQuery.data?.data ?? [];
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{t("searchFriendTitle")}</DialogTitle>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-3">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="tel"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("searchFriendPlaceholder")}
+              className="h-10 w-full rounded border border-gray-200 bg-white pl-9 pr-3 text-sm outline-none transition-colors focus:border-[#01798A] focus:ring-1 focus:ring-[#01798A]"
+              autoFocus
+            />
+          </div>
+
+          {search.trim().length > 0 && search.trim().length < 4 ? (
+            <p className="py-6 text-center text-sm text-gray-400">{t("searchFriendMinChars")}</p>
+          ) : friendsQuery.isFetching ? (
+            <div className="flex items-center justify-center gap-2 py-6">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#ffcf02] border-t-black" />
+              <span className="text-sm text-gray-600">{t("searchFriendLoading")}</span>
+            </div>
+          ) : trimmed.length >= 4 && results.length === 0 ? (
+            <p className="py-6 text-center text-sm text-gray-400">{t("searchFriendEmpty")}</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {results.map((friend) => {
+                const isAdded = addedIds.includes(friend.buyer_id);
+                return (
+                  <div
+                    key={friend.buyer_id}
+                    className="flex items-center gap-3 rounded border border-gray-200 bg-white px-3 py-2.5"
+                  >
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+                      <UserRound className="size-5" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-black">{friend.nama}</p>
+                      <p className="text-xs text-gray-500">{friend.telepon}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={isAdded}
+                      onClick={() => onAdd(friend)}
+                      className="h-8 shrink-0 bg-[#ffcf02] px-3 text-xs font-bold text-black shadow-none hover:bg-[#f0c300] disabled:opacity-50"
+                    >
+                      {isAdded ? t("searchFriendAlreadyAdded") : t("searchFriendAdd")}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-2 h-9 w-full text-sm shadow-none"
+          onClick={() => onOpenChange(false)}
+        >
+          {t("searchFriendDone")}
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -437,11 +548,11 @@ function PickupInfoCard({
 
 // ─── Payment Logo ──────────────────────────────────────────────────────────────
 
-const LOGO_EXT: Record<string, string> = {
+export const LOGO_EXT: Record<string, string> = {
   gopay: "png",
 };
 
-const LOGO_COLORS: Record<string, string> = {
+export const LOGO_COLORS: Record<string, string> = {
   bca: "bg-blue-600",
   mandiri: "bg-yellow-500",
   bni: "bg-orange-600",
@@ -460,7 +571,7 @@ const LOGO_COLORS: Record<string, string> = {
   qris: "bg-red-600",
 };
 
-function PaymentLogo({ logoValue, nama }: { logoValue: string; nama: string }) {
+export function PaymentLogo({ logoValue, nama }: { logoValue: string; nama: string }) {
   const [imgError, setImgError] = React.useState(false);
   const colorClass = LOGO_COLORS[logoValue] ?? "bg-gray-500";
   const initials = nama
@@ -497,7 +608,7 @@ function PaymentLogo({ logoValue, nama }: { logoValue: string; nama: string }) {
 
 // ─── Payment Method Selector ───────────────────────────────────────────────────
 
-function PaymentMethodSelector({
+export function PaymentMethodSelector({
   groups,
   isLoading,
   isError,
@@ -627,9 +738,104 @@ function PaymentMethodSelector({
   );
 }
 
+// ─── Disclaimer Consent Dialog ────────────────────────────────────────────────
+
+function DisclaimerConsentDialog({
+  open,
+  onOpenChange,
+  onAgree,
+  disclaimer,
+  isLoading,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onAgree: () => void;
+  disclaimer: DisclaimerData | null;
+  isLoading: boolean;
+}) {
+  const t = useTranslations("CheckoutPage");
+  const [checked, setChecked] = useState(false);
+
+  // Reset checkbox setiap kali dialog dibuka
+  useEffect(() => {
+    if (open) setChecked(false);
+  }, [open]);
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <ShieldCheck className="size-5 text-[#01798A]" />
+            {isLoading ? t("disclaimerTitle") : (disclaimer?.judul ?? t("disclaimerTitle"))}
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-4 flex-1 overflow-hidden">
+          {/* Konten HTML dari API */}
+          <div className="flex-1 overflow-y-auto rounded border border-gray-200 bg-gray-50 p-4">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-10">
+                <div className="h-6 w-6 animate-spin rounded-full border-4 border-[#ffcf02] border-t-black" />
+              </div>
+            ) : disclaimer?.konten ? (
+              <div
+                className="prose prose-sm max-w-none text-gray-700 [&_h1]:text-base [&_h1]:font-bold [&_h1]:mb-3 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:mt-4 [&_h2]:mb-2 [&_ul]:pl-4 [&_li]:mb-1 [&_p]:mb-2"
+                dangerouslySetInnerHTML={{ __html: disclaimer.konten }}
+              />
+            ) : (
+              <p className="text-sm text-gray-500">{t("disclaimerLoadError")}</p>
+            )}
+          </div>
+
+          {/* Checkbox persetujuan */}
+          <button
+            type="button"
+            onClick={() => setChecked((v) => !v)}
+            className="flex items-start gap-3 rounded border border-gray-200 bg-white px-4 py-3 text-left transition-colors hover:border-[#01798A] hover:bg-[#f0fafb]"
+          >
+            <span
+              className={[
+                "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded border-2 transition-colors",
+                checked ? "border-[#01798A] bg-[#01798A]" : "border-gray-300",
+              ].join(" ")}
+            >
+              {checked && (
+                <svg viewBox="0 0 10 8" className="size-2.5 fill-none stroke-white stroke-2">
+                  <polyline points="1,4 4,7 9,1" />
+                </svg>
+              )}
+            </span>
+            <span className="text-sm text-gray-700">{t("disclaimerCheckboxLabel")}</span>
+          </button>
+        </div>
+
+        <div className="flex gap-2 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1 h-10 text-sm shadow-none"
+            onClick={() => onOpenChange(false)}
+          >
+            {t("disclaimerCancel")}
+          </Button>
+          <Button
+            type="button"
+            disabled={!checked || isLoading || !disclaimer}
+            className="flex-1 h-10 bg-[#ffcf02] hover:bg-[#f0c300] text-black font-bold text-sm shadow-none disabled:opacity-50"
+            onClick={onAgree}
+          >
+            {t("disclaimerAgree")}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
-export const CheckoutClient = () => {
+export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
   const t = useTranslations("CheckoutPage");
   const { isLoading: sessionLoading } = useProtectRoute();
   const params = useParams<{ locale: string }>();
@@ -647,14 +853,19 @@ export const CheckoutClient = () => {
   const [voucherError, setVoucherError] = useState<string | null>(null);
   const [insuranceSelected, setInsuranceSelected] = useState(false);
   const [selectedPaymentKode, setSelectedPaymentKode] = useState<string | null>(null);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
+  const [disclaimerAgreed, setDisclaimerAgreed] = useState(false);
+  const [paymentType, setPaymentType] = useState<PaymentType>("single_payment");
+  const [splitFriends, setSplitFriends] = useState<SplitPaymentFriend[]>([]);
+  const [friendSearchOpen, setFriendSearchOpen] = useState(false);
   const queryClient = useQueryClient();
 
   // ─── Query ──────────────────────────────────────────────────────────────────
 
   const checkoutQuery = useApiQuery<GetCheckoutResponse>({
-    key: ["checkout"],
+    key: ["checkout", productSlug ?? "cart"],
     endpoint: "/checkout/summary",
-    searchParams: { locale },
+    searchParams: { locale, ...(productSlug ? { slug: productSlug } : {}) },
     enabled: !sessionLoading,
   });
 
@@ -670,15 +881,28 @@ export const CheckoutClient = () => {
     enabled: !sessionLoading,
   });
 
+  const disclaimerQuery = useApiQuery<GetDisclaimerResponse>({
+    key: ["checkout-disclaimer"],
+    endpoint: "/checkout/disclaimer",
+    searchParams: { locale },
+    enabled: !sessionLoading,
+  });
+
+  const disclaimerData = disclaimerQuery.data?.data ?? null;
+
   // ─── Mutations ──────────────────────────────────────────────────────────────
 
   const placeOrder = useMutate<PlaceOrderResponse, PlaceOrderBody>({
     endpoint: "/place-order",
     method: "post",
     onSuccess: (res) => {
-      const paymentUrl = res.data?.data?.payment_url;
-      if (paymentUrl) {
-        window.location.href = paymentUrl;
+      const orderData = res.data?.data;
+      if (paymentType === "split_payment" && orderData?.kode) {
+        router.push(`/checkout/split/${orderData.kode}`);
+        return;
+      }
+      if (orderData?.payment_url) {
+        window.location.href = orderData.payment_url;
       } else {
         router.push("/profile");
       }
@@ -749,7 +973,7 @@ export const CheckoutClient = () => {
       setShippingCost(null);
       setSelectedProvider(null);
       setInsuranceSelected(false);
-      checkShipping.mutate({ body: { alamat_buyer_id: address.id } });
+      checkShipping.mutate({ body: { alamat_buyer_id: address.id, ...(productSlug ? { slug: productSlug } : {}) } });
     }
     if (deliveryMode === "PICKUP") {
       setShippingCost(null);
@@ -775,7 +999,7 @@ export const CheckoutClient = () => {
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
-  const handlePlaceOrder = () => {
+  const executePlaceOrder = () => {
     if (!deliveryMode) {
       toast.error(t("deliveryModeRequired"));
       return;
@@ -792,8 +1016,12 @@ export const CheckoutClient = () => {
       toast.error(t("deliveryShippingCostRequired"));
       return;
     }
-    if (!selectedPaymentKode) {
+    if (paymentType === "single_payment" && !selectedPaymentKode) {
       toast.error(t("paymentMethodRequired"));
+      return;
+    }
+    if (paymentType === "split_payment" && splitFriends.length === 0) {
+      toast.error(t("splitFriendsRequired"));
       return;
     }
 
@@ -823,9 +1051,24 @@ export const CheckoutClient = () => {
           : {}),
         ...(notes.trim() ? { catatan: notes.trim() } : {}),
         ...(appliedVoucher ? { kupon_kode: appliedVoucher.kode } : {}),
+        ...(productSlug ? { slug: productSlug } : {}),
         success_return_url: successReturnUrl,
+        disclaimer_id: disclaimerData!.id,
+        disclaimer_agreed: true,
+        payment_type: paymentType,
+        ...(paymentType === "split_payment"
+          ? { friend_ids: splitFriends.map((f) => f.buyer_id) }
+          : {}),
       },
     });
+  };
+
+  const handlePlaceOrder = () => {
+    if (!disclaimerAgreed) {
+      setDisclaimerOpen(true);
+      return;
+    }
+    executePlaceOrder();
   };
 
   // ─── Render states ────────────────────────────────────────────────────────────
@@ -1089,17 +1332,106 @@ export const CheckoutClient = () => {
             )}
           </section>
 
+          {/* Tipe Pembayaran */}
+          <section className="flex flex-col gap-3">
+            <SectionTitle>{t("paymentTypeTitle")}</SectionTitle>
+
+            <div className="flex overflow-hidden rounded border border-gray-200">
+              <button
+                type="button"
+                onClick={() => setPaymentType("single_payment")}
+                className={[
+                  "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
+                  paymentType === "single_payment"
+                    ? "bg-[#ffcf02] text-black"
+                    : "bg-white text-gray-600 hover:bg-gray-50",
+                ].join(" ")}
+              >
+                <UserRound className="size-4" />
+                {t("paymentTypeSelf")}
+              </button>
+              <div className="w-px bg-gray-200" />
+              <button
+                type="button"
+                onClick={() => setPaymentType("split_payment")}
+                className={[
+                  "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
+                  paymentType === "split_payment"
+                    ? "bg-[#ffcf02] text-black"
+                    : "bg-white text-gray-600 hover:bg-gray-50",
+                ].join(" ")}
+              >
+                <Users className="size-4" />
+                {t("paymentTypeSplit")}
+              </button>
+            </div>
+
+            {paymentType === "split_payment" && (
+              <div className="flex flex-col gap-2 rounded border border-gray-200 bg-white p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-black">{t("splitFriendsLabel")}</span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="h-8 gap-1.5 bg-[#ffcf02] px-3 text-xs font-bold text-black shadow-none hover:bg-[#f0c300]"
+                    onClick={() => setFriendSearchOpen(true)}
+                  >
+                    <Search className="size-3.5" /> {t("splitAddFriend")}
+                  </Button>
+                </div>
+
+                {splitFriends.length === 0 ? (
+                  <p className="text-sm text-gray-400">{t("splitFriendsEmpty")}</p>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {splitFriends.map((friend) => (
+                      <div
+                        key={friend.buyer_id}
+                        className="flex items-center gap-3 rounded border border-gray-200 bg-gray-50 px-3 py-2"
+                      >
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-gray-500">
+                          <UserRound className="size-4" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-black">{friend.nama}</p>
+                          <p className="text-xs text-gray-500">{friend.telepon}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSplitFriends((prev) => prev.filter((f) => f.buyer_id !== friend.buyer_id))
+                          }
+                          className="shrink-0 rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
+                          aria-label={t("splitFriendRemove")}
+                        >
+                          <X className="size-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+
           {/* Pilih Cara Bayar */}
           <section className="flex flex-col gap-3">
             <SectionTitle>{t("paymentMethod")}</SectionTitle>
-            <PaymentMethodSelector
-              groups={paymentMethodsQuery.data?.data ?? []}
-              isLoading={paymentMethodsQuery.isLoading}
-              isError={paymentMethodsQuery.isError}
-              selectedKode={selectedPaymentKode}
-              onSelect={setSelectedPaymentKode}
-              qrisDisabled={isQrisDisabled}
-            />
+            {paymentType === "single_payment" ? (
+              <PaymentMethodSelector
+                groups={paymentMethodsQuery.data?.data ?? []}
+                isLoading={paymentMethodsQuery.isLoading}
+                isError={paymentMethodsQuery.isError}
+                selectedKode={selectedPaymentKode}
+                onSelect={setSelectedPaymentKode}
+                qrisDisabled={isQrisDisabled}
+              />
+            ) : (
+              <div className="flex items-start gap-3 rounded border border-[#01798A]/30 bg-[#f0fafb] px-4 py-3">
+                <Info className="mt-0.5 size-4 shrink-0 text-[#01798A]" />
+                <span className="text-sm text-[#01798A]">{t("paymentMethodSplitInfo")}</span>
+              </div>
+            )}
           </section>
 
           {/* Voucher */}
@@ -1262,6 +1594,25 @@ export const CheckoutClient = () => {
         open={addressPickerOpen}
         onOpenChange={setAddressPickerOpen}
         onChanged={() => queryClient.invalidateQueries({ queryKey: ["checkout"] })}
+      />
+
+      <FriendSearchDialog
+        open={friendSearchOpen}
+        onOpenChange={setFriendSearchOpen}
+        addedIds={splitFriends.map((f) => f.buyer_id)}
+        onAdd={(friend) => setSplitFriends((prev) => [...prev, friend])}
+      />
+
+      <DisclaimerConsentDialog
+        open={disclaimerOpen}
+        onOpenChange={setDisclaimerOpen}
+        disclaimer={disclaimerData}
+        isLoading={disclaimerQuery.isLoading}
+        onAgree={() => {
+          setDisclaimerAgreed(true);
+          setDisclaimerOpen(false);
+          executePlaceOrder();
+        }}
       />
 
     </div>

@@ -204,13 +204,13 @@ export const CartClient = () => {
                   checked={item.is_checked}
                   onCheckedChange={() => handleToggleItem(item)}
                   disabled={isMutating || item.is_sold}
-                  aria-label={`Pilih ${item.name}`}
+                  aria-label={`Pilih ${item.name[locale]}`}
                 />
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div className="relative size-[72px] rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shrink-0">
                     <Image
                       src={item.image || "https://github.com/shadcn.png"}
-                      alt={item.name}
+                      alt={item.name[locale]}
                       fill
                       className="object-cover"
                       sizes="72px"
@@ -218,7 +218,7 @@ export const CartClient = () => {
                   </div>
                   <div className="min-w-0">
                     <p className="font-medium text-sm line-clamp-2 leading-snug min-w-0">
-                      {item.name}
+                      {item.name[locale]}
                     </p>
                     {item.is_sold && (
                       <span className="inline-block mt-0.5 text-[10px] font-semibold text-white bg-red-500 px-1.5 py-0.5 rounded">
@@ -238,7 +238,7 @@ export const CartClient = () => {
                   onClick={() => handleDeleteItem(item)}
                   disabled={isMutating}
                   className="w-10 flex justify-center text-gray-400 hover:text-red-500 disabled:opacity-40"
-                  aria-label={`Hapus ${item.name}`}
+                  aria-label={`Hapus ${item.name[locale]}`}
                 >
                   <Trash2 className="size-4" />
                 </button>

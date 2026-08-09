@@ -36,6 +36,7 @@ export type ShippingCostData = {
 
 export type CheckShippingCostBody = {
   alamat_buyer_id: string;
+  slug?: string;
 };
 
 export type CheckShippingCostResponse = BaseAuthResponse<ShippingCostData>;
@@ -102,6 +103,8 @@ export type ApplyVoucherResponse = BaseAuthResponse<VoucherData>;
 
 export type GetCheckoutResponse = BaseAuthResponse<CheckoutData>;
 
+export type PaymentType = "single_payment" | "split_payment";
+
 // POST /place-order — place the order
 export type PlaceOrderBody = {
   delivery_type: "PICKUP" | "DELIVEREE" | "FORWARDER";
@@ -114,6 +117,12 @@ export type PlaceOrderBody = {
   catatan?: string;
   kupon_kode?: string;
   success_return_url?: string;
+  slug?: string;
+  disclaimer_id: string;
+  disclaimer_agreed: boolean;
+  payment_type: PaymentType;
+  /** Required when payment_type is "split_payment" — buyer_id of invited friends, at least 1. */
+  friend_ids?: string[];
 };
 
 export type PlaceOrderData = {
@@ -121,10 +130,63 @@ export type PlaceOrderData = {
   kode: string;
   total: number;
   expired_at: string;
-  payment_url: string;
+  // Empty for split_payment orders — each participant pays their own portion
+  // via the split-payment endpoints below.
+  payment_url: string | null;
+  participants_count: number;
 };
 
 export type PlaceOrderResponse = BaseAuthResponse<PlaceOrderData>;
+
+// ─── Split Payment (Patungan) ──────────────────────────────────────────────────
+
+export type SplitPaymentFriend = {
+  buyer_id: string;
+  nama: string;
+  telepon: string;
+  foto_url: string | null;
+};
+
+// GET /checkout/friends/search?phone=... — search for a friend to invite
+export type SearchFriendResponse = {
+  success: boolean;
+  message: string;
+  data: SplitPaymentFriend[];
+};
+
+// PATCH /pesanan/:kode/split-payment/amount — set my contribution amount
+export type SetSplitPaymentAmountBody = {
+  amount: number;
+};
+
+export type SetSplitPaymentAmountData = {
+  remaining_after: number;
+  total: number;
+};
+
+export type SetSplitPaymentAmountResponse = {
+  success: boolean;
+  message: string;
+  data: SetSplitPaymentAmountData;
+};
+
+// POST /pesanan/:kode/split-payment/pay — create invoice for my portion
+export type CreateSplitPaymentBody = {
+  metode_pembayaran_id: string;
+  metode_pembayaran_kode: string;
+  success_return_url: string;
+};
+
+export type CreateSplitPaymentData = {
+  payment_url: string;
+  expired_at: string;
+};
+
+export type CreateSplitPaymentResponse = {
+  success: boolean;
+  message: string;
+  data: CreateSplitPaymentData;
+};
 
 // ─── Payment Methods ──────────────────────────────────────────────────────────
 
@@ -163,3 +225,13 @@ export type PickupInfoData = {
 };
 
 export type GetPickupInfoResponse = BaseAuthResponse<PickupInfoData>;
+
+// ─── Disclaimer ───────────────────────────────────────────────────────────────
+
+export type DisclaimerData = {
+  id: string;
+  judul: string;
+  konten: string; // HTML string
+};
+
+export type GetDisclaimerResponse = BaseAuthResponse<DisclaimerData>;

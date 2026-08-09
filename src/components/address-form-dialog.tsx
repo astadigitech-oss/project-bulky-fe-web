@@ -108,8 +108,17 @@ export function AddressFormDialog({
     onError: { title: "UPDATE_ADDRESS" },
   });
 
+  const [locationError, setLocationError] = useState(false);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const lat = parseFloat(form.latitude);
+    const lng = parseFloat(form.longitude);
+    if (!lat && !lng) {
+      setLocationError(true);
+      return;
+    }
+    setLocationError(false);
     const body: AddressFormBody = {
       ...form,
       latitude: form.latitude || "0",
@@ -136,7 +145,7 @@ export function AddressFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-lg lg:max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{isEdit ? t("editTitle") : t("addTitle")}</DialogTitle>
           <DialogDescription>
@@ -149,25 +158,16 @@ export function AddressFormDialog({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3 pt-2">
-            {textFields.map(({ key, label, placeholder, required, type }) => (
-              <div key={key} className="space-y-1.5">
-                <label className="text-sm font-medium text-black">{label}</label>
-                <Input
-                  type={type ?? "text"}
-                  value={form[key] ?? ""}
-                  onChange={(e) => setField(key, e.target.value)}
-                  placeholder={placeholder}
-                  required={required}
-                />
-              </div>
-            ))}
-
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-black">{t("locationLabel")}</label>
+              <label className="text-sm font-medium text-black">
+                {t("locationLabel")}
+                <span className="ml-0.5 text-red-500">*</span>
+              </label>
               <MapPickerTrigger
                 latitude={form.latitude}
                 longitude={form.longitude}
                 onConfirm={(lat, lng, resolved?: ResolvedAddress) => {
+                  setLocationError(false);
                   setField("latitude", lat);
                   setField("longitude", lng);
                   if (resolved) {
@@ -180,10 +180,25 @@ export function AddressFormDialog({
                   }
                 }}
               />
-              <p className="text-xs text-[#727272]">
-                {t("locationHint")}
-              </p>
+              {locationError ? (
+                <p className="text-xs text-red-500">{t("locationRequired")}</p>
+              ) : (
+                <p className="text-xs text-[#727272]">{t("locationHint")}</p>
+              )}
             </div>
+
+            {textFields.map(({ key, label, placeholder, required, type }) => (
+              <div key={key} className="space-y-1.5">
+                <label className="text-sm font-medium text-black">{label}</label>
+                <Input
+                  type={type ?? "text"}
+                  value={form[key] ?? ""}
+                  onChange={(e) => setField(key, e.target.value)}
+                  placeholder={placeholder}
+                  required={required}
+                />
+              </div>
+            ))}
 
             <DialogFooter className="pt-2">
               <Button

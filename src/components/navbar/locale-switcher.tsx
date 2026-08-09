@@ -4,6 +4,7 @@ import { MyFlag } from "@components/flag";
 import { Command, CommandItem, CommandList } from "@ui/command";
 import { Locale, useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import { useOnClickOutside } from "usehooks-ts";
 
 export const LocaleSwitcher = () => {
@@ -12,12 +13,14 @@ export const LocaleSwitcher = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
 
   const handleSelect = async (locale: Locale) => {
+    const query = Object.fromEntries(searchParams.entries());
     startTransition(() => {
-      router.replace({ pathname }, { locale: locale });
+      router.replace({ pathname, query }, { locale: locale });
     });
   };
 

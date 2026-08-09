@@ -1,7 +1,8 @@
 {
   "Root": {
     "nextSlide": "Slide Selanjutnya",
-    "prevSlide": "Slide Sebelumnya"
+    "prevSlide": "Slide Sebelumnya",
+    "slideProgress": "Progres Slide Promo"
   },
   "Header": {
     "search": {
@@ -19,6 +20,7 @@
       "about": "Tentang Kami",
       "contact": "Hubungi Kami"
     },
+    "cart": "Keranjang",
     "auth": {
       "login": "Masuk",
       "profile": "Edit Profil",
@@ -36,13 +38,14 @@
     "close": "Tutup",
     "title": "Masuk",
     "register": "Daftar",
-    "phoneLabel": "No Telepon",
-    "phonePlaceholder": "No Handphone",
+    "phoneLabel": "No. Telepon",
+    "phonePlaceholder": "Masukkan nomor telepon",
     "passwordLabel": "Password",
-    "passwordPlaceholder": "Password",
+    "passwordPlaceholder": "Masukkan password",
     "showPassword": "Tampilkan password",
     "hidePassword": "Sembunyikan password",
     "forgotPassword": "Lupa Kata Sandi?",
+    "recoverOldAccount": "Pulihkan Akses Akun Lama",
     "processing": "Memproses...",
     "submit": "Masuk",
     "or": "Atau",
@@ -51,7 +54,9 @@
     "noAccount": "Belum punya akun?",
     "authRequired": "Silakan masuk terlebih dahulu untuk melanjutkan.",
     "authRequiredAddToCart": "Silakan masuk terlebih dahulu untuk menambahkan produk ke keranjang.",
-    "authRequiredBuyNow": "Silakan masuk terlebih dahulu untuk melanjutkan pembelian produk ini."
+    "authRequiredBuyNow": "Silakan masuk terlebih dahulu untuk melanjutkan pembelian produk ini.",
+    "welcomePrefix": "Selamat Datang di",
+    "heroAlt": "Dua kurir Bulky membawa kardus"
   },
   "ForgotPassword": {
     "title": "Lupa Kata Sandi",
@@ -93,11 +98,11 @@
     "title": "Daftar Sekarang",
     "alreadyHaveAccount": "Sudah Punya Akun?",
     "login": "Masuk",
-    "registerWithGoogle": "Google",
+    "registerWithGoogle": "Daftar dengan Google",
     "registerWithApple": "Apple",
     "or": "Atau",
-    "phoneLabel": "Nomor Telepon",
-    "phonePlaceholder": "Nomor Handphone",
+    "phoneLabel": "No. Telepon",
+    "phonePlaceholder": "Masukkan nomor telepon",
     "processing": "Memproses...",
     "submit": "Daftar",
     "termsPrefix": "Dengan Mendaftar, Saya menyetujui",
@@ -106,7 +111,8 @@
     "privacy": "Kebijakan Privasi",
     "errors": {
       "mustAgree": "Harap setujui Syarat & Ketentuan terlebih dahulu."
-    }
+    },
+    "welcomePrefix": "Gabung Bersama"
   },
   "Otp": {
     "title": "Verifikasi Akun",
@@ -153,8 +159,20 @@
       "emailInvalid": "Format email tidak valid.",
       "passwordRequired": "Password wajib diisi.",
       "passwordMin": "Password minimal 8 karakter.",
-      "general": "Terjadi kesalahan. Coba lagi."
-    }
+      "general": "Terjadi kesalahan. Coba lagi.",
+      "phoneRequired": "Nomor telepon wajib diisi.",
+      "confirmPasswordRequired": "Konfirmasi password wajib diisi.",
+      "confirmPasswordMismatch": "Konfirmasi password tidak sama."
+    },
+    "welcomePrefix": "Satu Langkah Lagi Menuju",
+    "subtitle": "Lengkapi data berikut untuk menyelesaikan pendaftaran.",
+    "confirmPasswordLabel": "Konfirmasi Password",
+    "confirmPasswordPlaceholder": "Ulangi password",
+    "strengthWeak": "Lemah",
+    "strengthFair": "Cukup",
+    "strengthGood": "Baik",
+    "strengthStrong": "Kuat",
+    "strengthLabel": "Kekuatan password"
   },
   "OAuthAddPhone": {
     "title": "Satu Langkah Lagi!",
@@ -203,7 +221,13 @@
     "sortCheapest": "Termurah",
     "sortExpensive": "Termahal",
     "listError": "Gagal mengambil data produk.",
-    "sold": "Terjual"
+    "sold": "Terjual",
+    "resetFilter": "Hapus Filter",
+    "pagination": {
+      "previous": "Halaman Sebelumnya",
+      "next": "Halaman Berikutnya",
+      "morePages": "Lebih Banyak Halaman"
+    }
   },
   "ProductDetail": {
     "detailError": "Gagal mengambil detail produk.",
@@ -251,7 +275,8 @@
     "cm3": "cm³",
     "warehouseFallback": "Warehouse",
     "loginRequiredToast": "Silakan masuk terlebih dahulu untuk melanjutkan.",
-    "addToCartError": "Gagal menambahkan produk ke keranjang."
+    "addToCartError": "Gagal menambahkan produk ke keranjang.",
+    "sold": "Terjual"
   },
   "CartPage": {
     "title": "Keranjang",
@@ -334,6 +359,11 @@
     "totalPayment": "Total Pembayaran",
     "placeOrder": "Buat Pesanan",
     "placingOrder": "Memproses...",
+    "disclaimerTitle": "Persetujuan Disclaimer",
+    "disclaimerCheckboxLabel": "Saya telah membaca dan menyetujui seluruh ketentuan di atas.",
+    "disclaimerAgree": "Setuju & Lanjutkan",
+    "disclaimerCancel": "Batal",
+    "disclaimerLoadError": "Gagal memuat konten disclaimer.",
     "deliveryModeRequired": "Pilih metode pengiriman terlebih dahulu.",
     "deliveryProviderRequired": "Pilih jenis pengiriman terlebih dahulu.",
     "deliveryAddressRequired": "Tambahkan alamat pengiriman terlebih dahulu.",
@@ -351,11 +381,50 @@
     "vaGoToOrders": "Lihat Pesanan",
     "paymentSuccessTitle": "Pembayaran Berhasil!",
     "paymentSuccessDesc": "Pesananmu sedang diproses. Terima kasih telah berbelanja di Bulky!",
-    "paymentSuccessGoToOrders": "Lihat Pesanan Saya"
+    "paymentSuccessGoToOrders": "Lihat Pesanan Saya",
+    "paymentTypeTitle": "Tipe Pembayaran",
+    "paymentTypeSelf": "Bayar Sendiri",
+    "paymentTypeSplit": "Patungan",
+    "paymentMethodSplitInfo": "Metode pembayaran akan dipilih setelah pesanan dibuat, di halaman atur nominal patungan.",
+    "splitFriendsLabel": "Teman Patungan",
+    "splitFriendsEmpty": "Belum ada teman yang diundang.",
+    "splitAddFriend": "Cari Teman",
+    "splitFriendRemove": "Hapus",
+    "splitFriendsRequired": "Undang minimal 1 teman untuk patungan.",
+    "searchFriendTitle": "Cari Teman Patungan",
+    "searchFriendPlaceholder": "Cari nomor telepon (contoh: 08123456789)",
+    "searchFriendMinChars": "Masukkan minimal 4 digit nomor telepon.",
+    "searchFriendEmpty": "Pengguna tidak ditemukan.",
+    "searchFriendLoading": "Mencari...",
+    "searchFriendAlreadyAdded": "Sudah ditambahkan",
+    "searchFriendAdd": "Tambah",
+    "searchFriendDone": "Selesai"
+  },
+  "SplitPaymentPage": {
+    "pageTitle": "Bayar Bagian Patungan",
+    "title": "Bayar Bagian Patungan",
+    "orderCode": "Kode Pesanan",
+    "orderTotal": "Total Pesanan",
+    "amountSectionTitle": "Nominal Bagian Saya",
+    "amountLabel": "Jumlah yang ingin dibayar",
+    "amountPlaceholder": "Masukkan nominal",
+    "saveAmount": "Simpan Nominal",
+    "savingAmount": "Menyimpan...",
+    "amountSaved": "Nominal berhasil disimpan.",
+    "remainingAfter": "Sisa yang harus dibayar peserta lain",
+    "amountRequired": "Masukkan nominal terlebih dahulu.",
+    "paymentMethodSectionTitle": "Pilih Cara Bayar",
+    "payButton": "Bayar Bagian Saya",
+    "paying": "Memproses...",
+    "paymentMethodRequired": "Pilih metode pembayaran terlebih dahulu.",
+    "setAmountFirst": "Simpan nominal terlebih dahulu sebelum membayar.",
+    "invalidCode": "Kode pesanan tidak valid."
   },
   "Homepage": {
     "hero": {
       "title": "Bangun Masa Depan Di Bulky.id",
+      "titleLine1": "Bangun Masa Depan",
+      "titleLine2": "Di <accent>Bulky.id</accent>",
       "description": "Belanja ratusan lelang likuidasi. Puluhan kategori produk. Semua ukuran dan kondisi.",
       "startNow": "Mulai Sekarang"
     },
@@ -363,12 +432,12 @@
     "seeAllProducts": "Lihat Semua Produk",
     "seeAllTV": "Lihat Semua Konten",
     "infoBanner": {
-      "title": "Kirim ke Seluruh Indonesia",
+      "title": "Pengiriman ke Seluruh Indonesia",
+      "titleLine1": "Pengiriman",
+      "titleLine2": "Ke Seluruh <accent>Indonesia</accent>",
+      "description": "Kami siap membantu kebutuhan bisnis Anda dengan pengiriman cepat, aman dan terpercaya ke seluruh wilayah Indonesia.",
       "getNow": "Dapatkan Sekarang",
-      "package": "Pengiriman kargo (ambil sendiri) atau layanan pengiriman",
-      "payment": "Pembayaran Terjamin 100% Aman",
-      "cs": "Dukungan Khusus 24 Jam",
-      "satisfied": "Pelanggan Puas"
+      "satisfied": "Dipercaya oleh <b>5.000+</b> Pelanggan"
     },
     "howItWorks": {
       "title": "Bagaimana Bulky.id Bekerja?",
@@ -379,7 +448,13 @@
     },
     "testimony": {
       "title": "Testimoni",
-      "description": "Apa kata pelanggan tentang produk dan layanan kami? Lihat pengalaman mereka di sini."
+      "description": "Apa kata pelanggan tentang produk dan layanan kami? Lihat pengalaman mereka di sini.",
+      "productPurchased": "Produk yang dibeli:",
+      "ratingLabel": "Rating {rating} dari 5",
+      "goToSlide": "Lihat testimoni ke-{number}",
+      "viewPhoto": "Lihat foto ulasan ke-{number}",
+      "photoPreview": "Pratinjau Foto",
+      "closePreview": "Tutup"
     },
     "wholesale": {
       "title": "Ayo! Daftarkan Diri Menjadi",
@@ -390,33 +465,24 @@
         "description": "Isi informasi bisnis kamu untuk menjadi member wholesale Bulky.id.",
         "fullNameLabel": "Nama Lengkap",
         "fullNamePlaceholder": "Masukkan nama lengkap kamu",
-        "businessNameLabel": "Nama Usaha / Toko",
-        "businessNamePlaceholder": "Masukkan nama usaha kamu",
         "phoneLabel": "Nomor Telepon",
         "phonePlaceholder": "Contoh: 08123456789",
-        "emailLabel": "Email",
-        "emailPlaceholder": "Masukkan alamat email kamu",
         "addressLabel": "Alamat Usaha",
         "addressPlaceholder": "Masukkan alamat usaha kamu",
-        "businessTypeLabel": "Jenis Usaha",
-        "businessTypePlaceholder": "Pilih jenis usaha",
-        "businessTypes": {
-          "retailer": "Retailer",
-          "distributor": "Distributor",
-          "reseller": "Reseller",
-          "other": "Lainnya"
-        },
-        "notesLabel": "Catatan Tambahan",
-        "notesPlaceholder": "Informasi tambahan (opsional)",
+        "budgetLabel": "Kisaran Budget",
+        "budgetPlaceholder": "Pilih kisaran budget",
+        "categoriesLabel": "Kategori Produk",
+        "categoriesRequired": "Pilih minimal satu kategori produk",
         "cancel": "Batal",
         "submit": "Kirim",
-        "submitting": "Mengirim..."
+        "submitting": "Mengirim...",
+        "errorMessage": "Terjadi kesalahan. Silakan coba lagi."
       }
     }
   },
   "Footer": {
     "company": {
-      "description": "Platform Recommerce Antar Bisnis Pertama di Indonesia",
+      "description": "Platform Recommerce Business-to-Business Pertama di Indonesia",
       "altCompany": "logo_bulky",
       "srCompany": "Logo Bulky",
       "srInstagram": "Instagram Bulky",
@@ -437,11 +503,11 @@
       "termsCondition": "Syarat dan Ketentuan",
       "privacyPolicy": "Kebijakan Privasi"
     },
-    "service": {
-      "title": "Layanan",
-      "otherProducts": "Produk Lainnya",
-      "order": "Pesanan",
-      "userProfile": "Profil"
+    "others": {
+      "title": "Lainnya",
+      "products": "Produk",
+      "news": "Berita",
+      "bulkyLive": "Bulky Live"
     },
     "getItOn": {
       "title": "Dapatkan di",
@@ -460,23 +526,27 @@
     "pageTitle": "Tentang Kami - Bulky.id",
     "section1": {
       "heading": "Tentang Kami",
+      "subheading": "Kenali lebih dekat Bulky.id dan komitmen kami untuk memberikan yang terbaik bagi bisnis Anda.",
+      "card1Title": "Komitmen Kami",
       "card1": "Kami berkomitmen menciptakan ekosistem bisnis yang berkelanjutan, transparan, dan saling menguntungkan, antara ritel, mitra logistik, dan reseller di seluruh Indonesia.",
+      "card2Title": "Tentang Bulky.id",
       "card2": "<b>Bulky.id</b> adalah perusahaan likuidasi ritel online pertama di Indonesia yang membantu bisnis mengelola kelebihan stok, barang retur, dan produk gagal kirim secara efisien.",
-      "card3": "Kami menghadirkan solusi inovatif dalam pengelolaan stok agar setiap produk tetap memiliki nilai jual dan peluang keuntungan baru bagi pelaku usaha."
+      "card3Title": "Inovasi untuk Solusi",
+      "card3": "Kami menghadirkan solusi inovatif dalam pengelolaan stok, memastikan setiap produk tetap memiliki nilai jual serta membuka peluang keuntungan baru bagi pelaku usaha."
     },
     "section2": {
       "heading": "Kami Menyediakan Solusi",
       "headingLine2": "Bisnis yang Efisien"
     },
     "section3": {
-      "heading": "Kami hadir untuk mendukung pelaku usaha, reseller, dan UMKM",
+      "heading": "Kami Hadir untuk Mendukung Pelaku Usaha, Reseller, dan UMKM",
       "p1": "Melalui Bulky.id, pelaku usaha dapat mendapatkan stok grosir berkualitas dengan harga lebih hemat, sekaligus memiliki kesempatan memulai bisnis tanpa modal besar.",
       "p2": "Kami juga membantu mitra meningkatkan keuntungan melalui sistem distribusi yang transparan, efisien, dan terpercaya."
     },
     "section4": {
       "heading": "Ekosistem Bulky.id",
-      "p1": "Kami bekerja sama dengan ritel besar, distributor, dan mitra logistik di seluruh Indonesia. Dari proses pengumpulan, sortir, hingga distribusi, semuanya kami jalankan dengan sistem digital yang cepat dan terpercaya.",
-      "p2": "Dari stok berlebih menjadi peluang baru untuk bisnis dan keberlanjutan."
+      "p1": "Kami bekerja sama dengan ritel besar, distributor, serta mitra logistik di seluruh Indonesia. Mulai dari proses pengumpulan, penyortiran, hingga distribusi, seluruh rangkaian proses kami jalankan melalui sistem digital yang cepat dan terpercaya.",
+      "p2": "Mengubah kelebihan stok menjadi peluang bisnis baru yang berkelanjutan."
     },
     "section5": {
       "heading": "Berita Bulky",
@@ -503,14 +573,25 @@
           "excerpt": "Bulky terus meningkatkan akurasi dan kecepatan proses sortir di gudang.",
           "date": "05 Agustus 2025"
         }
-      ]
+      ],
+      "empty": "Belum ada berita.",
+      "detailError": "Gagal memuat detail berita.",
+      "home": "Beranda",
+      "breadcrumbLabel": "Berita",
+      "relatedTitle": "Artikel Lainnya",
+      "viewAll": "Lihat Semua"
     },
     "section6": {
-      "heading": "Di Bulky.id, setiap kontainer dan palet kami kemas dengan hati-hati",
+      "heading": "Di <brand>Bulky.id</brand> setiap kontainer dan palet, kami tangani dengan standar terbaik",
       "p": "Sebagai platform likuidasi ritel online pertama di Indonesia, <b>Bulky.id</b> hadir untuk membantu pelaku usaha mendapatkan stok terbaik mengubah kelebihan barang menjadi peluang bisnis baru yang menguntungkan dan berkelanjutan.",
       "badge1": "Aman",
+      "badge1Desc": "Transaksi aman dan terpercaya",
       "badge2": "Cepat",
-      "badge3": "24/7 Dukungan"
+      "badge2Desc": "Proses cepat untuk kebutuhan bisnis Anda",
+      "badge3": "24/7 Dukungan",
+      "badge3Desc": "Tim kami siap membantu kapan saja",
+      "badge4": "Stok Terbaik",
+      "badge4Desc": "Stok berkualitas untuk peluang terbaik"
     }
   },
   "ProfilePages": {
@@ -518,16 +599,26 @@
       "pageTitle": "Menunggu Pembayaran",
       "heading": "Menunggu Pembayaran",
       "emptyTitle": "Tidak ada produk yang belum dibayar",
-      "emptyAction": "Mulai Belanja"
+      "emptyAction": "Mulai Belanja",
+      "errorLoading": "Gagal memuat data pembayaran.",
+      "card": {
+        "payNow": "Bayar Sekarang"
+      }
     },
     "orders": {
       "pageTitle": "Status Pesanan",
       "statusLabel": "Status",
+      "emptyTitle": "Tidak ada pesanan",
+      "emptyAction": "Mulai Belanja",
+      "errorLoading": "Gagal memuat data pesanan.",
+      "itemCount": "produk",
       "filters": {
         "all": "Semua",
         "waitingConfirmation": "Menunggu Konfirmasi",
-        "inProcess": "Proses",
-        "arrived": "Tiba Ditujuan",
+        "inProcess": "Diproses",
+        "arrived": "Siap Kirim",
+        "shipped": "Dikirim",
+        "completed": "Selesai",
         "cancelled": "Dibatalkan"
       },
       "paymentSuccessTitle": "Pembayaran Berhasil!",
@@ -538,9 +629,106 @@
         "palletType": "Tipe Palet Online",
         "deliveryStatus": "Status Pengiriman",
         "viewHistory": "Lihat Riwayat",
+        "viewDetail": "Detail Pesanan",
         "trackOrder": "Lacak Pesanan",
+        "pickupInfo": "Info Pickup",
         "statusPacking": "Dikemas",
-        "statusDone": "Selesai"
+        "statusDone": "Selesai",
+        "splitPaymentBadge": "Patungan"
+      },
+      "pickupModal": {
+        "title": "Informasi Pickup",
+        "description": "Pesananmu siap diambil! Datangi gudang kami sesuai jadwal operasional dan tunjukkan bukti pesanan saat tiba.",
+        "schedule": "Jadwal Operasional",
+        "closed": "Tutup",
+        "today": "Hari ini",
+        "copyAddress": "Salin alamat",
+        "copied": "Tersalin!"
+      }
+    },
+    "orderDetail": {
+      "pageTitle": "Detail Pesanan",
+      "back": "Kembali ke Pesanan",
+      "backGroupBuy": "Kembali ke Group Buy",
+      "orderId": "Nomor Pesanan",
+      "createdAt": "Dibuat pada",
+      "palletType": "Tipe Palet Online",
+      "progress": "Status Pesanan",
+      "history": "Riwayat Status",
+      "historyEmpty": "Belum ada riwayat status.",
+      "notes": "Catatan",
+      "address": "Alamat Pengiriman",
+      "payNow": "Bayar Sekarang",
+      "errorLoading": "Gagal memuat detail pesanan.",
+      "pickupInfo": "Info Pickup",
+      "trackOrder": "Lacak Pesanan",
+      "markDone": "Pesanan Diterima",
+      "markDoneLoading": "Mengkonfirmasi...",
+      "markDoneSuccess": "Pesanan berhasil dikonfirmasi diterima!",
+      "markDoneError": "Gagal mengkonfirmasi pesanan.",
+      "markDoneConfirmTitle": "Konfirmasi Pesanan Diterima",
+      "markDoneConfirmDesc": "Pastikan kamu sudah menerima pesanan dalam kondisi baik sebelum mengkonfirmasi. Tindakan ini tidak dapat dibatalkan.",
+      "markDoneConfirmOk": "Ya, Sudah Diterima",
+      "markDoneConfirmCancel": "Batal",
+      "markDoneOwnerOnlyNote": "Hanya pemilik pesanan yang bisa mengonfirmasi pesanan diterima.",
+      "splitPaymentBadge": "Patungan",
+      "expiredNotice": "Pembayaran kadaluarsa pada",
+      "participants": {
+        "title": "Peserta Patungan",
+        "subtitle": "Setiap peserta membayar bagiannya masing-masing untuk pesanan ini.",
+        "you": "Kamu",
+        "owner": "Pemilik",
+        "payMyPart": "Bayar Bagian Saya",
+        "paidAt": "Dibayar pada",
+        "expiredAt": "Kadaluarsa pada",
+        "status": {
+          "PAID": "Lunas",
+          "PENDING": "Menunggu",
+          "PARTIAL": "Sebagian",
+          "EXPIRED": "Kadaluarsa"
+        }
+      },
+      "orderStatus": {
+        "PROCESSING": "Diproses",
+        "PENDING": "Menunggu",
+        "READY": "Siap Kirim",
+        "SHIPPED": "Dikirim",
+        "COMPLETED": "Selesai",
+        "CANCELLED": "Dibatalkan"
+      },
+      "orderStatusPickup": {
+        "READY": "Siap Diambil",
+        "SHIPPED": "Sudah Diambil"
+      },
+      "deliveryType": {
+        "PICKUP": "Ambil di Gudang",
+        "DELIVEREE": "Deliveree",
+        "FORWARDER": "Forwarder",
+        "FORWARDER_LCL": "Forwarder LCL"
+      },
+      "stepper": {
+        "ordered": "Pesanan Dibuat",
+        "packed": "Dikemas",
+        "shipped": "Dikirim",
+        "readyPickup": "Siap Diambil",
+        "done": "Selesai"
+      },
+      "biaya": {
+        "title": "Rincian Biaya",
+        "produk": "Biaya Produk",
+        "pengiriman": "Biaya Pengiriman",
+        "ppn": "PPN",
+        "lainnya": "Asuransi Pengiriman",
+        "total": "Total Pembayaran"
+      },
+      "trackingModal": {
+        "title": "Lacak Pesanan",
+        "bookingNumber": "Nomor Booking",
+        "deliveryStatus": "Status Pengiriman",
+        "trackExternally": "Buka Halaman Tracking",
+        "history": "Riwayat Pengiriman",
+        "noData": "Informasi tracking belum tersedia.",
+        "loading": "Memuat informasi tracking..."
       }
     },
     "tracking": {
@@ -559,9 +747,39 @@
     },
     "patungan": {
       "pageTitle": "Pembayaran Patungan",
-      "heading": "Patungan",
+      "heading": "Pantau pesanan patungan kamu di sini.",
       "emptyTitle": "Tidak ada pembayaran patungan",
       "emptyAction": "Buat Pembayaran Patungan"
+    },
+    "review": {
+      "pageTitle": "Ulasan Saya",
+      "tabPending": "Belum Direview",
+      "tabReviewed": "Sudah Direview",
+      "emptyPendingTitle": "Tidak ada pesanan yang perlu direview",
+      "emptyReviewedTitle": "Belum ada ulasan",
+      "emptyAction": "Mulai Belanja",
+      "errorLoading": "Gagal memuat data ulasan.",
+      "pendingCard": {
+        "qty": "{qty} item",
+        "writeReview": "Tulis Ulasan"
+      },
+      "reviewedCard": {
+        "approved": "Disetujui",
+        "pending": "Menunggu Persetujuan"
+      },
+      "addModal": {
+        "title": "Tulis Ulasan",
+        "ratingLabel": "Rating",
+        "commentLabel": "Komentar",
+        "commentPlaceholder": "Ceritakan pengalamanmu dengan produk ini...",
+        "imageLabel": "Foto (opsional)",
+        "imageHint": "JPG/PNG",
+        "submit": "Kirim Ulasan",
+        "submitting": "Mengirim...",
+        "successMessage": "Ulasan berhasil dikirim!",
+        "ratingRequired": "Pilih rating terlebih dahulu.",
+        "errorMessage": "Gagal mengirim ulasan. Coba lagi."
+      }
     }
   },
   "Profile": {
@@ -570,6 +788,7 @@
       "payment": "Pembayaran",
       "orders": "Pesanan",
       "patungan": "Patungan",
+      "review": "Ulasan",
       "edit": "Edit Profil"
     },
     "edit": {
@@ -645,6 +864,15 @@
       "deleting": "Menghapus...",
       "confirm": "Hapus Akun"
     },
+    "mapPickerDialog": {
+      "title": "Pilih Lokasi",
+      "description": "Cari alamat atau klik/seret pin untuk menentukan titik lokasi.",
+      "searchPlaceholder": "Cari alamat di peta...",
+      "addressDetected": "Alamat terdeteksi",
+      "cancel": "Batal",
+      "confirm": "Konfirmasi Lokasi",
+      "selectPin": "Pilih Titik Lokasi di Peta"
+    },
     "addressDialog": {
       "addTitle": "Tambah Alamat Baru",
       "editTitle": "Edit Alamat",
@@ -671,6 +899,7 @@
       "postalCodeLabel": "Kode Pos",
       "postalCodePlaceholder": "12345",
       "locationLabel": "Pin Lokasi di Peta",
+      "locationRequired": "Silakan tentukan titik lokasi di peta terlebih dahulu.",
       "locationHint": "Cari atau seret pin — kolom alamat akan terisi otomatis dari hasil peta.",
       "addButton": "Tambah Alamat",
       "updateButton": "Perbarui",
@@ -751,11 +980,28 @@
       }
     }
   },
+  "BulkyNews": {
+    "pageTitle": "Berita Bulky",
+    "subtitle": "Kabar terbaru seputar grosir, logistik, dan operasional Bulky",
+    "empty": "Belum ada berita di kategori ini.",
+    "categories": {
+      "all": "Semua"
+    }
+  },
+  "MobileRedirectModal": {
+    "from": "Dipersembahkan oleh",
+    "title": "Belanja Lebih Nyaman di Aplikasi",
+    "description": "Dapatkan pengalaman belanja grosir terbaik di genggamanmu. Download aplikasi Bulky sekarang dan nikmati kemudahan transaksi kapan saja, di mana saja.",
+    "appStore": "Download di App Store",
+    "playStore": "Download di Google Play",
+    "dismiss": "Lanjutkan ke website"
+  },
   "ContactUs": {
     "pageTitle": "Hubungi Kami - Bulky.id",
     "hero": {
-      "heading": "Layanan Bantuan?",
-      "subheading": "Pertanyaan? Pesan 24/7",
+      "heading": "Butuh Bantuan?",
+      "subheading": "Tim kami siap melayani Anda 24/7",
+      "description": "Hubungi kami untuk mendapatkan informasi, konsultasi, atau bantuan seputar produk dan layanan bulky.",
       "cta": "Tanya Sekarang"
     },
     "form": {
@@ -771,27 +1017,79 @@
       "messagePlaceholder": "Tulis pesan",
       "sending": "Mengirim...",
       "submit": "Kirim Pesan",
-      "successMessage": "\u2713 Pesan kamu sudah terkirim. Tim kami akan menghubungi kamu segera."
+      "successMessage": "✓ Pesan kamu sudah terkirim. Tim kami akan menghubungi kamu segera."
     },
     "sidebar": {
-      "greeting": "Hi, Kami selalu ada disini untuk membantu kamu",
+      "greeting": "Hi, Tim kami selalu siap membantu Anda",
       "contact": "Kontak",
-      "smsWa": "SMS/Wa",
+      "smsWa": "WhatsApp",
       "phone": "Telepon",
       "email": "Email",
       "address": "Alamat",
       "officeHours": "Jam Operasi Kantor",
-      "monFri": "Senin\u2013Jumat",
-      "satSun": "Sabtu\u2013Minggu",
+      "monFri": "Senin–Jumat",
+      "satSun": "Sabtu–Minggu",
       "socialMedia": "Sosial Media Kami"
     },
     "map": {
-      "openMaps": "Buka di Google Maps \u2192"
+      "openMaps": "Buka di Google Maps →"
     },
     "points": {
       "shipping": "Pengiriman kargo (ambil sendiri) atau layanan pengiriman",
       "payment": "Pembayaran Terjamin 100% Aman",
       "support": "Dukungan Khusus 24 Jam"
     }
+  },
+  "Faq": {
+    "pageTitle": "Pertanyaan Umum - Bulky.id",
+    "heading": "Pertanyaan Umum",
+    "subheading": "Jawaban atas pertanyaan yang paling sering diajukan seputar belanja di Bulky.id",
+    "home": "Beranda",
+    "breadcrumbLabel": "FAQ",
+    "loading": "Memuat FAQ...",
+    "loadError": "Gagal memuat FAQ. Silakan coba lagi nanti.",
+    "empty": "Belum ada FAQ tersedia.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "HowToBuy": {
+    "pageTitle": "Cara Membeli - Bulky.id",
+    "heading": "Cara Membeli",
+    "home": "Beranda",
+    "breadcrumbLabel": "Cara Membeli",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "PaymentInformation": {
+    "pageTitle": "Informasi Pembayaran - Bulky.id",
+    "heading": "Informasi Pembayaran",
+    "home": "Beranda",
+    "breadcrumbLabel": "Informasi Pembayaran",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "TermsConditions": {
+    "pageTitle": "Syarat dan Ketentuan - Bulky.id",
+    "heading": "Syarat dan Ketentuan",
+    "home": "Beranda",
+    "breadcrumbLabel": "Syarat dan Ketentuan",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "PrivacyPolicy": {
+    "pageTitle": "Kebijakan Privasi - Bulky.id",
+    "heading": "Kebijakan Privasi",
+    "home": "Beranda",
+    "breadcrumbLabel": "Kebijakan Privasi",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
   }
 }

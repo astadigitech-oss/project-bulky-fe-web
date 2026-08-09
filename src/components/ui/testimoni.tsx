@@ -1,10 +1,13 @@
 "use client";
 
-import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import { motion, AnimatePresence } from "motion/react";
+import { IconStarFilled } from "@tabler/icons-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-
-import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight, Eye, Package, XIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "./button";
 import {
   Dialog,
   DialogClose,
@@ -12,18 +15,47 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./dialog";
-import { Eye, XIcon } from "lucide-react";
-import { Button } from "./button";
 
 type Testimonial = {
   description: string;
   name: string;
+  productName?: string;
   images: string[];
   date: string;
   src: string;
+  rating?: number;
 };
+
+const AUTOPLAY_DELAY = 6000;
+
+/** White pill on the yellow field. Used both beside the card (desktop) and under it (mobile). */
+const NavButton = ({
+  label,
+  onClick,
+  className,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <button
+    type="button"
+    aria-label={label}
+    onClick={onClick}
+    className={cn(
+      "flex size-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-lg",
+      "transition hover:bg-[#fff3c4] active:scale-95",
+      "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900",
+      className,
+    )}
+  >
+    {children}
+  </button>
+);
+
 export const AnimatedTestimonials = ({
   testimonials,
   autoplay = false,
@@ -31,261 +63,236 @@ export const AnimatedTestimonials = ({
   testimonials: Testimonial[];
   autoplay?: boolean;
 }) => {
+  const t = useTranslations("Homepage.testimony");
+  const tRoot = useTranslations("Root");
+  const reduceMotion = useReducedMotion();
+
   const [active, setActive] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const handleNext = () => {
-    setActive((prev) => (prev + 1) % testimonials.length);
-    setProgress(0);
-  };
+  const count = testimonials.length;
 
-  const handlePrev = () => {
-    setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-    setProgress(0);
-  };
-
-  const isActive = (index: number) => {
-    return index === active;
-  };
-
+  // Autoplay pauses on hover and while the photo preview is open, so the slide
+  // never changes out from under whatever the reader is looking at.
   useEffect(() => {
-    if (!autoplay || isPaused || isOpen) return;
+    if (!autoplay || isPaused || selectedImage || count <= 1) return;
 
-    const duration = 5000;
-    const intervalTime = 50;
-    const step = 100 / (duration / intervalTime);
+    const interval = setInterval(() => {
+      setActive((prev) => (prev + 1) % count);
+    }, AUTOPLAY_DELAY);
 
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) return 100;
-        return prev + step;
-      });
-    }, intervalTime);
+    return () => clearInterval(interval);
+  }, [autoplay, isPaused, selectedImage, count]);
 
-    const slideInterval = setInterval(() => {
-      handleNext();
-    }, duration);
+  if (!count) return null;
 
-    return () => {
-      clearInterval(progressInterval);
-      clearInterval(slideInterval);
-    };
-  }, [autoplay, isPaused]);
+  const index = Math.min(active, count - 1);
+  const item = testimonials[index];
+  const rating = item.rating ?? 0;
 
-  const randomRotateY = (seed: number): number => {
-    const x = Math.sin(seed * 9301 + 49297) * 233280;
-    const normalized = x - Math.floor(x); // 0..1
-
-    return Math.floor(normalized * (10 - -10 + 1)) + -10;
-  };
+  const handlePrev = () => setActive((prev) => (prev - 1 + count) % count);
+  const handleNext = () => setActive((prev) => (prev + 1) % count);
 
   return (
-    <div className="font-sans antialiased w-full bg-white px-6 xl:px-10 2xl:px-20 py-4 rounded-xl h-7/11 flex items-center justify-center">
-      <div
-        ref={containerRef}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => {
-          setIsPaused(false);
-          setProgress(0);
-        }}
-        className="relative grid grid-cols-1 gap-6 xl:gap-12 2xl:gap-20 md:grid-cols-3 w-fit mx-auto h-full"
-      >
-        <div className="flex items-center justify-center">
-          <div className="relative w-2/3 xl:w-5/6 2xl:w-full aspect-square">
-            <AnimatePresence>
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.src}
-                  initial={{
-                    opacity: 0,
-                    scale: 0.9,
-                    z: -100,
-                    rotate: randomRotateY(index),
-                  }}
-                  animate={{
-                    opacity: isActive(index) ? 1 : 0.7,
-                    scale: isActive(index) ? 1 : 0.95,
-                    z: isActive(index) ? 0 : -100,
-                    rotate: isActive(index) ? 0 : randomRotateY(index),
-                    zIndex: isActive(index)
-                      ? 40
-                      : testimonials.length + 2 - index,
-                    y: isActive(index) ? [0, -80, 0] : 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    scale: 0.9,
-                    z: 100,
-                    rotate: randomRotateY(index),
-                  }}
-                  transition={{
-                    duration: 0.4,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute inset-0 origin-bottom"
+    <div
+      className="w-full"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div className="relative mx-auto w-full max-w-3xl">
+        {count > 1 && (
+          <>
+            <NavButton
+              label={tRoot("prevSlide")}
+              onClick={handlePrev}
+              className="absolute top-1/2 -left-6 z-10 hidden -translate-y-1/2 md:flex lg:-left-14"
+            >
+              <ArrowLeft className="size-4.5 stroke-[2.5]" />
+            </NavButton>
+            <NavButton
+              label={tRoot("nextSlide")}
+              onClick={handleNext}
+              className="absolute top-1/2 -right-6 z-10 hidden -translate-y-1/2 md:flex lg:-right-14"
+            >
+              <ArrowRight className="size-4.5 stroke-[2.5]" />
+            </NavButton>
+          </>
+        )}
+
+        <article className="rounded-3xl bg-white p-5 shadow-[0_22px_50px_-24px_rgba(146,101,0,0.55)] sm:p-7 md:p-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={index}
+              initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -14 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="grid gap-5 sm:gap-7 md:grid-cols-[auto_1fr] md:items-start md:gap-8"
+            >
+              <div className="relative mx-auto size-28 shrink-0 overflow-hidden rounded-full bg-[#ffcf02]/25 ring-8 ring-[#fff3c4] sm:size-32 md:mx-0 md:size-36">
+                <Image
+                  unoptimized
+                  src={item.src}
+                  alt={item.name}
+                  fill
+                  sizes="144px"
+                  draggable={false}
+                  className="object-cover object-center"
+                />
+              </div>
+
+              <div className="min-w-0 text-center md:text-left">
+                <h3 className="text-xl font-bold text-neutral-900 sm:text-2xl">
+                  {item.name}
+                </h3>
+                {item.date && (
+                  <p className="mt-1 text-xs text-neutral-500">{item.date}</p>
+                )}
+
+                <div
+                  role="img"
+                  aria-label={t("ratingLabel", { rating: String(rating) })}
+                  className="mt-2 flex items-center justify-center gap-0.5 md:justify-start"
                 >
-                  <img
-                    src={testimonial.src}
-                    alt={testimonial.name}
-                    width={500}
-                    height={500}
-                    draggable={false}
-                    className="h-full w-full rounded-3xl object-cover object-center"
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        </div>
-        <div className="flex flex-col justify-between xl:py-4 col-span-2">
-          <motion.div
-            key={active}
-            initial={{
-              y: 20,
-              opacity: 0,
-            }}
-            animate={{
-              y: 0,
-              opacity: 1,
-            }}
-            exit={{
-              y: -20,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.2,
-              ease: "easeInOut",
-            }}
-            className=""
-          >
-            <h3 className="text-lg xl:text-xl 2xl:text-2xl font-bold text-black dark:text-white">
-              {testimonials[active].name}
-            </h3>
-            <p className="text-xs xl:text-sm text-gray-700 dark:text-neutral-500">
-              {testimonials[active].date}
-            </p>
-            <motion.p className="mt-3 xl:mt-5 2xl:mt-6 text-xs leading-relaxed xl:text-sm 2xl:text-base text-black dark:text-neutral-300">
-              {testimonials[active].description
-                .split(" ")
-                .map((word, index) => (
-                  <motion.span
-                    key={index}
-                    initial={{
-                      filter: "blur(10px)",
-                      opacity: 0,
-                      y: 5,
-                    }}
-                    animate={{
-                      filter: "blur(0px)",
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                      ease: "easeInOut",
-                      delay: 0.02 * index,
-                    }}
-                    className="inline-block"
-                  >
-                    {word}&nbsp;
-                  </motion.span>
-                ))}
-            </motion.p>
-            <div className="flex items-center gap-2 mt-2 xl:mt-4">
-              {Array.from({ length: 4 }, (_, i) => (
-                <Dialog
-                  key={i}
-                  open={isOpen}
-                  onOpenChange={(e) => {
-                    setIsOpen(e);
-                    if (!e) {
-                      setIsPaused(false);
-                      setProgress(0);
-                    }
-                  }}
-                >
-                  <DialogTrigger
-                    render={
-                      <motion.button
-                        className="relative size-16 xl:size-20 2xl:size-24 rounded-xl shadow bg-white group"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          duration: 0.5,
-                          delay: i * 0.2, // otomatis berurutan
-                        }}
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <IconStarFilled
+                      key={i}
+                      aria-hidden
+                      className={cn(
+                        "size-4",
+                        i < rating ? "text-[#ffc107]" : "text-neutral-200",
+                      )}
+                    />
+                  ))}
+                </div>
+
+                <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-neutral-700 md:line-clamp-3 md:min-h-[4.5rem]">
+                  {item.description}
+                </p>
+
+                {(item.images?.length ?? 0) > 0 && (
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2 md:justify-start">
+                    {item.images.map((imgUrl, i) => (
+                      <button
+                        key={imgUrl}
+                        type="button"
+                        aria-label={t("viewPhoto", { number: String(i + 1) })}
+                        className="group relative size-14 overflow-hidden rounded-xl border border-neutral-200 bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:size-16"
+                        onClick={() => setSelectedImage(imgUrl)}
                       >
-                        <div className="size-full rounded-xl bg-black/10 backdrop-blur-sm absolute top-0 left-0 z-10 group-hover:opacity-100 flex items-center justify-center opacity-0 transition-all">
-                          <div className="size-6 flex items-center justify-center bg-yellow-400 rounded-full">
-                            <Eye className="size-4" />
-                          </div>
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/10 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+                          <span className="flex size-6 items-center justify-center rounded-full bg-[#ffcf02]">
+                            <Eye className="size-4 text-neutral-900" />
+                          </span>
                         </div>
                         <Image
-                          src={"/assets/images/warehouse.webp"}
-                          alt="warehouse"
+                          src={imgUrl}
+                          alt=""
                           fill
-                          sizes="50vw"
+                          sizes="64px"
                           className="object-cover"
                         />
-                      </motion.button>
-                    }
-                  />
-                  <DialogContent
-                    className={"lg:min-w-[80vh]"}
-                    showCloseButton={false}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>Pratinjau Foto</DialogTitle>
-                      <div className="w-full aspect-square rounded-lg relative overflow-hidden">
-                        <Image
-                          src={"/assets/images/warehouse.webp"}
-                          alt="warehouse"
-                          fill
-                          sizes="50vw"
-                          className="object-cover"
-                        />
-                      </div>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <DialogClose
-                        render={
-                          <Button>
-                            <XIcon />
-                            Tutup
-                          </Button>
-                        }
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {item.productName && (
+                  <div className="mt-5 flex items-center justify-center gap-3 border-t border-neutral-200 pt-4 md:justify-start">
+                    <span className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-neutral-200 bg-[#ffcf02]/15 sm:size-14">
+                      <Package
+                        className="size-6 text-neutral-500"
+                        strokeWidth={1.5}
                       />
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </div>
-          </motion.div>
-          <div className="flex gap-4 pt-12 md:pt-2 xl:pt-0 items-center">
-            <button
-              onClick={handlePrev}
-              className="group/button flex size-6 xl:size-7 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800"
-            >
-              <IconArrowLeft className="size-3.5 xl:size-5 text-black transition-transform duration-300 group-hover/button:rotate-12 dark:text-neutral-400" />
-            </button>
-            <div className="relative h-1 w-24 xl:w-28 2xl:w-32 rounded-full overflow-hidden bg-gray-200">
-              <div
-                className="absolute h-full rounded-full top-0 left-0 bg-black"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <button
-              onClick={handleNext}
-              className="group/button flex size-6 xl:size-7 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800"
-            >
-              <IconArrowRight className="size-3.5 xl:size-5 text-black transition-transform duration-300 group-hover/button:-rotate-12 dark:text-neutral-400" />
-            </button>
-          </div>
-        </div>
+                    </span>
+                    <span className="min-w-0 text-left">
+                      <span className="block text-xs text-neutral-500">
+                        {t("productPurchased")}
+                      </span>
+                      <span className="block truncate text-sm font-bold text-neutral-900">
+                        {item.productName}
+                      </span>
+                    </span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </article>
       </div>
+
+      {count > 1 && (
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <NavButton
+            label={tRoot("prevSlide")}
+            onClick={handlePrev}
+            className="md:hidden"
+          >
+            <ArrowLeft className="size-4.5 stroke-[2.5]" />
+          </NavButton>
+
+          <div className="flex items-center gap-2">
+            {testimonials.map((testimonial, i) => (
+              <button
+                key={`${testimonial.name}-${i}`}
+                type="button"
+                aria-label={t("goToSlide", { number: String(i + 1) })}
+                aria-current={i === index}
+                onClick={() => setActive(i)}
+                className={cn(
+                  "h-2.5 rounded-full transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900",
+                  i === index
+                    ? "w-6 bg-neutral-900"
+                    : "w-2.5 bg-white/70 hover:bg-white",
+                )}
+              />
+            ))}
+          </div>
+
+          <NavButton
+            label={tRoot("nextSlide")}
+            onClick={handleNext}
+            className="md:hidden"
+          >
+            <ArrowRight className="size-4.5 stroke-[2.5]" />
+          </NavButton>
+        </div>
+      )}
+
+      <Dialog
+        open={!!selectedImage}
+        onOpenChange={(open) => {
+          if (!open) setSelectedImage(null);
+        }}
+      >
+        <DialogContent className="lg:min-w-[80vh]" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>{t("photoPreview")}</DialogTitle>
+            {selectedImage && (
+              <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+                <Image
+                  src={selectedImage}
+                  alt=""
+                  fill
+                  sizes="80vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose
+              render={
+                <Button>
+                  <XIcon />
+                  {t("closePreview")}
+                </Button>
+              }
+            />
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

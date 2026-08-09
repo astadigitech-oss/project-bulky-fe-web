@@ -11,25 +11,25 @@ export const Help = () => {
         <Link href={"/about-us"}>
           <li className="hover:underline underline-offset-2">{t("aboutUs")}</li>
         </Link>
-        <Link href={"#"}>
+        <Link href={"/how-to-buy"}>
           <li className="hover:underline underline-offset-2">
             {t("howToBuy")}
           </li>
         </Link>
-        <Link href={"#"}>
+        <Link href={"/payment-information"}>
           <li className="hover:underline underline-offset-2">
             {t("aboutPayment")}
           </li>
         </Link>
-        <Link href={"#"}>
+        <Link href={"/faq"}>
           <li className="hover:underline underline-offset-2">{t("faq")}</li>
         </Link>
-        <Link href={"#"}>
+        <Link href={"/terms-conditions"}>
           <li className="hover:underline underline-offset-2">
             {t("termsCondition")}
           </li>
         </Link>
-        <Link href={"#"}>
+        <Link href={"/privacy-policy"}>
           <li className="hover:underline underline-offset-2">
             {t("privacyPolicy")}
           </li>

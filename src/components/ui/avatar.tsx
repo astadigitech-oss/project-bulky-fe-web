@@ -99,6 +99,74 @@ function AvatarGroupCount({
   );
 }
 
+// ─── UserAvatar ───────────────────────────────────────────────────────────────
+// Wrapper yang mencegah fallback muncul saat image masih loading.
+// Fallback (initial name) hanya muncul jika src null/undefined atau image error (404).
+
+type UserAvatarProps = {
+  src?: string | null;
+  name: string;
+  className?: string;
+  fallbackClassName?: string;
+  isLoading?: boolean; // skeleton saat data belum di-fetch
+};
+
+function UserAvatar({ src, name, className, fallbackClassName, isLoading = false }: UserAvatarProps) {
+  const [imgStatus, setImgStatus] = React.useState<"idle" | "loading" | "loaded" | "error">(
+    src ? "loading" : "idle",
+  );
+
+  // Reset status setiap kali src berubah
+  React.useEffect(() => {
+    setImgStatus(src ? "loading" : "idle");
+  }, [src]);
+
+  const initials = name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+  if (isLoading) {
+    return (
+      <Avatar className={className}>
+        <AvatarFallback className={cn("animate-pulse bg-gray-200", fallbackClassName)} />
+      </Avatar>
+    );
+  }
+
+  return (
+    <Avatar className={className}>
+      {/* Image — selalu di-render jika src ada, tapi disembunyikan saat error */}
+      {src && imgStatus !== "error" && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={src}
+          alt={name}
+          onLoad={() => setImgStatus("loaded")}
+          onError={() => setImgStatus("error")}
+          className={cn(
+            "rounded-full aspect-square size-full object-cover",
+            // Sembunyikan saat masih loading agar fallback tidak sempat muncul
+            imgStatus === "loading" ? "invisible absolute" : "",
+          )}
+        />
+      )}
+
+      {/* Skeleton saat image sedang di-fetch */}
+      {src && imgStatus === "loading" && (
+        <AvatarFallback className={cn("animate-pulse bg-gray-200", fallbackClassName)} />
+      )}
+
+      {/* Fallback initial — hanya muncul jika src null atau image error */}
+      {(!src || imgStatus === "error") && (
+        <AvatarFallback className={fallbackClassName}>{initials}</AvatarFallback>
+      )}
+    </Avatar>
+  );
+}
+
 export {
   Avatar,
   AvatarImage,
@@ -106,4 +174,5 @@ export {
   AvatarGroup,
   AvatarGroupCount,
   AvatarBadge,
+  UserAvatar,
 };

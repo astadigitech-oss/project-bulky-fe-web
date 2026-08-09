@@ -1,10 +1,13 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/avatar";
 import { useApiQuery } from "@/lib/query/use-query";
+import { useProtectRoute } from "@/providers/session-provider";
 import type { GetProfileResponse } from "@/services/profile/types";
 
 export function ProfileSidebarClient() {
+  useProtectRoute();
+
   const { data, isLoading } = useApiQuery<GetProfileResponse>({
     key: ["profile"],
     endpoint: "/profile",
@@ -23,18 +26,13 @@ export function ProfileSidebarClient() {
 
   return (
     <>
-      <Avatar className="mx-auto mb-4 size-24 bg-[#ffcf02]">
-        {user?.image && (
-          <AvatarImage
-            src={user.image}
-            alt={user.name}
-            className="object-cover"
-          />
-        )}
-        <AvatarFallback className="bg-white text-3xl font-bold text-black">
-          {isLoading ? "..." : initials}
-        </AvatarFallback>
-      </Avatar>
+      <UserAvatar
+        src={user?.image}
+        name={user?.name ?? ""}
+        isLoading={isLoading}
+        className="mx-auto mb-4 size-24"
+        fallbackClassName="bg-white text-3xl font-bold text-black"
+      />
       <div className="space-y-1 text-base text-black">
         {isLoading ? (
           <div className="space-y-2">

@@ -11,6 +11,10 @@ export type AuthUser = {
   email: string | null;
 };
 
+export type SessionUser = AuthUser & {
+  photo_url: string | null;
+};
+
 // ─── Login ────────────────────────────────────────────────────────────────────
 
 export type LoginBody = {
@@ -123,5 +127,68 @@ export type GoogleVerifyOtpResponse = {
 
 // ─── Check Session ────────────────────────────────────────────────────────────
 
-export type CheckSessionData = { expires_at: string; user: AuthUser };
+export type CheckSessionData = { expires_at: string; user: SessionUser };
 export type CheckSessionResponse = BaseAuthResponse<CheckSessionData | null>;
+
+// ─── Account Recovery (v1 buyer migration) ────────────────────────────────────
+// Recovery flow lets legacy (v1) buyers regain access when their account has
+// no phone number bound yet. All 4 endpoints share the { success, message, data }
+// envelope (not BaseAuthResponse's { status, message, data }).
+
+export type RecoveryLoginBody = { email: string; password: string };
+export type RecoveryLoginData = { recovery_token: string; expires_in: number };
+export type RecoveryLoginResponse = {
+  success: boolean;
+  message: string;
+  data: RecoveryLoginData | null;
+};
+
+export type RecoveryRequestOtpBody = { recovery_token: string; telepon: string };
+export type RecoveryRequestOtpData = {
+  telepon: string;
+  expires_in: number;
+  otp_expires_in: number;
+};
+export type RecoveryRequestOtpResponse = {
+  success: boolean;
+  message: string;
+  data: RecoveryRequestOtpData | null;
+};
+
+export type RecoveryVerifyOtpBody = {
+  recovery_token: string;
+  telepon: string;
+  kode: string;
+};
+export type RecoveryVerifyOtpData = { telepon: string };
+export type RecoveryVerifyOtpResponse = {
+  success: boolean;
+  message: string;
+  data: RecoveryVerifyOtpData | null;
+};
+
+export type RecoveryCompleteBody = {
+  recovery_token: string;
+  keep_password: boolean;
+  new_password?: string;
+};
+export type RecoveryCompleteBuyer = {
+  id: string;
+  profile_url: string;
+  full_name: string;
+  phone_number: string;
+  email: string;
+};
+export type RecoveryCompleteData = { buyer: RecoveryCompleteBuyer };
+export type RecoveryCompleteResponse = {
+  success: boolean;
+  message: string;
+  data: RecoveryCompleteData | null;
+};
+
+// Error envelope shared by all 4 recovery endpoints on 4xx responses.
+export type RecoveryErrorBody = {
+  success: false;
+  message: string;
+  data?: { retry_after?: number };
+};

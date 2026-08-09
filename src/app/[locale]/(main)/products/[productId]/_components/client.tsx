@@ -75,16 +75,18 @@ type RecommendationResponse = {
   message: string;
   data: Array<{
     id: string;
-    slug: string;
+    primary_image: string;
     slug_trans: { id: string; en: string };
-    nama: string;
-    nama_trans: { id: string; en: string };
-    harga_sebelum_diskon: number;
-    harga_sesudah_diskon: number;
-    harga_formatted: string;
-    persentase_diskon: number;
-    gambar_utama: string;
+    name_trans: { id: string; en: string };
+    price: {
+      old: { numeric: number; formatted: string };
+      current: { numeric: number; formatted: string };
+    };
+    discount: string;
+    total_quantity: number;
+    is_active: boolean;
     is_sold: boolean;
+    warehouse: { id: string; name: string };
     source: string;
   }>;
 };
@@ -155,19 +157,10 @@ export const ProductIdClient = () => {
   };
 
   const handleBuyNow = () => {
-    if (!product?.id) return;
+    if (!product?.slug) return;
     if (!handleRequireLogin("buy-now")) return;
 
-    addToCart.mutate(
-      { body: { product_id: product.id } },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["cart"] });
-          router.push("/checkout");
-        },
-        onError: () => toast.error(t("addToCartError")),
-      },
-    );
+    router.push(`/checkout?slug=${encodeURIComponent(product.slug)}`);
   };
 
   const handlePrevImage = () => {
@@ -566,25 +559,31 @@ export const ProductIdClient = () => {
       <div className="grid grid-cols-6 gap-4">
         {(recommendationQuery.data?.data ?? []).map((item) => {
           const slug = locale === "en" ? item.slug_trans.en : item.slug_trans.id;
-          const name = locale === "en" ? item.nama_trans.en : item.nama_trans.id;
-          const discountPercent = Math.round(item.persentase_diskon);
+          const name = locale === "en" ? item.name_trans.en : item.name_trans.id;
+          const hasDiscount = item.price.old.numeric > item.price.current.numeric;
 
           return (
-            <Link key={item.id} href={`/products/${slug}`}>
+            <Link
+              key={item.id}
+              href={item.is_sold ? "#" : `/products/${slug}`}
+              onClick={(e) => item.is_sold && e.preventDefault()}
+              aria-disabled={item.is_sold}
+              className={item.is_sold ? "cursor-not-allowed" : ""}
+            >
               <div className="w-full border border-gray-300 rounded-3xl overflow-hidden bg-white">
                 <div className="aspect-square w-full relative bg-[#e9e9e9]">
-                  {discountPercent > 0 && (
+                  {hasDiscount && (
                     <div className="absolute top-2 left-0 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded-r-sm">
-                      {discountPercent}%
+                      {item.discount}
                     </div>
                   )}
                   {item.is_sold && (
-                    <div className="absolute inset-0 z-10 bg-black/50 flex items-center justify-center">
-                      <span className="text-white text-xs font-semibold">Terjual</span>
+                    <div className="absolute inset-0 z-10 bg-black/50 flex items-center justify-center rounded-t-3xl">
+                      <span className="text-white text-xs font-semibold">{t("sold")}</span>
                     </div>
                   )}
                   <Image
-                    src={item.gambar_utama}
+                    src={item.primary_image}
                     alt={name}
                     fill
                     sizes="20vw"
@@ -597,14 +596,16 @@ export const ProductIdClient = () => {
                   </p>
                   <div className="flex flex-col gap-0.5">
                     <p className="font-bold text-orange-500 text-xl leading-tight whitespace-nowrap">
-                      {item.harga_formatted}
+                      {item.price.current.formatted}
                     </p>
-                    {item.harga_sebelum_diskon > item.harga_sesudah_diskon && (
-                      <p className="text-[11px] line-through text-gray-400 leading-none whitespace-nowrap">
-                        {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(item.harga_sebelum_diskon)}
-                      </p>
-                    )}
+                    <p className="text-[11px] line-through text-gray-400 leading-none whitespace-nowrap">
+                      {item.price.old.formatted}
+                    </p>
                   </div>
+                  <p className="text-[11px] text-gray-400 leading-none line-clamp-1">
+                    {item.total_quantity} pcs <span className="mx-1">/</span>
+                    {item.warehouse.name}
+                  </p>
                 </div>
               </div>
             </Link>
