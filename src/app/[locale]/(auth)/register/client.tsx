@@ -9,7 +9,6 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 import { AuthField } from "../_components/auth-field";
-import { BrandFlowField } from "../_components/brand-flow-field";
 import { useMutate } from "@/lib/query";
 import type {
   RegisterRequestOtpBody,
@@ -156,7 +155,15 @@ export default function RegisterPage() {
 
   return (
     <main className="relative min-h-[100dvh] w-full overflow-hidden bg-[#ffcf02]">
-      <BrandFlowField />
+      <Image
+        src="/assets/images/bg-banner-default-new.png"
+        alt=""
+        aria-hidden
+        fill
+        priority
+        sizes="100vw"
+        className="pointer-events-none object-cover select-none"
+      />
 
       <section className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-1 items-center gap-y-8 px-5 py-10 md:px-8 lg:min-h-[100dvh] lg:grid-cols-[1fr_380px] lg:gap-x-10 lg:py-0 lg:pl-12 xl:gap-x-12">
         {/* Brand column. Bottom-aligned on desktop so the staff stand on the

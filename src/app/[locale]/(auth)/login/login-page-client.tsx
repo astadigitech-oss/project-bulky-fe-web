@@ -11,7 +11,6 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 import { AuthField } from "../_components/auth-field";
-import { BrandFlowField } from "../_components/brand-flow-field";
 import { useTranslations } from "next-intl";
 import { useMutate } from "@/lib/query";
 import { cookiesKey } from "@/config";
@@ -78,16 +77,6 @@ function AssetWithFallback({
       sizes={sizes}
       onError={() => setFailed(true)}
     />
-  );
-}
-
-function OrDivider({ label }: { label: string }) {
-  return (
-    <div className="flex w-full items-center gap-3">
-      <div className="h-px flex-1 bg-[#e4e4e4]" />
-      <span className="text-[12px] font-medium text-[#757575]">{label}</span>
-      <div className="h-px flex-1 bg-[#e4e4e4]" />
-    </div>
   );
 }
 
@@ -175,7 +164,15 @@ export default function LoginPage() {
 
   return (
     <main className="relative min-h-[100dvh] w-full overflow-hidden bg-[#ffcf02]">
-      <BrandFlowField />
+      <Image
+        src="/assets/images/bg-banner-default-new.png"
+        alt=""
+        aria-hidden
+        fill
+        priority
+        sizes="100vw"
+        className="pointer-events-none object-cover select-none"
+      />
 
       <section className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-1 items-center gap-y-8 px-5 py-10 md:px-8 lg:min-h-[100dvh] lg:grid-cols-[1fr_380px] lg:gap-x-10 lg:py-0 lg:pl-12 xl:gap-x-16">
         {/* Brand column. Bottom-aligned on desktop so the couriers stand on the
@@ -314,15 +311,11 @@ export default function LoginPage() {
                 {loginMutation.isPending ? t("processing") : t("submit")}
               </Button>
 
-              <div className="my-4">
-                <OrDivider label={t("or")} />
-              </div>
-
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleGoogleLogin}
-                className="h-11 w-full justify-center gap-2.5 rounded-[10px] border-[#e4e4e4] bg-white text-[14px] font-semibold text-[#1f1f1f] transition-[background-color,transform] hover:bg-[#f7f7f7] active:translate-y-px"
+                className="mt-2.5 h-11 w-full justify-center gap-2.5 rounded-[10px] border-[#e4e4e4] bg-white text-[14px] font-semibold text-[#1f1f1f] transition-[background-color,transform] hover:bg-[#f7f7f7] active:translate-y-px"
               >
                 <Image
                   src={assets.google}
