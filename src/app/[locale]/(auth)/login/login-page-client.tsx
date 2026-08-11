@@ -334,13 +334,22 @@ export default function LoginPage() {
                 {t("loginWithGoogle")}
               </Button>
 
-              {/* Plain anchor (not the locale-aware Link) because /recovery is a
-                  standalone route outside [locale], meant to be opened from the
-                  native app's WebView without a locale prefix. Kept as a filled
-                  tap target rather than plain text so it still reads as tappable
-                  without hover, since most entries here are touch-only, but
-                  tinted instead of outlined so it stays below the two primary
-                  actions in the hierarchy. */}
+            </form>
+
+            {/* Separated from the primary login actions above by a divider and
+                its own intro copy, so users coming from the old Bulky app (v1)
+                understand *why* this button exists before they tap it, rather
+                than mistaking it for a regular login shortcut. Plain anchor
+                (not the locale-aware Link) because /recovery is a standalone
+                route outside [locale], meant to be opened from the native
+                app's WebView without a locale prefix. */}
+            <div className="mt-6 border-t border-dashed border-[#e4e4e4] pt-5">
+              <p className="text-[13px] font-semibold text-[#1f1f1f]">
+                {t("recoverAccountHint")}
+              </p>
+              <p className="mt-1 text-[12px] leading-relaxed text-[#757575]">
+                {t("recoverAccountHintDesc")}
+              </p>
               <NextLink
                 href="/recovery"
                 className="mt-3 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#fff6e0] px-3 text-[13px] font-semibold whitespace-nowrap text-[#a06a00] transition-[background-color,transform] hover:bg-[#ffefc8] active:translate-y-px"
@@ -348,7 +357,7 @@ export default function LoginPage() {
                 <KeyRound className="h-4 w-4 shrink-0" strokeWidth={2} />
                 {t("recoverOldAccount")}
               </NextLink>
-            </form>
+            </div>
           </div>
         </motion.div>
       </section>

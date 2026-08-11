@@ -45,6 +45,8 @@
     "showPassword": "Tampilkan password",
     "hidePassword": "Sembunyikan password",
     "forgotPassword": "Lupa Kata Sandi?",
+    "recoverAccountHint": "Pernah pakai Bulky versi lama?",
+    "recoverAccountHintDesc": "Pulihkan akses akun lama kamu ke Bulky sekarang, tanpa perlu daftar ulang.",
     "recoverOldAccount": "Pulihkan Akses Akun Lama",
     "processing": "Memproses...",
     "submit": "Masuk",

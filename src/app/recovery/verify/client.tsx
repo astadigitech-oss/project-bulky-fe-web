@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { MessageCircle } from "lucide-react";
 
 import { OtpBoxes } from "../_components/otp-boxes";
 import { RecoveryShell } from "../_components/recovery-shell";
@@ -104,11 +105,9 @@ export default function RecoveryVerifyClient() {
       <StepIndicator step={3} total={4} label={t.stepper.label(3)} />
 
       <div className="mb-4 flex justify-center">
-        <img
-          src="/assets/icons/icon-verify.svg"
-          alt=""
-          className="h-[72px] w-[68px] object-contain"
-        />
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#e6f9ef]">
+          <MessageCircle className="h-7 w-7 text-[#25d366]" strokeWidth={2} fill="#25d366" fillOpacity={0.15} />
+        </div>
       </div>
 
       <h1 className="mb-2 text-center text-[24px] font-bold leading-tight text-[#222]">

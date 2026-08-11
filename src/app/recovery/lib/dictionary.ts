@@ -38,7 +38,7 @@ function buildDict(locale: RecoveryLocale) {
     },
     step3: {
       title: "Verifikasi Nomor Telepon",
-      otpSentPrefix: "Kode OTP telah dikirim ke",
+      otpSentPrefix: "Kode OTP telah dikirim melalui WhatsApp ke",
       otpGuide: "Masukkan 6 digit kode yang kamu terima lewat WhatsApp",
       verify: "Verifikasi",
       verifying: "Memverifikasi...",
@@ -98,7 +98,7 @@ function buildDict(locale: RecoveryLocale) {
     },
     step3: {
       title: "Verify Your Phone Number",
-      otpSentPrefix: "An OTP code has been sent to",
+      otpSentPrefix: "An OTP code has been sent via WhatsApp to",
       otpGuide: "Enter the 6 digit code you received via WhatsApp",
       verify: "Verify",
       verifying: "Verifying...",
