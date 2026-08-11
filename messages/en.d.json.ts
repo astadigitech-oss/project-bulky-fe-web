@@ -48,6 +48,8 @@ declare const messages: {
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "forgotPassword": "Forgot Password?",
+    "recoverAccountHint": "Used Bulky before on our old app?",
+    "recoverAccountHintDesc": "Recover access to your old account here — no need to sign up again.",
     "recoverOldAccount": "Recover Old Account Access",
     "processing": "Processing...",
     "submit": "Login",
