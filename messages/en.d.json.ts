@@ -227,6 +227,7 @@ declare const messages: {
     "sortExpensive": "Most Expensive",
     "listError": "Failed to fetch product list.",
     "sold": "Sold",
+    "sale": "SALE",
     "resetFilter": "Reset Filter",
     "pagination": {
       "previous": "Previous Page",
@@ -281,7 +282,8 @@ declare const messages: {
     "warehouseFallback": "Warehouse",
     "loginRequiredToast": "Please log in first to continue.",
     "addToCartError": "Failed to add product to cart.",
-    "sold": "Sold"
+    "sold": "Sold",
+    "sale": "SALE"
   },
   "CartPage": {
     "title": "Cart",
@@ -436,6 +438,7 @@ declare const messages: {
     "recommendation": "Recommendations",
     "seeAllProducts": "View All Products",
     "seeAllTV": "View All Contents",
+    "sale": "SALE",
     "infoBanner": {
       "title": "Shipping Across Indonesia",
       "titleLine1": "Shipping",

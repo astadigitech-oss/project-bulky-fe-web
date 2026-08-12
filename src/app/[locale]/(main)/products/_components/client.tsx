@@ -53,6 +53,7 @@ import Image from "next/image";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { SaleRibbon } from "@/components/ui/sale-ribbon";
 import { useTranslations } from "next-intl";
 
 type Locale = "id" | "en";
@@ -81,6 +82,7 @@ type ProductCard = {
   stock: number;
   warehouse: string;
   is_sold: boolean;
+  is_sale: boolean;
 };
 
 type ProductListResponse = {
@@ -751,6 +753,7 @@ export const ProductClient = () => {
                     >
                       <div className="w-full border border-gray-300 rounded-3xl overflow-hidden bg-white">
                         <div className="aspect-square w-full relative bg-[#e9e9e9]">
+                          {item.is_sale && <SaleRibbon label={t("sale")} />}
                           {discountPercent > 0 && (
                             <div className="absolute top-2 left-0 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded-r-sm">
                               {discountPercent}%

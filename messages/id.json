@@ -224,6 +224,7 @@
     "sortExpensive": "Termahal",
     "listError": "Gagal mengambil data produk.",
     "sold": "Terjual",
+    "sale": "SALE",
     "resetFilter": "Hapus Filter",
     "pagination": {
       "previous": "Halaman Sebelumnya",
@@ -278,7 +279,8 @@
     "warehouseFallback": "Warehouse",
     "loginRequiredToast": "Silakan masuk terlebih dahulu untuk melanjutkan.",
     "addToCartError": "Gagal menambahkan produk ke keranjang.",
-    "sold": "Terjual"
+    "sold": "Terjual",
+    "sale": "SALE"
   },
   "CartPage": {
     "title": "Keranjang",
@@ -433,6 +435,7 @@
     "recommendation": "Rekomendasi",
     "seeAllProducts": "Lihat Semua Produk",
     "seeAllTV": "Lihat Semua Konten",
+    "sale": "SALE",
     "infoBanner": {
       "title": "Pengiriman ke Seluruh Indonesia",
       "titleLine1": "Pengiriman",

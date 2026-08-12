@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { SaleRibbon } from "@/components/ui/sale-ribbon";
 import { Link, useRouter } from "@/i18n/navigation";
 import {
   ArrowLeft,
@@ -86,6 +87,7 @@ type RecommendationResponse = {
     total_quantity: number;
     is_active: boolean;
     is_sold: boolean;
+    is_sale: boolean;
     warehouse: { id: string; name: string };
     source: string;
   }>;
@@ -572,6 +574,7 @@ export const ProductIdClient = () => {
             >
               <div className="w-full border border-gray-300 rounded-3xl overflow-hidden bg-white">
                 <div className="aspect-square w-full relative bg-[#e9e9e9]">
+                  {item.is_sale && <SaleRibbon label={t("sale")} />}
                   {hasDiscount && (
                     <div className="absolute top-2 left-0 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded-r-sm">
                       {item.discount}
