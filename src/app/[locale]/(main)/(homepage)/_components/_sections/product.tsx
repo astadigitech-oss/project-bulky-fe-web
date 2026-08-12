@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@i18n/navigation";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { SaleRibbon } from "@/components/ui/sale-ribbon";
 
 type ProdukItem = {
   nama: string;
@@ -15,6 +16,7 @@ type ProdukItem = {
   };
   stock: string;
   warehouse: string;
+  is_sale: boolean;
 };
 
 type ProductSectionProps = {
@@ -46,6 +48,7 @@ export const ProductSection = ({ products }: ProductSectionProps) => {
             <Link key={item.slug} href={`/products/${item.slug}`}>
               <div className="w-full border border-gray-300 rounded-3xl overflow-hidden bg-white">
                 <div className="aspect-square w-full relative bg-[#e9e9e9]">
+                  {item.is_sale && <SaleRibbon label={t("sale")} />}
                   {discountPercent > 0 && (
                     <div className="absolute top-2 left-0 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded-r-sm">
                       {discountPercent}%

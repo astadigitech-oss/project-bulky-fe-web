@@ -35,6 +35,7 @@ type HomepageResponse = {
       };
       stock: string;
       warehouse: string;
+      is_sale: boolean;
     }[];
     bulky_tv: {
       nama: string;
