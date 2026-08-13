@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { SaleRibbon } from "@/components/ui/sale-ribbon";
+import { QcPassBadge } from "@/components/ui/qc-pass-badge";
 import { Link, useRouter } from "@/i18n/navigation";
 import {
   ArrowLeft,
@@ -46,6 +47,7 @@ type ProductDetailResponse = {
     name: string;
     slug: string;
     images: string[];
+    is_qc_pass: boolean;
     price: {
       old_price: string;
       current_price: string;
@@ -327,6 +329,7 @@ export const ProductIdClient = () => {
                 className="object-cover"
                 sizes="40vw"
               />
+              {product.is_qc_pass && <QcPassBadge />}
               <button
                 type="button"
                 onClick={handlePrevImage}
@@ -373,8 +376,19 @@ export const ProductIdClient = () => {
           <p className="text-cyan-700 text-sm font-semibold">
             {t("detailTitle")}
           </p>
-          <h1 className="text-4xl font-bold leading-tight line-clamp-2">
-            {product.name}
+          <h1 className="flex items-center gap-2 text-4xl font-bold leading-tight">
+            <span className="line-clamp-2">{product.name}</span>
+            {product.is_qc_pass && (
+              <span className="relative inline-block size-12 shrink-0">
+                <Image
+                  src="/assets/images/passed_qc_sticker.webp"
+                  alt="QC PASS"
+                  fill
+                  className="object-contain"
+                  sizes="48px"
+                />
+              </span>
+            )}
           </h1>
           <div className="flex flex-col">
             <p className="font-bold text-4xl text-orange-500">
