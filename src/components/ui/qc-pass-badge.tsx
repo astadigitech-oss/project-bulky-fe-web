@@ -17,16 +17,16 @@ export const QcPassBadge = ({
   return (
     <div
       className={cn(
-        "pointer-events-none absolute left-2 top-2 z-20 size-20",
+        "pointer-events-none absolute -left-1 -top-4 z-20 size-28",
         className,
       )}
     >
       <Image
-        src="/assets/images/passed_qc_sticker.webp"
+        src="/assets/images/qc-2.png"
         alt={alt}
         fill
         className="object-contain drop-shadow-sm"
-        sizes="80px"
+        sizes="112px"
       />
     </div>
   );
