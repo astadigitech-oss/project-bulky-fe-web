@@ -379,13 +379,13 @@ export const ProductIdClient = () => {
           <h1 className="flex items-center gap-2 text-4xl font-bold leading-tight">
             <span className="line-clamp-2">{product.name}</span>
             {product.is_qc_pass && (
-              <span className="relative inline-block size-8 shrink-0">
+              <span className="relative inline-block size-12 shrink-0">
                 <Image
                   src="/assets/images/passed_qc_sticker.webp"
                   alt="QC PASS"
                   fill
                   className="object-contain"
-                  sizes="32px"
+                  sizes="48px"
                 />
               </span>
             )}

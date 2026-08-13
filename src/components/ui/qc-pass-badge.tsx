@@ -17,7 +17,7 @@ export const QcPassBadge = ({
   return (
     <div
       className={cn(
-        "pointer-events-none absolute left-2 top-2 z-20 size-12",
+        "pointer-events-none absolute left-2 top-2 z-20 size-20",
         className,
       )}
     >
@@ -26,7 +26,7 @@ export const QcPassBadge = ({
         alt={alt}
         fill
         className="object-contain drop-shadow-sm"
-        sizes="48px"
+        sizes="80px"
       />
     </div>
   );
