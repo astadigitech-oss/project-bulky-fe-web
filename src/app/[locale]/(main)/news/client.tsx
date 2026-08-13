@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -61,19 +61,52 @@ function NewsListCard({ item }: { item: NewsListItem }) {
   );
 }
 
-export function NewsListClient() {
+export function NewsListClient({
+  initialCategories,
+  initialNews,
+}: {
+  initialCategories?: GetNewsCategoriesResponse;
+  initialNews?: GetNewsListPaginatedResponse;
+} = {}) {
   const t = useTranslations("BulkyNews");
   const params = useParams<{ locale: string }>();
+  const router = useRouter();
+  const pathname = `/` + (params?.locale ?? "id") + `/news`;
+  const query = useSearchParams();
   const locale = clampLocale(params?.locale);
 
-  const [activeCategory, setActiveCategory] = useState("");
-  const [page, setPage] = useState(1);
+  const [activeCategory, setActiveCategory] = useState(
+    query.get("kategori") ?? "",
+  );
+  const [page, setPage] = useState(Number(query.get("halaman") ?? "1") || 1);
+
+  // `initialData` hanya boleh dipakai pada render pertama (state client masih
+  // persis sama dengan searchParams yang dipakai untuk fetch di server).
+  const isInitialRenderRef = React.useRef(true);
+  useEffect(() => {
+    isInitialRenderRef.current = false;
+  }, []);
+
+  useEffect(() => {
+    const sp = new URLSearchParams();
+    if (activeCategory) sp.set("kategori", activeCategory);
+    if (page > 1) sp.set("halaman", String(page));
+
+    const nextQuery = sp.toString();
+    const currentQuery = query.toString();
+
+    if (nextQuery !== currentQuery) {
+      router.replace(`${pathname}${nextQuery ? `?${nextQuery}` : ""}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCategory, page, pathname, router]);
 
   const kategorisQuery = useApiQuery<GetNewsCategoriesResponse>({
     key: ["news-kategoris", locale],
     endpoint: "/web/news/kategori",
     searchParams: { locale },
     staleTime: 5 * 60 * 1000,
+    initialData: isInitialRenderRef.current ? initialCategories : undefined,
   });
 
   const newsQuery = useApiQuery<GetNewsListPaginatedResponse>({
@@ -86,6 +119,7 @@ export function NewsListClient() {
       ...(activeCategory ? { kategori: activeCategory } : {}),
     },
     staleTime: 60_000,
+    initialData: isInitialRenderRef.current ? initialNews : undefined,
   });
 
   const kategoris = kategorisQuery.data?.data ?? [];

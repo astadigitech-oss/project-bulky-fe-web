@@ -12,9 +12,21 @@ import { GoogleMapsProvider } from "@/providers/google-maps-provider";
 import { MobileRedirectModal } from "@/components/mobile-redirect-modal";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { siteUrl } from "@/config";
+import { JsonLd } from "@/components/json-ld";
 import "../globals.css";
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Bulky.id",
+  url: siteUrl,
+  logo: `${siteUrl}/assets/images/logo-bulky.webp`,
+  sameAs: ["https://instagram.com/bulky.id", "https://tiktok.com/@bulky.id"],
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     template: "%s | Bulky",
     default: "Bulky",
@@ -48,6 +60,7 @@ const LocaleLayout = async ({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <JsonLd data={organizationJsonLd} />
         <QueryProviders>
           <NuqsAdapter>
             <NextIntlClientProvider>
