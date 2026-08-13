@@ -381,7 +381,7 @@ export const ProductIdClient = () => {
             {product.is_qc_pass && (
               <span className="relative inline-block size-12 shrink-0">
                 <Image
-                  src="/assets/images/passed_qc_sticker.webp"
+                  src="/assets/images/qc-2.png"
                   alt="QC PASS"
                   fill
                   className="object-contain"
