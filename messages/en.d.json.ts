@@ -209,6 +209,7 @@ declare const messages: {
   },
   "Products": {
     "metaTitle": "Products",
+    "metaDescription": "Shop hundreds of Bulky.id liquidation pallet products — electronics, apparel, and more categories at wholesale prices with QC-passed condition.",
     "searchPlaceholder": "Search product...",
     "filterTitle": "Filter",
     "filterApplied": "{count} filters applied",
@@ -990,6 +991,7 @@ declare const messages: {
   },
   "BulkyNews": {
     "pageTitle": "Bulky News",
+    "metaDescription": "Latest updates on wholesale, logistics, and Bulky.id operations.",
     "subtitle": "Latest updates on wholesale, logistics, and Bulky operations",
     "empty": "No news in this category yet.",
     "categories": {

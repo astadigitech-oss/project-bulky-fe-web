@@ -11,6 +11,7 @@ import { WholesaleSection } from "./_sections/wholesale";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useParams } from "next/navigation";
 import { PageLoader } from "@/components/ui/page-loader";
+import { useTranslations } from "next-intl";
 
 type Locale = "id" | "en";
 
@@ -61,6 +62,7 @@ const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
 export const HompageClient = () => {
   const params = useParams<{ locale: string }>();
   const locale = clampLocale(params?.locale);
+  const tHero = useTranslations("Homepage.hero");
 
   const { data, isLoading } = useApiQuery<HomepageResponse>({
     key: ["homepage", locale],
@@ -74,7 +76,7 @@ export const HompageClient = () => {
 
   return (
     <main className="flex flex-col w-full">
-      <h1 className="sr-only">Beranda Bulky</h1>
+      <h1 className="sr-only">{tHero("title")}</h1>
       <HeroSection heroUrl={homepage?.hero_url} />
       <PromoSection promos={homepage?.promo} />
       <ProductSection products={homepage?.produk} />

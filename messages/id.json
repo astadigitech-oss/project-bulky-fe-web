@@ -206,6 +206,7 @@
   },
   "Products": {
     "metaTitle": "Produk",
+    "metaDescription": "Belanja ratusan produk palet likuidasi Bulky.id — elektronik, pakaian, dan berbagai kategori lain dengan harga grosir dan kondisi QC pass.",
     "searchPlaceholder": "Cari produk...",
     "filterTitle": "Filter",
     "filterApplied": "{count} filter diterapkan",
@@ -987,6 +988,7 @@
   },
   "BulkyNews": {
     "pageTitle": "Berita Bulky",
+    "metaDescription": "Kabar terbaru seputar grosir, logistik, dan operasional Bulky.id.",
     "subtitle": "Kabar terbaru seputar grosir, logistik, dan operasional Bulky",
     "empty": "Belum ada berita di kategori ini.",
     "categories": {

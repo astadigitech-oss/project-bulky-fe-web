@@ -4,6 +4,9 @@ import { getTranslations } from "next-intl/server";
 import { apiUrl } from "@/config";
 import { NewsDetailClient } from "./_components/client";
 import type { GetNewsDetailResponse } from "@/services/news/types";
+import { buildAlternates } from "@/lib/seo/alternates";
+import { JsonLd } from "@/components/json-ld";
+import { siteUrl } from "@/config";
 
 const clampLocale = (value?: string): "id" | "en" =>
   value === "en" ? "en" : "id";
@@ -45,6 +48,7 @@ export async function generateMetadata({
     title,
     description,
     keywords: detail.meta_keywords || undefined,
+    alternates: buildAlternates(lng, `/news/${slug}`),
     openGraph: {
       title,
       description,
@@ -72,9 +76,31 @@ export default async function NewsDetailPage({
   if (!data) notFound();
 
   const t = await getTranslations("AboutUs.section5");
+  const detail = data.data?.data;
+
+  const articleJsonLd = detail
+    ? {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        headline: detail.title,
+        image: detail.image ? [detail.image] : undefined,
+        datePublished: detail.date,
+        articleSection: detail.category?.name,
+        mainEntityOfPage: `${siteUrl}/${lng}/news/${slug}`,
+        publisher: {
+          "@type": "Organization",
+          name: "Bulky.id",
+          logo: {
+            "@type": "ImageObject",
+            url: `${siteUrl}/assets/images/logo-bulky.webp`,
+          },
+        },
+      }
+    : null;
 
   return (
     <main className="w-full bg-white">
+      {articleJsonLd && <JsonLd data={articleJsonLd} />}
       <NewsDetailClient initialData={data} locale={lng} notFoundLabel={t("empty")} />
     </main>
   );

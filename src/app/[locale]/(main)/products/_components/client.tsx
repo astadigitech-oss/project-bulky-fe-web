@@ -245,7 +245,7 @@ export const ProductClient = () => {
     ],
     endpoint: "/web/products",
     searchParams: {
-      local: locale,
+      locale,
       p: page,
       category: selected.category || undefined,
       source: selected.source || undefined,
