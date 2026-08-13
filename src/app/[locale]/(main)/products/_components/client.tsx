@@ -55,48 +55,12 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { SaleRibbon } from "@/components/ui/sale-ribbon";
 import { useTranslations } from "next-intl";
+import type {
+  FilterResponse,
+  ProductListResponse,
+} from "@/services/products/types";
 
 type Locale = "id" | "en";
-
-type FilterOption = { label: string; value: string };
-
-type FilterResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    categories: FilterOption[];
-    sources: FilterOption[];
-    brands: FilterOption[];
-    product_conditions: FilterOption[];
-    package_conditions: FilterOption[];
-    price: { low: number; high: number };
-    banner: string[];
-  };
-};
-
-type ProductCard = {
-  name: string;
-  slug: string;
-  price: { old_price: string; current_price: string };
-  image: string;
-  stock: number;
-  warehouse: string;
-  is_sold: boolean;
-  is_sale: boolean;
-};
-
-type ProductListResponse = {
-  success: boolean;
-  message: string;
-  data: ProductCard[];
-  meta: {
-    first_page: number;
-    last_page: number;
-    current_page: number;
-    total_items: number;
-    per_page: number;
-  };
-};
 
 const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
 
@@ -112,7 +76,13 @@ const getDiscountPercent = (oldPrice: string, currentPrice: string) => {
   return Math.round(((oldNum - currentNum) / oldNum) * 100);
 };
 
-export const ProductClient = () => {
+export const ProductClient = ({
+  initialFilters,
+  initialProducts,
+}: {
+  initialFilters?: FilterResponse;
+  initialProducts?: ProductListResponse;
+} = {}) => {
   const t = useTranslations("Products");
   const params = useParams<{ locale: string }>();
   const router = useRouter();
@@ -162,10 +132,20 @@ export const ProductClient = () => {
     (query.get("order") as "new" | "cheap" | "expensive") || "new",
   );
 
+  // `initialData` hanya boleh dipakai pada render pertama (state client masih
+  // persis sama dengan searchParams yang dipakai untuk fetch di server).
+  // Setelah user berinteraksi (ganti filter/page/dsb), flag ini dimatikan
+  // supaya data SSR lama tidak "nempel" ke query key yang berbeda.
+  const isInitialRenderRef = React.useRef(true);
+  useEffect(() => {
+    isInitialRenderRef.current = false;
+  }, []);
+
   const filterQuery = useApiQuery<FilterResponse>({
     key: ["product-filters", locale],
     endpoint: "/web/products/filters",
     searchParams: { locale },
+    initialData: isInitialRenderRef.current ? initialFilters : undefined,
   });
 
   const defaultPriceRange = useMemo(() => {
@@ -258,6 +238,7 @@ export const ProductClient = () => {
       sort: sortOrder === "new" ? "desc" : "asc",
       brand: selected.brands.length ? selected.brands : undefined,
     },
+    initialData: isInitialRenderRef.current ? initialProducts : undefined,
   });
 
   const updatePage = (next: number) => {
@@ -293,6 +274,7 @@ export const ProductClient = () => {
 
   return (
     <div className="flex flex-col w-full">
+      <h1 className="sr-only">{t("pageTitle")}</h1>
       {/* <BannerSection images={filterQuery.data?.data.banner ?? []} /> */}
       <div className="grid grid-cols-4 w-full px-17.5 mx-auto xl:max-w-7xl max-w-5xl gap-6">
         <div className="col-span-1">

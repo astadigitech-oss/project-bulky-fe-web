@@ -210,6 +210,7 @@ declare const messages: {
   "Products": {
     "metaTitle": "Products",
     "metaDescription": "Shop hundreds of Bulky.id liquidation pallet products — electronics, apparel, and more categories at wholesale prices with QC-passed condition.",
+    "pageTitle": "Bulky.id Liquidation Pallet Products",
     "searchPlaceholder": "Search product...",
     "filterTitle": "Filter",
     "filterApplied": "{count} filters applied",
