@@ -11,13 +11,19 @@ import { siteUrl } from "@/config";
 const clampLocale = (value?: string): "id" | "en" =>
   value === "en" ? "en" : "id";
 
+// Backend yang lambat/macet tidak boleh menggantung SSR halaman selamanya.
+const REQUEST_TIMEOUT_MS = 10_000;
+
 async function fetchNewsDetail(
   slug: string,
   locale: string,
 ): Promise<GetNewsDetailResponse | null> {
   try {
     const url = `${apiUrl}/web/news/${encodeURIComponent(slug)}?locale=${locale}`;
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    const res = await fetch(url, {
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
     if (!res.ok) return null;
     return (await res.json()) as GetNewsDetailResponse;
   } catch {

@@ -12,6 +12,12 @@ const SITEMAP_REVALIDATE_SECONDS = 3600;
 // Safety cap so a misbehaving API (e.g. `last_page` never converging) can
 // never turn sitemap generation into an unbounded loop.
 const MAX_PAGES = 200;
+// Hard timeout per request — a slow/hanging backend must never stall
+// sitemap generation (and hold the server busy) indefinitely.
+const REQUEST_TIMEOUT_MS = 10_000;
+
+const timeoutSignal = (ms: number) =>
+  AbortSignal.timeout(ms);
 
 type ProductListItem = {
   slug: string;
@@ -49,6 +55,7 @@ export async function fetchAllProductSlugs(
       const url = `${apiUrl}/web/products?locale=${locale}&p=${page}`;
       const res = await fetch(url, {
         next: { revalidate: SITEMAP_REVALIDATE_SECONDS },
+        signal: timeoutSignal(REQUEST_TIMEOUT_MS),
       });
       if (!res.ok) break;
 
@@ -79,6 +86,7 @@ export async function fetchAllNewsSlugs(
       const url = `${apiUrl}/web/news/list?locale=${locale}&halaman=${page}&per_halaman=50`;
       const res = await fetch(url, {
         next: { revalidate: SITEMAP_REVALIDATE_SECONDS },
+        signal: timeoutSignal(REQUEST_TIMEOUT_MS),
       });
       if (!res.ok) break;
 

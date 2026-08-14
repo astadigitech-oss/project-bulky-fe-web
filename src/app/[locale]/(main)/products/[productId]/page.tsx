@@ -9,6 +9,9 @@ type Locale = "id" | "en";
 
 const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
 
+// Backend yang lambat/macet tidak boleh menggantung SSR halaman selamanya.
+const REQUEST_TIMEOUT_MS = 10_000;
+
 type ProductSeoData = {
   name: string;
   images: string[];
@@ -19,7 +22,10 @@ type ProductSeoData = {
 async function fetchProductSeoData(productId: string, locale: Locale) {
   try {
     const url = `${apiUrl}/web/products/${encodeURIComponent(productId)}?locale=${locale}`;
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    const res = await fetch(url, {
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
     if (!res.ok) return null;
     const json = await res.json();
     return json?.data as ProductSeoData | undefined;
