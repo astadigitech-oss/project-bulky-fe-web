@@ -4,6 +4,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
+    // Gambar lokal (logo, ikon payment, dll) dipakai apa adanya via `next/image`
+    // tanpa optimizer — mencegah error "The requested resource isn't a valid
+    // image" dan menghindari sharp memproses file statis pada tiap request.
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },
       { protocol: "https", hostname: "**.bulky.id" },
