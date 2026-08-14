@@ -14,8 +14,16 @@ export function MobileRedirectModal() {
   const locale = useLocale();
   const t = useTranslations("MobileRedirectModal");
   const [os, setOs] = useState<DeviceOS>("both");
+  // mounted = false saat SSR & first paint, true setelah hydration di browser.
+  // Ini memastikan HTML yang dikirim ke server (termasuk Googlebot, yang
+  // mobile-first indexing-nya memakai UA Android/Mobile Safari asli
+  // sehingga tidak bisa dibedakan dari UA check) TIDAK PERNAH berisi teks
+  // modal ini, karena modal baru di-render di client setelah JS jalan.
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     // Hanya deteksi OS untuk menentukan tombol store yang ditampilkan
     const ua = navigator.userAgent;
     const isIOS = /iphone|ipad|ipod/i.test(ua);
@@ -26,17 +34,20 @@ export function MobileRedirectModal() {
 
   const assetLocale = locale === "id" ? "id" : "en";
 
+  if (!mounted) return null;
+
   return (
     <>
       {/*
-       * Lock scroll via CSS — aktif sejak render pertama (SSR/hydration),
-       * tidak perlu tunggu useEffect sehingga tidak ada jeda scroll.
+       * Lock scroll via CSS. Aman dirender di sini (bukan sebelum mounted)
+       * karena elemen modal-nya sendiri juga baru muncul setelah mounted.
        */}
       <style>{`@media (max-width: 1023px) { html, body { overflow: hidden !important; } }`}</style>
 
       {/*
-       * lg:hidden — visibility dikontrol CSS bukan JS state,
-       * sehingga block langsung aktif tanpa flash konten.
+       * lg:hidden — visibility di viewport ≥1024px tetap dikontrol CSS,
+       * sedangkan ada/tidaknya elemen ini di DOM dikontrol oleh `mounted`
+       * di atas (client-only), supaya tidak ikut ke-SSR ke HTML mentah.
        */}
       <div className="lg:hidden fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white px-6 py-8">
         {/* Logo */}
