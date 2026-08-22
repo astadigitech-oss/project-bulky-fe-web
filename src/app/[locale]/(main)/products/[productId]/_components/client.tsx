@@ -506,7 +506,7 @@ export const ProductIdClient = () => {
         <div className="col-span-3">
           <div className="sticky top-24 rounded-2xl border border-gray-300 bg-white p-4 shadow-sm flex flex-col gap-3.5">
             <div className="flex items-center gap-3">
-              <div className="relative size-14 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+              <div className="relative size-14 shrink-0 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
                 <Image
                   src={product.images[0] || "https://github.com/shadcn.png"}
                   alt={product.name}
