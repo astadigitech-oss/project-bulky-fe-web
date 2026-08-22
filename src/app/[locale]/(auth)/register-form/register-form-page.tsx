@@ -74,7 +74,7 @@ export default function RegisterFormPage({
   const assets = useMemo(
     () => ({
       logo: "/assets/images/logo-bulky.webp",
-      hero: "/assets/images/hero-register-form.svg",
+      hero: "/assets/images/hero-register-form.webp",
     }),
     [],
   );
@@ -183,7 +183,7 @@ export default function RegisterFormPage({
   return (
     <main className="relative min-h-[100dvh] w-full overflow-hidden bg-[#ffcf02]">
       <Image
-        src="/assets/images/bg-banner-default-new.png"
+        src="/assets/images/bg-banner-default-new.webp"
         alt=""
         aria-hidden
         fill

@@ -118,7 +118,7 @@ export default function GlobalNotFound() {
             }}
           >
             <Image
-              src="/assets/images/contact-us/hero-right.svg"
+              src="/assets/images/contact-us/hero-right.webp"
               alt=""
               aria-hidden
               unoptimized

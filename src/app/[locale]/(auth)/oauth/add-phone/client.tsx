@@ -65,8 +65,8 @@ export default function OAuthAddPhoneClient() {
 
   const assets = useMemo(
     () => ({
-      container: "/assets/images/register-container.svg",
-      people: "/assets/images/register-people.svg",
+      container: "/assets/images/register-container.webp",
+      people: "/assets/images/register-people.webp",
       logo: "/assets/images/logo-bulky.webp",
       looperLeft: "/assets/images/Looper-kiri.svg",
       looperRight: "/assets/images/Looper-kanan.svg",

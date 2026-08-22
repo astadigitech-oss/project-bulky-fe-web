@@ -15,7 +15,7 @@ export const HeroSection = ({ heroUrl }: HeroSectionProps) => {
     return (
       <section className="relative w-full overflow-hidden bg-[#ffcf02]">
         <Image
-          src="/assets/images/bg-banner-default-new.png"
+          src="/assets/images/bg-banner-default-new.webp"
           alt=""
           aria-hidden
           fill
@@ -51,7 +51,7 @@ export const HeroSection = ({ heroUrl }: HeroSectionProps) => {
 
           <div className="relative mx-auto aspect-[1012/631] w-full max-w-[420px] sm:max-w-[520px] lg:max-w-[620px] lg:justify-self-end">
             <Image
-              src="/assets/images/ilustrasi-hero-section-default.png"
+              src="/assets/images/ilustrasi-hero-section-default.webp"
               alt={t("title")}
               fill
               priority

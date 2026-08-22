@@ -10,7 +10,7 @@ export const InfoSection = () => {
   return (
     <section className="relative w-full overflow-hidden bg-[#ffcf02] py-10 md:py-14">
       <Image
-        src="/assets/images/bg-banner-default-new.png"
+        src="/assets/images/bg-banner-default-new.webp"
         alt=""
         aria-hidden
         fill
@@ -63,7 +63,7 @@ export const InfoSection = () => {
         <div className="relative mx-auto aspect-[4/3] w-full max-w-[480px] overflow-hidden lg:max-w-[760px] lg:justify-self-end">
           <Image
             unoptimized
-            src="/assets/images/about-us/delivery-illustration.png"
+            src="/assets/images/about-us/delivery-illustration.webp"
             alt={t("title")}
             fill
             sizes="(max-width: 1024px) 90vw, 760px"

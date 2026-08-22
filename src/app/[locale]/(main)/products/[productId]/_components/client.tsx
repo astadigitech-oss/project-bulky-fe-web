@@ -216,7 +216,7 @@ export const ProductIdClient = () => {
           </div>
           <div className="relative size-52">
             <Image
-              src="/assets/images/profile/empty-illustration.svg"
+              src="/assets/images/profile/empty-illustration.webp"
               alt={"added"}
               fill
               className="object-contain"
@@ -381,7 +381,7 @@ export const ProductIdClient = () => {
             {product.is_qc_pass && (
               <span className="relative inline-block size-12 shrink-0">
                 <Image
-                  src="/assets/images/qc-2.png"
+                  src={"/assets/images/qc-2.webp"}
                   alt="QC PASS"
                   fill
                   className="object-contain"

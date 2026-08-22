@@ -67,7 +67,7 @@ const AboutPage = () => {
               <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-[radial-gradient(circle_at_50%_100%,#ffe6a0_0%,#ffe6a0_38%,rgba(255,230,160,0.45)_62%,rgba(255,230,160,0)_85%)]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/6A (Tentang Kami kiri) (1).png"
+                  src="/assets/images/about-us/6A (Tentang Kami kiri) (1).webp"
                   alt={t("section1.card1Title")}
                   fill
                   sizes="(max-width: 768px) 90vw, 380px"
@@ -90,7 +90,7 @@ const AboutPage = () => {
               <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-[radial-gradient(circle_at_50%_100%,#ffe6a0_0%,#ffe6a0_38%,rgba(255,230,160,0.45)_62%,rgba(255,230,160,0)_85%)]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/6B (Tentang Kami tengah) (1).png"
+                  src="/assets/images/about-us/6B (Tentang Kami tengah) (1).webp"
                   alt={t("section1.card2Title")}
                   fill
                   sizes="(max-width: 768px) 90vw, 380px"
@@ -113,7 +113,7 @@ const AboutPage = () => {
               <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-[radial-gradient(circle_at_50%_100%,#ffe6a0_0%,#ffe6a0_38%,rgba(255,230,160,0.45)_62%,rgba(255,230,160,0)_85%)]">
                 <Image
                   unoptimized
-                  src="/assets/images/about-us/6C (Tentang Kami kanan) (1).png"
+                  src="/assets/images/about-us/6C (Tentang Kami kanan) (1).webp"
                   alt={t("section1.card3Title")}
                   fill
                   sizes="(max-width: 768px) 90vw, 380px"
@@ -145,7 +145,7 @@ const AboutPage = () => {
         <div className="relative aspect-[21/9] w-full overflow-hidden rounded-3xl shadow-sm">
           <Image
             unoptimized
-            src="/assets/images/about-us/5A (Solusi Bisnis Efisien).jpg"
+            src="/assets/images/about-us/5A (Solusi Bisnis Efisien).webp"
             alt={t("section2.heading")}
             fill
             sizes="(max-width: 1280px) 100vw, 1280px"
@@ -171,7 +171,7 @@ const AboutPage = () => {
           <div className="overflow-hidden rounded-3xl shadow-sm">
             <Image
               unoptimized
-              src="/assets/images/about-us/4A (Dukungan untuk Pelaku Usaha) (1).png"
+              src="/assets/images/about-us/4A (Dukungan untuk Pelaku Usaha) (1).webp"
               alt={t("section3.heading")}
               width={564}
               height={443}
@@ -199,7 +199,7 @@ const AboutPage = () => {
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-sm lg:-mb-10">
               <Image
                 unoptimized
-                src="/assets/images/about-us/3B (Ekosistem Bulky.id).jpg"
+                src="/assets/images/about-us/3B (Ekosistem Bulky.id).webp"
                 alt={t("section4.heading")}
                 fill
                 sizes="(max-width: 1024px) 100vw, 560px"
@@ -258,7 +258,7 @@ const AboutPage = () => {
         <div className="relative z-10 mx-auto w-full max-w-[300px] px-4 pt-10 lg:hidden">
           <Image
             unoptimized
-            src="/assets/images/about-us/2A (Komitmen Pengemasan) (1).png"
+            src="/assets/images/about-us/2A (Komitmen Pengemasan) (1).webp"
             alt={t("section6.badge4")}
             width={1011}
             height={982}
@@ -269,7 +269,7 @@ const AboutPage = () => {
         <div className="pointer-events-none absolute bottom-0 left-0 z-10 hidden h-[94%] lg:block">
           <Image
             unoptimized
-            src="/assets/images/about-us/2A (Komitmen Pengemasan) (1).png"
+            src="/assets/images/about-us/2A (Komitmen Pengemasan) (1).webp"
             alt={t("section6.badge4")}
             width={1011}
             height={982}

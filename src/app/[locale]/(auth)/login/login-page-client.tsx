@@ -126,7 +126,7 @@ export default function LoginPage() {
 
   const assets = useMemo(
     () => ({
-      hero: "/assets/images/hero-login.png",
+      hero: "/assets/images/hero-login.webp",
       logo: "/assets/images/logo-bulky.webp",
       google: "/assets/images/login-google.svg",
     }),
@@ -165,7 +165,7 @@ export default function LoginPage() {
   return (
     <main className="relative min-h-[100dvh] w-full overflow-hidden bg-[#ffcf02]">
       <Image
-        src="/assets/images/bg-banner-default-new.png"
+        src="/assets/images/bg-banner-default-new.webp"
         alt=""
         aria-hidden
         fill

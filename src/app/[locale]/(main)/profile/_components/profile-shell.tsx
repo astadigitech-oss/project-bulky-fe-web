@@ -93,13 +93,13 @@ export function EmptyState({
   const illustration =
     icon === "payment"
       ? {
-          src: "/assets/images/profile/empty-illustration.svg",
+          src: "/assets/images/profile/empty-illustration.webp",
           alt: "Ilustrasi tidak ada produk yang belum dibayar",
           width: 209,
           height: 209,
         }
       : {
-          src: "/assets/images/profile/patungan-illustration.svg",
+          src: "/assets/images/profile/patungan-illustration.webp",
           alt: "Ilustrasi tidak ada pembayaran patungan",
           width: 250,
           height: 166,

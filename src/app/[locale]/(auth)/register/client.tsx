@@ -96,8 +96,8 @@ export default function RegisterPage() {
 
   const assets = useMemo(
     () => ({
-      container: "/assets/images/register-container.svg",
-      people: "/assets/images/register-people.svg",
+      container: "/assets/images/register-container.webp",
+      people: "/assets/images/register-people.webp",
       logo: "/assets/images/logo-bulky.webp",
       google: "/assets/images/login-google.svg",
     }),
@@ -156,7 +156,7 @@ export default function RegisterPage() {
   return (
     <main className="relative min-h-[100dvh] w-full overflow-hidden bg-[#ffcf02]">
       <Image
-        src="/assets/images/bg-banner-default-new.png"
+        src="/assets/images/bg-banner-default-new.webp"
         alt=""
         aria-hidden
         fill

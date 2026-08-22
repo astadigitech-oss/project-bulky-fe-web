@@ -26,7 +26,7 @@ export const WholesaleSection = () => {
         {/* Left: container/forklift — in normal flow, drives section height */}
         <div className="w-[460px] xl:w-[620px] pointer-events-none select-none">
           <Image
-            src="/assets/images/wholesale/container.svg"
+            src="/assets/images/wholesale/container.webp"
             alt="Bulky wholesale container"
             width={620}
             height={540}
@@ -38,7 +38,7 @@ export const WholesaleSection = () => {
         {/* Right: boxes illustration — pinned to right edge */}
         <div className="absolute right-0 bottom-0 w-[160px] xl:w-[210px] pointer-events-none select-none">
           <Image
-            src="/assets/images/wholesale/box.svg"
+            src="/assets/images/wholesale/box.webp"
             alt="Bulky wholesale boxes"
             width={210}
             height={200}
