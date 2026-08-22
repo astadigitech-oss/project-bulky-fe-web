@@ -471,7 +471,7 @@ export function BulkyTVClient() {
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <Image
-              src="/assets/images/profile/empty-illustration.svg"
+              src="/assets/images/profile/empty-illustration.webp"
               alt="No videos"
               width={160}
               height={160}

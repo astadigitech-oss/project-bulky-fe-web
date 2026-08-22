@@ -6,14 +6,13 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { Eye, EyeOff, KeyRound, Lock, Phone, X } from "lucide-react";
-import { setCookie } from "cookies-next/client";
 import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 import { AuthField } from "../_components/auth-field";
 import { useTranslations } from "next-intl";
 import { useMutate } from "@/lib/query";
-import { cookiesKey } from "@/config";
+import { establishSession } from "@/lib/auth-session";
 import type { LoginBody, LoginResponse } from "@/services/auth/types";
 import { useSession } from "@/providers/session-provider";
 
@@ -102,10 +101,9 @@ export default function LoginPage() {
     endpoint: "/auth/login",
     method: "post",
     isPublic: true,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       const token = data.data.data?.token;
-      if (token) {
-        setCookie(cookiesKey, token, { path: "/" });
+      if (token && (await establishSession(token))) {
         window.location.href = `/${locale}`;
       }
     },
@@ -126,7 +124,7 @@ export default function LoginPage() {
 
   const assets = useMemo(
     () => ({
-      hero: "/assets/images/hero-login.png",
+      hero: "/assets/images/hero-login.webp",
       logo: "/assets/images/logo-bulky.webp",
       google: "/assets/images/login-google.svg",
     }),
@@ -165,7 +163,7 @@ export default function LoginPage() {
   return (
     <main className="relative min-h-[100dvh] w-full overflow-hidden bg-[#ffcf02]">
       <Image
-        src="/assets/images/bg-banner-default-new.png"
+        src="/assets/images/bg-banner-default-new.webp"
         alt=""
         aria-hidden
         fill

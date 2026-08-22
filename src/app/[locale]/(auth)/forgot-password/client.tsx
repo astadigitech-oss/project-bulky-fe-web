@@ -18,7 +18,7 @@ export default function ForgotPasswordClient() {
 
   const assets = useMemo(
     () => ({
-      hero: "/assets/images/hero-login.svg",
+      hero: "/assets/images/hero-login-forgot.webp",
       logo: "/assets/images/logo-bulky.webp",
       looperLeft: "/assets/images/Looper-kiri.svg",
       looperRight: "/assets/images/Looper-kanan.svg",

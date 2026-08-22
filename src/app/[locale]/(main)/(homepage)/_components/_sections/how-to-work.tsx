@@ -9,7 +9,6 @@ export const HowToWorkSecttion = () => {
     <section className="py-20 xl:py-22.5 2xl:py-25 w-full grid grid-cols-3 gap-10 xl:gap-15 2xl:gap-20">
       <div className="relative w-full">
         <Image
-          // src={"/assets/images/htw-stagging.webp"}
           src={"/assets/images/8A (Cara Kerja Bulky.id).webp"}
           alt="how_to_work"
           width={1254}
@@ -27,8 +26,7 @@ export const HowToWorkSecttion = () => {
           <div className="w-full aspect-square flex-1 border rounded-xl p-3 flex flex-col items-center justify-between gap-1">
             <div className="relative w-full min-h-0 flex-1">
               <Image
-                // src={"/assets/images/warehouse.webp"}
-                src={"/assets/images/8B (Cara Kerja Bulky.id) GUDANG (1).png"}
+                src={"/assets/images/8B (Cara Kerja Bulky.id) GUDANG (1).webp"}
                 fill
                 alt="warehouse"
                 className="object-contain"
@@ -43,8 +41,7 @@ export const HowToWorkSecttion = () => {
           <div className="w-full aspect-square flex-1 border rounded-xl p-3 flex flex-col items-center justify-between gap-1">
             <div className="relative w-full min-h-0 flex-1">
               <Image
-                // src={"/assets/images/sortir.webp"}
-                src={"/assets/images/8C (Cara Kerja Bulky.id) SORTIR (1).png"}
+                src={"/assets/images/8C (Cara Kerja Bulky.id) SORTIR (1).webp"}
                 fill
                 alt="warehouse"
                 className="object-contain"
@@ -59,8 +56,7 @@ export const HowToWorkSecttion = () => {
           <div className="w-full aspect-square flex-1 border rounded-xl p-3 flex flex-col items-center justify-between gap-1">
             <div className="relative w-full min-h-0 flex-1">
               <Image
-                // src={"/assets/images/distribute.webp"}
-                src={"/assets/images/8D (Cara Kerja Bulky.id) DISTRIBUSI (1).png"}
+                src={"/assets/images/8D (Cara Kerja Bulky.id) DISTRIBUSI (1).webp"}
                 fill
                 alt="warehouse"
                 className="object-contain"

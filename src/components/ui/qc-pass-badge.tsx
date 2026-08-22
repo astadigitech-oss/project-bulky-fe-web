@@ -22,7 +22,7 @@ export const QcPassBadge = ({
       )}
     >
       <Image
-        src="/assets/images/qc-2.png"
+        src="/assets/images/qc-2.webp"
         alt={alt}
         fill
         className="object-contain drop-shadow-sm"

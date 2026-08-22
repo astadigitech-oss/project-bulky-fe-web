@@ -30,8 +30,7 @@ import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query/use-mutate";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { getCookie } from "cookies-next/client";
-import { cookiesKey } from "@/config";
+import { useSession } from "@/providers/session-provider";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
@@ -106,6 +105,7 @@ export const ProductIdClient = () => {
   const [pdfOpen, setPdfOpen] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(0);
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useSession();
 
   const detailQuery = useApiQuery<ProductDetailResponse>({
     key: ["product-detail", locale, productId],
@@ -134,8 +134,7 @@ export const ProductIdClient = () => {
     selectedImage < (product?.images?.length ?? 0) ? selectedImage : 0;
 
   const handleRequireLogin = (action: "cart" | "buy-now") => {
-    const token = getCookie(cookiesKey);
-    if (token) return true;
+    if (isAuthenticated) return true;
 
     toast.warning(t("loginRequiredToast"));
 
@@ -216,7 +215,7 @@ export const ProductIdClient = () => {
           </div>
           <div className="relative size-52">
             <Image
-              src="/assets/images/profile/empty-illustration.svg"
+              src="/assets/images/profile/empty-illustration.webp"
               alt={"added"}
               fill
               className="object-contain"
@@ -381,7 +380,7 @@ export const ProductIdClient = () => {
             {product.is_qc_pass && (
               <span className="relative inline-block size-12 shrink-0">
                 <Image
-                  src="/assets/images/qc-2.png"
+                  src={"/assets/images/qc-2.webp"}
                   alt="QC PASS"
                   fill
                   className="object-contain"
@@ -506,7 +505,7 @@ export const ProductIdClient = () => {
         <div className="col-span-3">
           <div className="sticky top-24 rounded-2xl border border-gray-300 bg-white p-4 shadow-sm flex flex-col gap-3.5">
             <div className="flex items-center gap-3">
-              <div className="relative size-14 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+              <div className="relative size-14 shrink-0 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
                 <Image
                   src={product.images[0] || "https://github.com/shadcn.png"}
                   alt={product.name}

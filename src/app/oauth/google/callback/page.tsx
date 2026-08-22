@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { setCookie } from "cookies-next/client";
 import axios from "axios";
 import Image from "next/image";
 
-import { cookiesKey, apiUrl } from "@/config";
+import { apiUrl } from "@/config";
+import { establishSession } from "@/lib/auth-session";
 import type {
   GoogleLoginResponse,
   GoogleLoginExistingUserData,
@@ -36,7 +36,7 @@ export default function GoogleOAuthCallbackPage() {
         authorization_code: code,
         redirect_uri: redirectUri,
       })
-      .then((res) => {
+      .then(async (res) => {
         const { data } = res.data;
 
         const locale =
@@ -45,8 +45,9 @@ export default function GoogleOAuthCallbackPage() {
         if (!data.needs_phone) {
           // Existing user — login directly
           const existing = data as GoogleLoginExistingUserData;
-          setCookie(cookiesKey, existing.access_token, { path: "/" });
-          window.location.href = `/${locale}`;
+          if (await establishSession(existing.access_token)) {
+            window.location.href = `/${locale}`;
+          }
         } else {
           // New user — needs phone number
           const newUser = data as GoogleLoginNewUserData;

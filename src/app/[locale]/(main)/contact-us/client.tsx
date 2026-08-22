@@ -13,7 +13,7 @@ import { useTranslations } from "next-intl";
 // ============================================================================
 const IMG_LOOPER_LEFT  = "/assets/images/Looper-kiri.svg";
 const IMG_LOOPER_RIGHT = "/assets/images/Looper-kanan.svg";
-const IMG_HERO_AGENT   = "/assets/images/contact-us/7A (Hubungi Kami) (1).png";
+const IMG_HERO_AGENT   = "/assets/images/contact-us/7A (Hubungi Kami) (1).webp";
 
 
 const ICON_IG     = "/assets/images/contact-us/logo-instagram.svg";

@@ -5,8 +5,7 @@ import { isRecord } from "./utils";
 
 import { errorResponse } from "./error-response";
 import { UseMutateConfig, MutationVariables } from "./types";
-import { apiUrl, cookiesKey } from "@/config";
-import { getCookie } from "cookies-next/client";
+import { apiProxyUrl } from "@/config";
 
 export const useMutate = <
   TResponse = any,
@@ -19,7 +18,6 @@ export const useMutate = <
   onSuccess,
   onError,
   errorCustom,
-  isPublic = false,
 }: UseMutateConfig<TResponse, TBody, TParams, TSearchParams>) =>
   useMutation<
     AxiosResponse<TResponse>,
@@ -27,7 +25,7 @@ export const useMutate = <
     MutationVariables<TBody, TParams, TSearchParams>
   >({
     mutationFn: async (variables) => {
-      let url = apiUrl + endpoint;
+      let url = apiProxyUrl + endpoint;
 
       if (
         variables &&
@@ -56,23 +54,19 @@ export const useMutate = <
           ? variables.body
           : {};
 
-      const axiosConfig = {
-        headers: !isPublic
-          ? { Authorization: `Bearer ${getCookie(cookiesKey)}` }
-          : {},
-      };
-
+      // Same-origin proxy call; the httpOnly session cookie is sent
+      // automatically by the browser for authenticated endpoints.
       switch (method) {
         case "get":
-          return axios.get(url, axiosConfig);
+          return axios.get(url);
         case "post":
-          return axios.post(url, body, axiosConfig);
+          return axios.post(url, body);
         case "put":
-          return axios.put(url, body, axiosConfig);
+          return axios.put(url, body);
         case "delete":
-          return axios.delete(url, axiosConfig);
+          return axios.delete(url);
         default:
-          return axios.patch(url, body, axiosConfig);
+          return axios.patch(url, body);
       }
     },
     onSuccess,

@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { setCookie } from "cookies-next/client";
 import { useTranslations } from "next-intl";
 import type { AxiosError } from "axios";
 
 import { useMutate } from "@/lib/query";
-import { cookiesKey, apiUrl } from "@/config";
+import { apiProxyUrl } from "@/config";
+import { establishSession } from "@/lib/auth-session";
 import type { GoogleVerifyOtpResponse } from "@/services/auth/types";
 
 const OTP_LENGTH = 6;
@@ -102,7 +102,7 @@ export default function OAuthVerifyOtpClient({ phoneNumber }: { phoneNumber?: st
     setIsVerifying(true);
     setError(null);
     try {
-      const res = await fetch(`${apiUrl}/auth/oauth/verify-otp`, {
+      const res = await fetch(`${apiProxyUrl}/auth/oauth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pending_oauth_token: token, telepon: phoneNumber, kode: code }),
@@ -110,8 +110,7 @@ export default function OAuthVerifyOtpClient({ phoneNumber }: { phoneNumber?: st
       const data: GoogleVerifyOtpResponse = await res.json();
       if (!res.ok) throw new Error((data as any).message);
       const accessToken = data.data?.access_token;
-      if (accessToken) {
-        setCookie(cookiesKey, accessToken, { path: "/" });
+      if (accessToken && (await establishSession(accessToken))) {
         sessionStorage.removeItem("bulky_oauth_token");
         window.location.href = "/";
       }

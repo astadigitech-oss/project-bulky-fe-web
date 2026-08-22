@@ -6,14 +6,13 @@ import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
-import { getCookie } from "cookies-next/client";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiUrl, cookiesKey } from "@/config";
+import { apiProxyUrl } from "@/config";
 import type { PendingReviewItem } from "@/services/review/types";
 
 export function AddReviewModal({
@@ -73,11 +72,8 @@ export function AddReviewModal({
       if (komentar.trim()) formData.append("komentar", komentar.trim());
       if (image) formData.append("gambar", image);
 
-      await axios.post(`${apiUrl}/web/review`, formData, {
-        headers: {
-          Authorization: `Bearer ${getCookie(cookiesKey)}`,
-        },
-      });
+      // Same-origin proxy call; the httpOnly session cookie is sent automatically.
+      await axios.post(`${apiProxyUrl}/web/review`, formData);
 
       toast.success(t("successMessage"));
       await queryClient.invalidateQueries({ queryKey: ["review-pending"] });

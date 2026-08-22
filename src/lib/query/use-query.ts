@@ -1,10 +1,8 @@
 import axios, { AxiosError } from "axios";
-import { getCookie } from "cookies-next/client";
 import { useQuery, UseQueryOptions, QueryKey } from "@tanstack/react-query";
 
-import { buildUrl } from "./utils";
+import { buildProxyUrl } from "./utils";
 import { QueryParams } from "./types";
-import { cookiesKey } from "@/config";
 
 type UseApiQueryOptions<T> = Omit<
   UseQueryOptions<T, AxiosError, T, QueryKey>,
@@ -28,16 +26,14 @@ export function useApiQuery<T = any>({
   searchParams,
   ...options
 }: UseApiQueryProps<T>) {
-  const token = getCookie(cookiesKey);
-  const urlWithParams = buildUrl(endpoint, searchParams);
+  const urlWithParams = buildProxyUrl(endpoint, searchParams);
 
   return useQuery<T, AxiosError>({
     queryKey: key,
     queryFn: async () => {
-      const res = await axios.get(urlWithParams, {
-        headers: { Authorization: `Bearer ${token}` },
-        params,
-      });
+      // Same-origin proxy call; the httpOnly session cookie is sent
+      // automatically by the browser, no Authorization header needed here.
+      const res = await axios.get(urlWithParams, { params });
       return res.data as T;
     },
     ...options,
