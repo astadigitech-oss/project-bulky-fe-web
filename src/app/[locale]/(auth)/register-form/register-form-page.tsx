@@ -6,13 +6,12 @@ import { CircleCheck, Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react"
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { setCookie } from "cookies-next/client";
 import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 import { AuthField } from "../_components/auth-field";
 import { useMutate } from "@/lib/query";
-import { cookiesKey } from "@/config";
+import { establishSession } from "@/lib/auth-session";
 import type { RegisterBody, RegisterResponse } from "@/services/auth/types";
 
 /**
@@ -91,10 +90,9 @@ export default function RegisterFormPage({
     endpoint: "/auth/register",
     method: "post",
     isPublic: true,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       const authToken = data.data.data?.token;
-      if (authToken) {
-        setCookie(cookiesKey, authToken, { path: "/" });
+      if (authToken && (await establishSession(authToken))) {
         sessionStorage.removeItem(REG_TOKEN_KEY);
         window.location.href = `/${locale}`;
       }

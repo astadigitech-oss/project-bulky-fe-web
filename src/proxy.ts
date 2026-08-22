@@ -1,8 +1,20 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
+import { cookiesKey } from "./config";
 
 const intlMiddleware = createMiddleware(routing);
+
+// Locale-prefixed segments that require a session; redirect at the edge
+// instead of relying solely on client-side useProtectRoute().
+const PROTECTED_SEGMENTS = ["/cart", "/checkout", "/profile"];
+
+function isProtectedPath(pathname: string): boolean {
+  const withoutLocale = pathname.replace(/^\/(en|id)(?=\/|$)/, "") || "/";
+  return PROTECTED_SEGMENTS.some(
+    (segment) => withoutLocale === segment || withoutLocale.startsWith(`${segment}/`),
+  );
+}
 
 // Simple in-memory fixed-window limiter, per server instance. Good enough to
 // stop a single misbehaving client/bot from taking the container down (which
@@ -63,6 +75,16 @@ export default function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   if (pathname.startsWith("/oauth") || pathname.startsWith("/recovery")) {
     return NextResponse.next();
+  }
+
+  // Edge-level gate: catches direct navigation/refresh before client JS
+  // (useProtectRoute) ever runs. Only checks the httpOnly cookie's presence,
+  // not validity — /me still verifies it and clears the cookie if stale.
+  if (isProtectedPath(pathname) && !req.cookies.get(cookiesKey)) {
+    const locale = pathname.match(/^\/(en|id)(?=\/|$)/)?.[1] ?? routing.defaultLocale;
+    const loginUrl = new URL(`/${locale}/login`, req.url);
+    loginUrl.searchParams.set("reason", "auth-required");
+    return NextResponse.redirect(loginUrl);
   }
 
   return intlMiddleware(req);

@@ -12,8 +12,8 @@ import {
   Trash2,
   User,
 } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
 import { deleteCookie } from "cookies-next/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ import {
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query";
 import { invalidateQuery } from "@/lib/query/utils";
-import { cookiesKey } from "@/config";
+import { sessionFlagCookie } from "@/config";
 import { AddressFormDialog } from "@/components/address-form-dialog";
 
 import type {
@@ -398,7 +398,8 @@ function DeleteAccountDialog({
     endpoint: "/profile",
     method: "delete",
     onSuccess: async () => {
-      deleteCookie(cookiesKey, { path: "/" });
+      await fetch("/api/auth/session", { method: "DELETE" });
+      deleteCookie(sessionFlagCookie, { path: "/" });
       queryClient.removeQueries({ queryKey: ["session"] });
       router.replace("/login");
     },

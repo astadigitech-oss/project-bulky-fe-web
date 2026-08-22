@@ -5,7 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { deleteCookie, getCookie } from "cookies-next/client";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { cookiesKey } from "@/config";
+import { sessionFlagCookie } from "@/config";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query";
 import type { SessionUser, CheckSessionResponse } from "@/services/auth/types";
@@ -29,34 +29,40 @@ const SessionContext = createContext<SessionContextValue>({
 // ─── Provider ────────────────────────────────────────────────────────────────
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
-  const token = getCookie(cookiesKey);
+  // Non-httpOnly marker; the real token cookie is only readable server-side.
+  const hasSessionFlag = getCookie(sessionFlagCookie);
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useApiQuery<CheckSessionResponse>({
-    key: ["session", token ?? ""],
+    key: ["session", hasSessionFlag ?? ""],
     endpoint: "/me",
-    enabled: !!token,
+    enabled: !!hasSessionFlag,
     retry: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
+  async function clearSession() {
+    await fetch("/api/auth/session", { method: "DELETE" });
+    deleteCookie(sessionFlagCookie, { path: "/" });
+  }
+
   const logoutMutation = useMutate({
     endpoint: "/auth/logout",
     method: "post",
-    onSuccess: () => {
-      deleteCookie(cookiesKey, { path: "/" });
+    onSuccess: async () => {
+      await clearSession();
       queryClient.removeQueries({ queryKey: ["session"] });
       window.location.href = "/login";
     },
     onError: { title: "LOGOUT" },
   });
 
-  // If token exists but session is invalid (401), clear the stale cookie
+  // If the flag exists but the session is invalid (401), clear the stale cookies.
   useEffect(() => {
-    if (isError && token) {
-      deleteCookie(cookiesKey, { path: "/" });
+    if (isError && hasSessionFlag) {
+      clearSession();
     }
-  }, [isError, token]);
+  }, [isError, hasSessionFlag]);
 
   const user = !isError ? (data?.data?.user ?? null) : null;
   const isAuthenticated = !!user;
@@ -69,7 +75,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     <SessionContext.Provider
       value={{
         user,
-        isLoading: !!token && isLoading,
+        isLoading: !!hasSessionFlag && isLoading,
         isAuthenticated,
         logout,
       }}

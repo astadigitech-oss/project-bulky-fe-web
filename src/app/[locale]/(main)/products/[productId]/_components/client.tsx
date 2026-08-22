@@ -30,8 +30,7 @@ import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query/use-mutate";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { getCookie } from "cookies-next/client";
-import { cookiesKey } from "@/config";
+import { useSession } from "@/providers/session-provider";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
@@ -106,6 +105,7 @@ export const ProductIdClient = () => {
   const [pdfOpen, setPdfOpen] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(0);
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useSession();
 
   const detailQuery = useApiQuery<ProductDetailResponse>({
     key: ["product-detail", locale, productId],
@@ -134,8 +134,7 @@ export const ProductIdClient = () => {
     selectedImage < (product?.images?.length ?? 0) ? selectedImage : 0;
 
   const handleRequireLogin = (action: "cart" | "buy-now") => {
-    const token = getCookie(cookiesKey);
-    if (token) return true;
+    if (isAuthenticated) return true;
 
     toast.warning(t("loginRequiredToast"));
 
