@@ -23,7 +23,6 @@ export default function ResetPasswordClient({ phone }: Props) {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [resetToken, setResetToken] = useState("");
 
   const assets = useMemo(
     () => ({
@@ -42,7 +41,6 @@ export default function ResetPasswordClient({ phone }: Props) {
       router.replace("/forgot-password");
       return;
     }
-    setResetToken(token);
   }, [router]);
 
   const resetMutation = useMutate<ResetPasswordResponse, ResetPasswordBody>({
@@ -59,6 +57,11 @@ export default function ResetPasswordClient({ phone }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const resetToken = sessionStorage.getItem("bulky_fp_token");
+    if (!resetToken) {
+      router.replace("/forgot-password");
+      return;
+    }
     if (password.length < 8) {
       setError(t("errors.passwordMin"));
       return;

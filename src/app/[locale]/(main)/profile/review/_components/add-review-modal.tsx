@@ -139,7 +139,7 @@ export function AddReviewModal({
               <p className="mb-2 text-xs text-[#727272]">{t("imageLabel")}</p>
               {imagePreview ? (
                 <div className="relative inline-block">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  { }
                   <img
                     src={imagePreview}
                     alt="preview"

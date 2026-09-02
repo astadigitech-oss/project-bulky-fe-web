@@ -24,15 +24,6 @@ import { useSession } from "@/providers/session-provider";
 import { useApiQuery } from "@/lib/query/use-query";
 import type { GetCartResponse } from "@/services/cart/types";
 
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-}
-
 export const Navbar = () => {
   const t = useTranslations("Header.auth");
   const topBarT = useTranslations("Header.topBar");

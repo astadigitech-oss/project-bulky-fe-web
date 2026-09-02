@@ -94,7 +94,7 @@ export default function RegisterFormPage({
       const authToken = data.data.data?.token;
       if (authToken && (await establishSession(authToken))) {
         sessionStorage.removeItem(REG_TOKEN_KEY);
-        window.location.href = `/${locale}`;
+        router.push(`/${locale}`);
       }
     },
     onError: { title: "REGISTER" },

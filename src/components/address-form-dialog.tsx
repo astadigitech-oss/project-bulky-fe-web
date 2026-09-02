@@ -68,11 +68,14 @@ export function AddressFormDialog({
   useEffect(() => {
     if (!open) return;
     if (!isEdit) {
+      // The dialog owns an editable draft, so reopening it must reset stale input.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm(EMPTY_ADDRESS);
       return;
     }
     if (detailData?.data) {
       const d: AddressDetail = detailData.data;
+      // Hydrate the editable draft when the asynchronous address query resolves.
       setForm({
         label: d.label ?? "",
         name: d.name,

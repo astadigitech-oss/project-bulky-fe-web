@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Edit3,
   Eye,
@@ -61,10 +61,6 @@ function EditInfoDialog({
 }) {
   const t = useTranslations("Profile");
   const [name, setName] = useState(currentName);
-
-  useEffect(() => {
-    if (open) setName(currentName);
-  }, [open, currentName]);
 
   const mutation = useMutate<BaseProfileResponse, FormData>({
     endpoint: "/profile",
@@ -541,7 +537,6 @@ export function EditProfileClient() {
   const {
     data: addressesData,
     isLoading: addressesLoading,
-    refetch: refetchAddresses,
   } = useApiQuery<GetAddressesResponse>({
     key: ["addresses"],
     endpoint: "/addresses",
@@ -557,15 +552,6 @@ export function EditProfileClient() {
   async function onAddressesRefresh() {
     await invalidateQuery(queryClient, [["addresses"]]);
   }
-
-  const initials = profile?.name
-    ? profile.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
-    : "?";
 
   return (
     <div>
@@ -674,12 +660,14 @@ export function EditProfileClient() {
       </div>
 
       {/* Dialogs */}
-      <EditInfoDialog
-        open={editInfoOpen}
-        onOpenChange={setEditInfoOpen}
-        currentName={profile?.name ?? ""}
-        onSuccess={onProfileUpdated}
-      />
+      {editInfoOpen && (
+        <EditInfoDialog
+          open
+          onOpenChange={setEditInfoOpen}
+          currentName={profile?.name ?? ""}
+          onSuccess={onProfileUpdated}
+        />
+      )}
       <ChangePhoneDialog
         open={changePhoneOpen}
         onOpenChange={setChangePhoneOpen}

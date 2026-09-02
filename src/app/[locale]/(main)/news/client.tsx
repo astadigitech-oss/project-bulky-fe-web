@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -75,17 +75,14 @@ export function NewsListClient({
   const query = useSearchParams();
   const locale = clampLocale(params?.locale);
 
-  const [activeCategory, setActiveCategory] = useState(
-    query.get("kategori") ?? "",
-  );
-  const [page, setPage] = useState(Number(query.get("halaman") ?? "1") || 1);
-
-  // `initialData` hanya boleh dipakai pada render pertama (state client masih
-  // persis sama dengan searchParams yang dipakai untuk fetch di server).
-  const isInitialRenderRef = React.useRef(true);
-  useEffect(() => {
-    isInitialRenderRef.current = false;
-  }, []);
+  const [initialRequest] = useState(() => ({
+    category: query.get("kategori") ?? "",
+    page: Number(query.get("halaman") ?? "1") || 1,
+  }));
+  const [activeCategory, setActiveCategory] = useState(initialRequest.category);
+  const [page, setPage] = useState(initialRequest.page);
+  const isInitialNewsRequest =
+    activeCategory === initialRequest.category && page === initialRequest.page;
 
   useEffect(() => {
     const sp = new URLSearchParams();
@@ -98,7 +95,6 @@ export function NewsListClient({
     if (nextQuery !== currentQuery) {
       router.replace(`${pathname}${nextQuery ? `?${nextQuery}` : ""}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory, page, pathname, router]);
 
   const kategorisQuery = useApiQuery<GetNewsCategoriesResponse>({
@@ -106,7 +102,7 @@ export function NewsListClient({
     endpoint: "/web/news/kategori",
     searchParams: { locale },
     staleTime: 5 * 60 * 1000,
-    initialData: isInitialRenderRef.current ? initialCategories : undefined,
+    initialData: initialCategories,
   });
 
   const newsQuery = useApiQuery<GetNewsListPaginatedResponse>({
@@ -119,7 +115,7 @@ export function NewsListClient({
       ...(activeCategory ? { kategori: activeCategory } : {}),
     },
     staleTime: 60_000,
-    initialData: isInitialRenderRef.current ? initialNews : undefined,
+    initialData: isInitialNewsRequest ? initialNews : undefined,
   });
 
   const kategoris = kategorisQuery.data?.data ?? [];

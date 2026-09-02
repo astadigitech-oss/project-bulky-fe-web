@@ -1,8 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 export type RecoveryLocale = "id" | "en";
+
+const localeListeners = new Set<() => void>();
+
+function subscribeToLocale(listener: () => void) {
+  localeListeners.add(listener);
+  return () => localeListeners.delete(listener);
+}
+
+function getLocaleSnapshot(): RecoveryLocale {
+  const match = document.cookie
+    .split("; ")
+    .find((entry) => entry.startsWith("NEXT_LOCALE="));
+  return match?.split("=")[1] === "en" ? "en" : "id";
+}
+
+function getServerLocaleSnapshot(): RecoveryLocale {
+  return "id";
+}
 
 function buildDict(locale: RecoveryLocale) {
   const id = {
@@ -143,17 +161,15 @@ export const recoveryDict: Record<RecoveryLocale, ReturnType<typeof buildDict>> 
  * to change language on this flow.
  */
 export function useRecoveryLocale(): [RecoveryLocale, (locale: RecoveryLocale) => void] {
-  const [locale, setLocaleState] = useState<RecoveryLocale>("id");
-
-  useEffect(() => {
-    const match = document.cookie.split("; ").find((r) => r.startsWith("NEXT_LOCALE="));
-    const value = match?.split("=")[1];
-    setLocaleState(value === "en" ? "en" : "id");
-  }, []);
+  const locale = useSyncExternalStore(
+    subscribeToLocale,
+    getLocaleSnapshot,
+    getServerLocaleSnapshot,
+  );
 
   function setLocale(next: RecoveryLocale) {
     document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; SameSite=Lax`;
-    setLocaleState(next);
+    localeListeners.forEach((listener) => listener());
   }
 
   return [locale, setLocale];

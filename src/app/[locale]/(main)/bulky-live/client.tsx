@@ -135,15 +135,6 @@ function VideoModal({
 
   const video = data?.data;
 
-  useEffect(() => {
-    setIsPlaying(false);
-    setCurrentTime(0);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  }, [slug]);
-
   // Auto-play saat video detail termuat, atau saat pindah ke video lain.
   // Guard ref mencegah memutar ulang video lama saat slug berubah tapi data belum selesai dimuat.
   useEffect(() => {
@@ -521,6 +512,7 @@ export function BulkyTVClient() {
       {/* Modal */}
       {selectedSlug && (
         <VideoModal
+          key={selectedSlug}
           slug={selectedSlug}
           locale={locale}
           labels={{

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -13,16 +13,11 @@ export function PaymentSuccessModal({ redirectTo = "/profile/orders" }: { redire
   const t = useTranslations("ProfilePages.orders");
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (searchParams.get("payment_success") === "1") {
-      setOpen(true);
-    }
-  }, [searchParams]);
+  const [dismissed, setDismissed] = useState(false);
+  const open = searchParams.get("payment_success") === "1" && !dismissed;
 
   const handleClose = () => {
-    setOpen(false);
+    setDismissed(true);
     router.replace(redirectTo);
   };
 

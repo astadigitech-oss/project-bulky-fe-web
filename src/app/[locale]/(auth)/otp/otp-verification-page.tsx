@@ -62,8 +62,6 @@ export default function OtpVerificationPage({
   const [timer, setTimer] = useState(RESEND_SECONDS);
 
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
-  const onSuccessRef = useRef(onSuccess);
-  onSuccessRef.current = onSuccess;
 
   const t = useTranslations("Otp");
 
@@ -222,7 +220,7 @@ export default function OtpVerificationPage({
       }
 
       if (token) {
-        onSuccessRef.current?.(token);
+        onSuccess?.(token);
       }
     } catch (err) {
       const msg = getApiErrorMessage(err);
