@@ -15,15 +15,6 @@ export function ProfileSidebarClient() {
 
   const user = data?.data;
 
-  const initials = user?.name
-    ? user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
-    : "?";
-
   return (
     <>
       <UserAvatar

@@ -755,11 +755,13 @@ function DisclaimerConsentDialog({
 }) {
   const t = useTranslations("CheckoutPage");
   const [checked, setChecked] = useState(false);
+  const [prevOpen, setPrevOpen] = useState(open);
 
   // Reset checkbox setiap kali dialog dibuka
-  useEffect(() => {
+  if (open !== prevOpen) {
+    setPrevOpen(open);
     if (open) setChecked(false);
-  }, [open]);
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -965,37 +967,43 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
     : "Rp 0";
 
   const isQrisDisabled = totalAmount > 10_000_000;
+  const paymentChannels = (paymentMethodsQuery.data?.data ?? []).flatMap(
+    (group) => group.metode,
+  );
+  const selectedPaymentChannel = paymentChannels.find(
+    (channel) => channel.kode === selectedPaymentKode,
+  );
+  const effectivePaymentKode =
+    isQrisDisabled && selectedPaymentChannel?.logo_value === "qris"
+      ? null
+      : selectedPaymentKode;
 
   // ─── Effects ─────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (deliveryMode === "DELIVERY" && address?.id) {
-      setShippingCost(null);
-      setSelectedProvider(null);
-      setInsuranceSelected(false);
       checkShipping.mutate({ body: { alamat_buyer_id: address.id, ...(productSlug ? { slug: productSlug } : {}) } });
     }
-    if (deliveryMode === "PICKUP") {
-      setShippingCost(null);
-      setSelectedProvider(null);
-      setInsuranceSelected(false);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryMode, address?.id]);
 
-  useEffect(() => {
+  const handleDeliveryModeChange = (mode: DeliveryMode) => {
+    setDeliveryMode(mode);
+    setShippingCost(null);
+    setSelectedProvider(null);
     setInsuranceSelected(false);
-  }, [selectedProvider]);
+  };
 
-  useEffect(() => {
-    if (!isQrisDisabled) return;
-    const allChannels = (paymentMethodsQuery.data?.data ?? []).flatMap((g) => g.metode);
-    const selectedChannel = allChannels.find((c) => c.kode === selectedPaymentKode);
-    if (selectedChannel?.logo_value === "qris") {
-      setSelectedPaymentKode(null);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isQrisDisabled]);
+  const handleProviderSelect = (provider: DeliveryProvider) => {
+    setSelectedProvider(provider);
+    setInsuranceSelected(false);
+  };
+
+  const handleAddressChanged = () => {
+    setShippingCost(null);
+    setSelectedProvider(null);
+    setInsuranceSelected(false);
+    void queryClient.invalidateQueries({ queryKey: ["checkout"] });
+  };
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
@@ -1016,7 +1024,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
       toast.error(t("deliveryShippingCostRequired"));
       return;
     }
-    if (paymentType === "single_payment" && !selectedPaymentKode) {
+    if (paymentType === "single_payment" && !effectivePaymentKode) {
       toast.error(t("paymentMethodRequired"));
       return;
     }
@@ -1028,8 +1036,9 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
     const deliveryType: "PICKUP" | "DELIVEREE" | "FORWARDER" =
       deliveryMode === "PICKUP" ? "PICKUP" : selectedProvider!;
 
-    const allChannels = (paymentMethodsQuery.data?.data ?? []).flatMap((g) => g.metode);
-    const selectedChannel = allChannels.find((c) => c.kode === selectedPaymentKode);
+    const selectedChannel = paymentChannels.find(
+      (channel) => channel.kode === effectivePaymentKode,
+    );
 
     const successReturnUrl = `${window.location.origin}/${locale}/profile/orders?payment_success=1`;
 
@@ -1161,7 +1170,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
             <div className="flex overflow-hidden rounded border border-gray-200">
               <button
                 type="button"
-                onClick={() => setDeliveryMode("PICKUP")}
+                onClick={() => handleDeliveryModeChange("PICKUP")}
                 className={[
                   "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
                   deliveryMode === "PICKUP"
@@ -1175,7 +1184,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
               <div className="w-px bg-gray-200" />
               <button
                 type="button"
-                onClick={() => setDeliveryMode("DELIVERY")}
+                onClick={() => handleDeliveryModeChange("DELIVERY")}
                 className={[
                   "flex flex-1 items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
                   deliveryMode === "DELIVERY"
@@ -1260,7 +1269,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
                       tooltip={t("delivereeTooltip")}
                       unavailable={!deliveree?.tersedia}
                       selected={selectedProvider === "DELIVEREE"}
-                      onSelect={setSelectedProvider}
+                      onSelect={handleProviderSelect}
                     />
                     <ProviderCard
                       id="FORWARDER"
@@ -1289,7 +1298,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
                       tooltip={t("forwarderTooltip")}
                       unavailable={!forwarder?.tersedia}
                       selected={selectedProvider === "FORWARDER"}
-                      onSelect={setSelectedProvider}
+                      onSelect={handleProviderSelect}
                     />
                     {/* Insurance opt-in */}
                     {selectedProvider === "FORWARDER" && forwarder?.asuransi.tersedia && (
@@ -1422,7 +1431,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
                 groups={paymentMethodsQuery.data?.data ?? []}
                 isLoading={paymentMethodsQuery.isLoading}
                 isError={paymentMethodsQuery.isError}
-                selectedKode={selectedPaymentKode}
+                selectedKode={effectivePaymentKode}
                 onSelect={setSelectedPaymentKode}
                 qrisDisabled={isQrisDisabled}
               />
@@ -1593,7 +1602,7 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
       <AddressPickerDialog
         open={addressPickerOpen}
         onOpenChange={setAddressPickerOpen}
-        onChanged={() => queryClient.invalidateQueries({ queryKey: ["checkout"] })}
+        onChanged={handleAddressChanged}
       />
 
       <FriendSearchDialog
@@ -1603,17 +1612,19 @@ export const CheckoutClient = ({ productSlug }: { productSlug?: string }) => {
         onAdd={(friend) => setSplitFriends((prev) => [...prev, friend])}
       />
 
-      <DisclaimerConsentDialog
-        open={disclaimerOpen}
-        onOpenChange={setDisclaimerOpen}
-        disclaimer={disclaimerData}
-        isLoading={disclaimerQuery.isLoading}
-        onAgree={() => {
-          setDisclaimerAgreed(true);
-          setDisclaimerOpen(false);
-          executePlaceOrder();
-        }}
-      />
+      {disclaimerOpen && (
+        <DisclaimerConsentDialog
+          open
+          onOpenChange={setDisclaimerOpen}
+          disclaimer={disclaimerData}
+          isLoading={disclaimerQuery.isLoading}
+          onAgree={() => {
+            setDisclaimerAgreed(true);
+            setDisclaimerOpen(false);
+            executePlaceOrder();
+          }}
+        />
+      )}
 
     </div>
   );

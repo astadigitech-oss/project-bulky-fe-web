@@ -104,7 +104,7 @@ export default function LoginPage() {
     onSuccess: async (data) => {
       const token = data.data.data?.token;
       if (token && (await establishSession(token))) {
-        window.location.href = `/${locale}`;
+        router.push(`/${locale}`);
       }
     },
     onError: { title: "LOGIN" },

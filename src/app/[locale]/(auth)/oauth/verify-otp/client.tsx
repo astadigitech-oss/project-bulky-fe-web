@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import type { AxiosError } from "axios";
 
 import { useMutate } from "@/lib/query";
 import { apiProxyUrl } from "@/config";
@@ -17,12 +16,6 @@ function formatTimer(seconds: number): string {
   const m = Math.floor(seconds / 60).toString().padStart(2, "0");
   const s = (seconds % 60).toString().padStart(2, "0");
   return `${m}:${s}`;
-}
-
-function getApiErrorMessage(err: unknown): string {
-  return (
-    ((err as AxiosError<{ message: string }>)?.response?.data as any)?.message ?? ""
-  );
 }
 
 export default function OAuthVerifyOtpClient({ phoneNumber }: { phoneNumber?: string }) {
@@ -112,7 +105,7 @@ export default function OAuthVerifyOtpClient({ phoneNumber }: { phoneNumber?: st
       const accessToken = data.data?.access_token;
       if (accessToken && (await establishSession(accessToken))) {
         sessionStorage.removeItem("bulky_oauth_token");
-        window.location.href = "/";
+        router.push("/");
       }
     } catch (err: any) {
       setError(err?.message || t("errors.failed"));

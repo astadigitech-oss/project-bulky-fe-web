@@ -32,6 +32,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   // Non-httpOnly marker; the real token cookie is only readable server-side.
   const hasSessionFlag = getCookie(sessionFlagCookie);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data, isLoading, isError } = useApiQuery<CheckSessionResponse>({
     key: ["session", hasSessionFlag ?? ""],
@@ -52,7 +53,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     onSuccess: async () => {
       await clearSession();
       queryClient.removeQueries({ queryKey: ["session"] });
-      window.location.href = "/login";
+      router.push("/login");
     },
     onError: { title: "LOGOUT" },
   });

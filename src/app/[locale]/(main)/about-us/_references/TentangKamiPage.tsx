@@ -7,7 +7,6 @@ import Link from "next/link";
 // ============================================================================
 
 // Hero cards
-const IMG_LOGO            = "https://www.figma.com/api/mcp/asset/6eb4471c-3a01-4d6a-bb83-201b9a18707e";
 const IMG_BULKY_LOGO_BG1  = "https://www.figma.com/api/mcp/asset/7b1a41c7-45dd-41a2-b7c1-509c5bdbb775"; // watermark besar atas
 const IMG_BULKY_LOGO_BG2  = "https://www.figma.com/api/mcp/asset/93d6a09c-126c-4b62-abaa-21b2f7c9a1c4"; // watermark besar bawah
 const IMG_CARD1_PERSON    = "https://www.figma.com/api/mcp/asset/fd26291d-393c-4282-b86e-ce15109df2d0"; // girl2 – card kiri
@@ -161,7 +160,7 @@ function AboutCard({
   return (
     <div className="relative w-[334px] shrink-0 drop-shadow-[0px_4px_2px_rgba(0,0,0,0.25)] flex flex-col rounded-[20px] overflow-hidden">
       {/* Foto */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={img}
         alt={alt}
@@ -193,7 +192,7 @@ function FeatureBadge({
 }) {
   return (
     <div className="flex-1 bg-white/60 rounded-[20px] px-[20px] py-[16px] flex flex-col gap-[6px]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img src={icon} alt={label} className="w-[24px] h-[24px] object-contain" />
       <p className="text-[16px] font-normal text-black font-roboto">{label}</p>
       <p className="text-[14px] font-normal text-black font-roboto leading-[20px]">
@@ -217,7 +216,7 @@ function NewsSidebarItem({
 }) {
   return (
     <div className="flex gap-[16px]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={img}
         alt={title}
@@ -243,14 +242,14 @@ function HeroSection() {
   return (
     <section className="relative w-full bg-white overflow-hidden py-[40px]">
       {/* Watermark BULKY besar di background */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={IMG_BULKY_LOGO_BG1}
         alt=""
         aria-hidden
         className="pointer-events-none select-none absolute left-1/2 -translate-x-1/2 top-[43px] w-[780px] h-[260px] object-contain opacity-100"
       />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={IMG_BULKY_LOGO_BG2}
         alt=""
@@ -282,7 +281,7 @@ function SolusiSection() {
           <br />
           Bisnis yang Efisien
         </h2>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        { }
         <img
           src={IMG_SOLUSI_BANNER}
           alt="Solusi Bisnis Bulky"
@@ -317,7 +316,7 @@ function DukungSection() {
           </p>
         </div>
         {/* Foto kanan */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        { }
         <img
           src={IMG_DUKUNG_PHOTO}
           alt="Pelaku usaha menggunakan Bulky"
@@ -333,7 +332,7 @@ function EkosistemSection() {
   return (
     <section className="relative w-full bg-[#ffcf02] overflow-hidden py-[68px]">
       {/* Looper pattern */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={IMG_LOOPER1}
         alt=""
@@ -346,7 +345,7 @@ function EkosistemSection() {
       <div className="relative z-10 max-w-[1280px] mx-auto px-[68px] flex items-start gap-[60px]">
         {/* Foto kiri */}
         <div className="relative shrink-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img
             src={IMG_EKOSISTEM_PHOTO}
             alt="Ekosistem Bulky"
@@ -372,14 +371,14 @@ function EkosistemSection() {
 
           {/* Girl + box ilustrasi di pojok kanan bawah */}
           <div className="relative self-end flex items-end">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img
               src={IMG_BOX4}
               alt=""
               aria-hidden
               className="absolute right-[60px] bottom-0 w-[200px] h-[200px] object-contain"
             />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img
               src={IMG_GIRL3}
               alt="Ilustrasi Bulky"
@@ -403,7 +402,7 @@ function BeritaSection() {
         <div className="flex gap-[40px]">
           {/* Featured artikel besar */}
           <Link href="/berita/featured" className="block shrink-0 group">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img
               src={IMG_NEWS_FEATURED}
               alt="Ribuan Pelaku Usaha Manfaatkan Bulky.id"
@@ -449,7 +448,7 @@ function DiBulkySection() {
     <section className="w-full bg-white py-[60px]">
       <div className="max-w-[1280px] mx-auto px-[68px]">
         {/* Watermark BULKY besar */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        { }
         <img
           src={IMG_BULKY_LOGO_BG1}
           alt=""
@@ -459,7 +458,7 @@ function DiBulkySection() {
 
         <div className="relative flex items-start gap-[60px]">
           {/* Ilustrasi kontainer (mirror) */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img
             src={IMG_DIBULKY_PHOTO}
             alt="Kontainer Bulky"
@@ -487,19 +486,19 @@ function DiBulkySection() {
                 <div className="flex gap-[12px]">
                   {/* Aman */}
                   <div className="flex-1 bg-white rounded-[20px] flex flex-col items-center gap-[8px] py-[16px] px-[12px]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    { }
                     <img src={IMG_ICON_PAYMENT} alt="Aman" className="w-[24px] h-[24px]" />
                     <span className="text-[24px] font-light text-black font-roboto">Aman</span>
                   </div>
                   {/* Cepat */}
                   <div className="flex-1 bg-white rounded-[20px] flex flex-col items-center gap-[8px] py-[16px] px-[12px]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    { }
                     <img src={IMG_ICON_SHIP} alt="Cepat" className="w-[24px] h-[24px]" />
                     <span className="text-[24px] font-light text-black font-roboto">Cepat</span>
                   </div>
                   {/* 24/7 */}
                   <div className="flex-1 bg-white rounded-[20px] flex flex-col items-center gap-[8px] py-[16px] px-[12px]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    { }
                     <img src={IMG_ICON_SUPPORT} alt="Dukungan 24/7" className="w-[24px] h-[24px]" />
                     <span className="text-[24px] font-light text-black font-roboto">24/7 Dukungan</span>
                   </div>
@@ -518,7 +517,7 @@ function CTASection() {
   return (
     <section className="relative w-full bg-[#ffcf02] overflow-hidden py-[55px] min-h-[436px]">
       {/* Looper pattern kiri */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={IMG_LOOPER2}
         alt=""
@@ -527,14 +526,14 @@ function CTASection() {
       />
 
       {/* Ilustrasi orang kanan */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={IMG_GIRL_CTA}
         alt=""
         aria-hidden
         className="pointer-events-none select-none absolute right-[219px] -top-[57px] h-[750px] w-auto object-contain"
       />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      { }
       <img
         src={IMG_BOY_CTA}
         alt=""
@@ -581,7 +580,7 @@ function CTASection() {
           <div className="flex -space-x-[8px]">
             {[IMG_AVATAR1, IMG_AVATAR2, IMG_AVATAR3, IMG_AVATAR4].map(
               (src, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
+                 
                 <img
                   key={i}
                   src={src}
@@ -594,7 +593,7 @@ function CTASection() {
           {/* Stars */}
           <div className="flex gap-[3px]">
             {[...Array(5)].map((_, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
+               
               <img key={i} src={IMG_STAR} alt="★" className="w-[24px] h-[24px]" />
             ))}
           </div>
@@ -614,7 +613,7 @@ function Footer() {
         <div className="flex gap-[40px]">
           {/* Kolom 1 — Logo + sosial */}
           <div className="w-[250px] shrink-0 flex flex-col gap-[24px]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img src={IMG_FOOTER_LOGO} alt="Bulky" className="h-[45px] w-auto object-contain self-start" />
             <p className="text-[16px] font-normal text-black font-roboto leading-[28px]">
               Platform Recommerce Antar
@@ -628,7 +627,7 @@ function Footer() {
                 { src: IMG_SOCIAL_TW, alt: "Twitter / X" },
                 { src: IMG_SOCIAL_FB, alt: "Facebook" },
               ].map((s, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
+                 
                 <img key={i} src={s.src} alt={s.alt} className="w-[33px] h-[33px] object-contain cursor-pointer hover:opacity-80 transition-opacity" />
               ))}
             </div>
@@ -680,7 +679,7 @@ function Footer() {
             <p className="text-[16px] font-bold text-black font-roboto">Metode Pembayaran</p>
             <div className="grid grid-cols-3 gap-[8px]">
               {PAYMENT_LOGOS.map((pay) => (
-                // eslint-disable-next-line @next/next/no-img-element
+                 
                 <img
                   key={pay.alt}
                   src={pay.src}
@@ -694,7 +693,7 @@ function Footer() {
             <div className="flex gap-[12px]">
               {/* App Store */}
               <div className="flex items-center gap-[8px] border border-black rounded-[6px] px-[10px] py-[6px] cursor-pointer hover:bg-gray-50 transition-colors">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                { }
                 <img src={IMG_APPLE_STORE} alt="Apple" className="w-[20px] h-[24px] object-contain" />
                 <div>
                   <p className="text-[9px] leading-none font-roboto">Download on the</p>
@@ -703,7 +702,7 @@ function Footer() {
               </div>
               {/* Play Store */}
               <div className="flex items-center gap-[8px] border border-black rounded-[6px] px-[10px] py-[6px] cursor-pointer hover:bg-gray-50 transition-colors">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                { }
                 <img src={IMG_PLAY_STORE} alt="Play" className="w-[21px] h-[24px] object-contain" />
                 <div>
                   <p className="text-[9px] leading-none uppercase font-roboto">Get It On</p>
@@ -716,7 +715,7 @@ function Footer() {
 
         {/* Garis + Copyright */}
         <div className="mt-[32px] border-t border-[#d9d9d9] pt-[16px] flex items-center gap-[4px]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img src={IMG_ICON_PAYMENT} alt="" className="w-[15px] h-[15px]" />
           <p className="text-[16px] font-medium text-black/80">
             Copyright 2025 bulky.id All Right Reserved.

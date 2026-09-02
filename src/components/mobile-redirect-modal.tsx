@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -10,27 +10,31 @@ const APP_STORE_URL = "https://apps.apple.com/id/app/bulky-id/id6738534149";
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.bulky.app";
 
+const subscribeToHydration = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+function detectDeviceOS(): DeviceOS {
+  const ua = navigator.userAgent;
+  if (/iphone|ipad|ipod/i.test(ua)) return "ios";
+  if (/android/i.test(ua)) return "android";
+  return "both";
+}
+
 export function MobileRedirectModal() {
   const locale = useLocale();
   const t = useTranslations("MobileRedirectModal");
-  const [os, setOs] = useState<DeviceOS>("both");
   // mounted = false saat SSR & first paint, true setelah hydration di browser.
   // Ini memastikan HTML yang dikirim ke server (termasuk Googlebot, yang
   // mobile-first indexing-nya memakai UA Android/Mobile Safari asli
   // sehingga tidak bisa dibedakan dari UA check) TIDAK PERNAH berisi teks
   // modal ini, karena modal baru di-render di client setelah JS jalan.
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-
-    // Hanya deteksi OS untuk menentukan tombol store yang ditampilkan
-    const ua = navigator.userAgent;
-    const isIOS = /iphone|ipad|ipod/i.test(ua);
-    const isAndroid = /android/i.test(ua);
-    if (isIOS) setOs("ios");
-    else if (isAndroid) setOs("android");
-  }, []);
+  const mounted = useSyncExternalStore(
+    subscribeToHydration,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+  const os = mounted ? detectDeviceOS() : "both";
 
   const assetLocale = locale === "id" ? "id" : "en";
 

@@ -140,7 +140,7 @@ function UserAvatar({ src, name, className, fallbackClassName, isLoading = false
     <Avatar className={className}>
       {/* Image — selalu di-render jika src ada, tapi disembunyikan saat error */}
       {src && imgStatus !== "error" && (
-        // eslint-disable-next-line @next/next/no-img-element
+         
         <img
           src={src}
           alt={name}

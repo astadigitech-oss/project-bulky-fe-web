@@ -6,9 +6,7 @@ import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { ProfileSidebarClient } from "./profile-sidebar-client";
 
-const tabValues = ["payments", "orders", "group-buy", "review", "edit"] as const;
-
-type ProfileTab = (typeof tabValues)[number];
+type ProfileTab = "payments" | "orders" | "group-buy" | "review" | "edit";
 
 
 export async function ProfileShell({

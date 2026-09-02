@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { apiUrl } from "@/config";
 import { establishSession } from "@/lib/auth-session";
@@ -14,52 +15,67 @@ import type {
 
 export default function GoogleOAuthCallbackPage() {
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get("code");
-    const errorParam = searchParams.get("error");
+    let redirectTimer: ReturnType<typeof setTimeout> | undefined;
+    let cancelled = false;
 
-    const locale =
-      document.cookie.split("; ").find((r) => r.startsWith("NEXT_LOCALE="))?.split("=")[1] ?? "id";
+    async function completeGoogleLogin() {
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get("code");
+      const errorParam = searchParams.get("error");
+      const locale =
+        document.cookie
+          .split("; ")
+          .find((entry) => entry.startsWith("NEXT_LOCALE="))
+          ?.split("=")[1] ?? "id";
 
-    if (errorParam || !code) {
-      setError("Login dengan Google dibatalkan. / Google login was cancelled.");
-      setTimeout(() => { window.location.href = `/${locale}/login`; }, 2000);
-      return;
-    }
+      if (errorParam || !code) {
+        if (!cancelled) {
+          setError("Login dengan Google dibatalkan. / Google login was cancelled.");
+          redirectTimer = setTimeout(() => router.replace(`/${locale}/login`), 2000);
+        }
+        return;
+      }
 
-    const redirectUri = `${window.location.origin}/oauth/google/callback`;
-
-    axios
-      .post<GoogleLoginResponse>(`${apiUrl}/auth/oauth/google`, {
-        authorization_code: code,
-        redirect_uri: redirectUri,
-      })
-      .then(async (res) => {
+      try {
+        const res = await axios.post<GoogleLoginResponse>(
+          `${apiUrl}/auth/oauth/google`,
+          {
+            authorization_code: code,
+            redirect_uri: `${window.location.origin}/oauth/google/callback`,
+          },
+        );
         const { data } = res.data;
-
-        const locale =
-          document.cookie.split("; ").find((r) => r.startsWith("NEXT_LOCALE="))?.split("=")[1] ?? "id";
 
         if (!data.needs_phone) {
           // Existing user — login directly
           const existing = data as GoogleLoginExistingUserData;
           if (await establishSession(existing.access_token)) {
-            window.location.href = `/${locale}`;
+            router.replace(`/${locale}`);
           }
         } else {
           // New user — needs phone number
           const newUser = data as GoogleLoginNewUserData;
           sessionStorage.setItem("bulky_oauth_token", newUser.pending_oauth_token);
-          window.location.href = `/${locale}/oauth/add-phone`;
+          router.replace(`/${locale}/oauth/add-phone`);
         }
-      })
-      .catch(() => {
-        setError("Gagal login dengan Google. Silakan coba lagi. / Failed to login with Google. Please try again.");
-        setTimeout(() => { window.location.href = `/${locale}/login`; }, 2000);
-      });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      } catch {
+        if (!cancelled) {
+          setError("Gagal login dengan Google. Silakan coba lagi. / Failed to login with Google. Please try again.");
+          redirectTimer = setTimeout(() => router.replace(`/${locale}/login`), 2000);
+        }
+      }
+    }
+
+    void completeGoogleLogin();
+
+    return () => {
+      cancelled = true;
+      if (redirectTimer) clearTimeout(redirectTimer);
+    };
+  }, [router]);
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#ffcf02]">

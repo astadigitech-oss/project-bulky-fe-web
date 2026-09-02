@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { BannerSection } from "./_section/banner";
+import { useEffect, useMemo, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -91,24 +90,37 @@ export const ProductClient = ({
 
   const locale = clampLocale(params?.locale);
 
-  const [page, setPage] = useState(Number(query.get("p") ?? "1") || 1);
-  const [searchInput, setSearchInput] = useState(query.get("q") ?? "");
+  const [initialRequest] = useState(() => ({
+    page: Number(query.get("p") ?? "1") || 1,
+    search: query.get("q") ?? "",
+    category: query.get("category") ?? "",
+    source: query.get("source") ?? "",
+    packageCondition: query.get("package-condition") ?? "",
+    productCondition: query.get("product-condition") ?? "",
+    brands: query.getAll("brand"),
+    order:
+      (query.get("order") as "new" | "cheap" | "expensive") || "new",
+    minPrice: Number(query.get("min-price") ?? 0),
+    maxPrice: Number(query.get("max-price") ?? 0),
+  }));
+  const [page, setPage] = useState(initialRequest.page);
+  const [searchInput, setSearchInput] = useState(initialRequest.search);
   const [debouncedSearch, setDebouncedSearch] = useState(searchInput);
 
   // Sync searchInput saat URL ?q= berubah dari luar (misal navigasi dari navbar)
   const qFromUrl = query.get("q") ?? "";
-  const skipUrlSyncRef = React.useRef(false);
-  useEffect(() => {
-    skipUrlSyncRef.current = true;
+  const [prevQFromUrl, setPrevQFromUrl] = useState(qFromUrl);
+  if (qFromUrl !== prevQFromUrl) {
+    setPrevQFromUrl(qFromUrl);
     setSearchInput(qFromUrl);
     setDebouncedSearch(qFromUrl);
-  }, [qFromUrl]);
+  }
 
   const initialHasPriceFilter = Boolean(
-    query.get("min-price") || query.get("max-price"),
+    initialRequest.minPrice || initialRequest.maxPrice,
   );
-  const initialMinPrice = Number(query.get("min-price") ?? 0);
-  const initialMaxPrice = Number(query.get("max-price") ?? 0);
+  const initialMinPrice = initialRequest.minPrice;
+  const initialMaxPrice = initialRequest.maxPrice;
 
   const [hasPriceFilter, setHasPriceFilter] = useState(initialHasPriceFilter);
 
@@ -121,31 +133,22 @@ export const ProductClient = ({
   });
 
   const [selected, setSelected] = useState({
-    category: (query.get("category") ?? "") as string,
-    source: (query.get("source") ?? "") as string,
-    packageCondition: (query.get("package-condition") ?? "") as string,
-    productCondition: (query.get("product-condition") ?? "") as string,
-    brands: query.getAll("brand"),
+    category: initialRequest.category,
+    source: initialRequest.source,
+    packageCondition: initialRequest.packageCondition,
+    productCondition: initialRequest.productCondition,
+    brands: initialRequest.brands,
   });
 
   const [sortOrder, setSortOrder] = useState<"new" | "cheap" | "expensive">(
-    (query.get("order") as "new" | "cheap" | "expensive") || "new",
+    initialRequest.order,
   );
-
-  // `initialData` hanya boleh dipakai pada render pertama (state client masih
-  // persis sama dengan searchParams yang dipakai untuk fetch di server).
-  // Setelah user berinteraksi (ganti filter/page/dsb), flag ini dimatikan
-  // supaya data SSR lama tidak "nempel" ke query key yang berbeda.
-  const isInitialRenderRef = React.useRef(true);
-  useEffect(() => {
-    isInitialRenderRef.current = false;
-  }, []);
 
   const filterQuery = useApiQuery<FilterResponse>({
     key: ["product-filters", locale],
     endpoint: "/web/products/filters",
     searchParams: { locale },
-    initialData: isInitialRenderRef.current ? initialFilters : undefined,
+    initialData: initialFilters,
   });
 
   const defaultPriceRange = useMemo(() => {
@@ -164,16 +167,27 @@ export const ProductClient = ({
   const [priceRange, setPriceRange] =
     useState<[number, number]>(initialPriceRange);
 
+  const isInitialProductRequest =
+    page === initialRequest.page &&
+    debouncedSearch === initialRequest.search &&
+    selected.category === initialRequest.category &&
+    selected.source === initialRequest.source &&
+    selected.packageCondition === initialRequest.packageCondition &&
+    selected.productCondition === initialRequest.productCondition &&
+    selected.brands.length === initialRequest.brands.length &&
+    selected.brands.every((brand, index) => brand === initialRequest.brands[index]) &&
+    sortOrder === initialRequest.order &&
+    hasPriceFilter === initialHasPriceFilter &&
+    (!hasPriceFilter ||
+      (priceRange[0] === initialPriceRange[0] &&
+        priceRange[1] === initialPriceRange[1]));
+
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
     return () => clearTimeout(timer);
   }, [searchInput]);
 
   useEffect(() => {
-    if (skipUrlSyncRef.current) {
-      skipUrlSyncRef.current = false;
-      return;
-    }
     const sp = new URLSearchParams();
 
     if (page > 1) sp.set("p", String(page));
@@ -238,7 +252,7 @@ export const ProductClient = ({
       sort: sortOrder === "new" ? "desc" : "asc",
       brand: selected.brands.length ? selected.brands : undefined,
     },
-    initialData: isInitialRenderRef.current ? initialProducts : undefined,
+    initialData: isInitialProductRequest ? initialProducts : undefined,
   });
 
   const updatePage = (next: number) => {

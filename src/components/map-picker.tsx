@@ -213,14 +213,6 @@ export function MapPickerDialog({
   const [position, setPosition] = useState<LatLng>({ lat: initialLat, lng: initialLng });
   const [resolved, setResolved] = useState<ResolvedAddress>({});
 
-  // Reset state when dialog opens with potentially different coords
-  useEffect(() => {
-    if (open) {
-      setPosition({ lat: parseFloat(latitude) || -6.2, lng: parseFloat(longitude) || 106.816 });
-      setResolved({});
-    }
-  }, [open, latitude, longitude]);
-
   const handleConfirm = () => {
     const hasResolved = Object.values(resolved).some(Boolean);
     onConfirm(String(position.lat), String(position.lng), hasResolved ? resolved : undefined);
@@ -310,13 +302,15 @@ export function MapPickerTrigger({
         )}
       </Button>
 
-      <MapPickerDialog
-        open={open}
-        onOpenChange={setOpen}
-        latitude={latitude}
-        longitude={longitude}
-        onConfirm={onConfirm}
-      />
+      {open && (
+        <MapPickerDialog
+          open
+          onOpenChange={setOpen}
+          latitude={latitude}
+          longitude={longitude}
+          onConfirm={onConfirm}
+        />
+      )}
     </>
   );
 }
