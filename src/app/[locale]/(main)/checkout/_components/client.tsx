@@ -12,7 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useProtectRoute } from "@/providers/session-provider";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query/use-mutate";
-import { useSearch } from "@/hooks/use-serach";
+import { useDebounce } from "@/hooks/use-debounce";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -341,7 +341,8 @@ function FriendSearchDialog({
   onAdd: (friend: SplitPaymentFriend) => void;
 }) {
   const t = useTranslations("CheckoutPage");
-  const { search, searchValue, setSearch } = useSearch();
+  const [search, setSearch] = useState("");
+  const searchValue = useDebounce(search, 700);
 
   useEffect(() => {
     if (open) setSearch("");
@@ -353,7 +354,7 @@ function FriendSearchDialog({
     key: ["checkout-friends-search", trimmed],
     endpoint: "/checkout/friends/search",
     searchParams: { phone: trimmed },
-    enabled: open && trimmed.length >= 4,
+    enabled: open && trimmed.length >= 8,
   });
 
   const results = friendsQuery.data?.data ?? [];
