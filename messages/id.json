@@ -921,6 +921,42 @@
       "edit": "Edit"
     }
   },
+  "DeleteAccount": {
+    "pageTitle": "Cara Hapus Akun",
+    "heading": "Cara Hapus Akun",
+    "intro": "Ikuti langkah berikut di aplikasi Bulky untuk menghapus akun Anda.",
+    "stepsHeading": "Langkah penghapusan akun",
+    "steps": {
+      "openApp": {
+        "title": "Buka aplikasi Bulky",
+        "description": "Mulai dari halaman beranda aplikasi Bulky."
+      },
+      "openProfile": {
+        "title": "Masuk ke halaman Profil",
+        "description": "Ketuk ikon foto profil di pojok kanan atas halaman beranda."
+      },
+      "selectDelete": {
+        "title": "Pilih Hapus Akun",
+        "description": "Di halaman Profil, ketuk tombol Hapus Akun."
+      },
+      "enterPassword": {
+        "title": "Masukkan kata sandi",
+        "description": "Masukkan kata sandi akun Anda saat diminta. Akun yang tidak menggunakan kata sandi dapat melanjutkan sesuai petunjuk aplikasi."
+      },
+      "confirm": {
+        "title": "Kirim konfirmasi",
+        "description": "Ketuk tombol Kirim untuk mengonfirmasi penghapusan akun."
+      },
+      "complete": {
+        "title": "Akun dihapus",
+        "description": "Akun Anda akan dihapus dan Anda akan diarahkan ke halaman Login."
+      }
+    },
+    "important": {
+      "title": "Penghapusan akun bersifat permanen",
+      "description": "Setelah dikonfirmasi, akun dan data terkait akan dihapus. Pastikan Anda telah menyelesaikan kebutuhan yang masih diperlukan sebelum melanjutkan."
+    }
+  },
   "BulkyTV": {
     "pageTitle": "Bulky Live",
     "subtitle": "Tonton video seputar palet, bisnis, dan operasional Bulky",

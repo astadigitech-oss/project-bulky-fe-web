@@ -924,6 +924,42 @@ declare const messages: {
       "edit": "Edit"
     }
   },
+  "DeleteAccount": {
+    "pageTitle": "How to Delete Your Account",
+    "heading": "How to Delete Your Account",
+    "intro": "Follow these steps in the Bulky app to delete your account.",
+    "stepsHeading": "Account deletion steps",
+    "steps": {
+      "openApp": {
+        "title": "Open the Bulky app",
+        "description": "Start from the Bulky app home screen."
+      },
+      "openProfile": {
+        "title": "Open your Profile",
+        "description": "Tap the profile photo icon in the upper-right corner of the home screen."
+      },
+      "selectDelete": {
+        "title": "Select Delete Account",
+        "description": "On the Profile page, tap the Delete Account button."
+      },
+      "enterPassword": {
+        "title": "Enter your password",
+        "description": "Enter your account password when prompted. Accounts without a password can continue according to the in-app instructions."
+      },
+      "confirm": {
+        "title": "Send confirmation",
+        "description": "Tap Send to confirm that you want to delete your account."
+      },
+      "complete": {
+        "title": "Account deleted",
+        "description": "Your account will be deleted and you will be taken to the Login page."
+      }
+    },
+    "important": {
+      "title": "Account deletion is permanent",
+      "description": "Once confirmed, your account and related data will be deleted. Complete any outstanding needs before you continue."
+    }
+  },
   "BulkyTV": {
     "pageTitle": "Bulky Live",
     "subtitle": "Watch videos about pallets, business, and Bulky operations",
