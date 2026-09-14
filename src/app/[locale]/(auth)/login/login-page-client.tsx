@@ -4,7 +4,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff, KeyRound, Lock, Phone, X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
@@ -83,7 +83,6 @@ export default function LoginPage() {
   const t = useTranslations("Login");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { locale } = useParams<{ locale: string }>();
   const reduceMotion = useReducedMotion();
 
   const [phone, setPhone] = useState("");
@@ -104,7 +103,7 @@ export default function LoginPage() {
     onSuccess: async (data) => {
       const token = data.data.data?.token;
       if (token && (await establishSession(token))) {
-        router.push(`/${locale}`);
+        router.push("/");
       }
     },
     onError: { title: "LOGIN" },
