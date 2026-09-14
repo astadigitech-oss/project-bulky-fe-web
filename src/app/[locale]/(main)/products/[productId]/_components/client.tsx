@@ -33,44 +33,11 @@ import { useParams } from "next/navigation";
 import { useSession } from "@/providers/session-provider";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import type { ProductDetailResponse } from "@/services/products/types";
 
 type Locale = "id" | "en";
 
 const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
-
-type ProductDetailResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    id: string;
-    name: string;
-    slug: string;
-    images: string[];
-    is_qc_pass: boolean;
-    price: {
-      old_price: string;
-      current_price: string;
-    };
-    detail: {
-      id_cargo: string;
-      category: string;
-      brand: string[];
-      package_condition: string;
-      product_condition: string;
-      source: string;
-      discrepancy: string;
-      warehouse: string;
-      stock: number;
-      panjang: number;
-      lebar: number;
-      tinggi: number;
-      berat: number;
-      volume: number;
-      berat_volumetrik: number;
-    };
-    document?: string;
-  };
-};
 
 type RecommendationResponse = {
   success: boolean;
@@ -94,7 +61,11 @@ type RecommendationResponse = {
   }>;
 };
 
-export const ProductIdClient = () => {
+export const ProductIdClient = ({
+  initialProduct,
+}: {
+  initialProduct?: ProductDetailResponse;
+}) => {
   const t = useTranslations("ProductDetail");
   const router = useRouter();
   const params = useParams<{ locale: string; productId: string }>();
@@ -112,6 +83,8 @@ export const ProductIdClient = () => {
     endpoint: `/web/products/${productId}`,
     searchParams: { locale },
     enabled: Boolean(productId),
+    initialData: initialProduct,
+    staleTime: 60_000,
   });
 
   const recommendationQuery = useApiQuery<RecommendationResponse>({

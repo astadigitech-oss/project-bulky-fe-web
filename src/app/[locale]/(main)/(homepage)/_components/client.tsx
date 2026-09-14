@@ -15,7 +15,7 @@ import { useTranslations } from "next-intl";
 
 type Locale = "id" | "en";
 
-type HomepageResponse = {
+export type HomepageResponse = {
   status: boolean;
   message: string;
   data: {
@@ -59,7 +59,11 @@ type HomepageResponse = {
 
 const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
 
-export const HompageClient = () => {
+export const HompageClient = ({
+  initialData,
+}: {
+  initialData?: HomepageResponse;
+}) => {
   const params = useParams<{ locale: string }>();
   const locale = clampLocale(params?.locale);
   const tHero = useTranslations("Homepage.hero");
@@ -68,6 +72,8 @@ export const HompageClient = () => {
     key: ["homepage", locale],
     endpoint: "/web/homepage",
     searchParams: { locale },
+    initialData,
+    staleTime: 60_000,
   });
 
   if (isLoading) return <PageLoader />;

@@ -312,7 +312,13 @@ function VideoModal({
   );
 }
 
-export function BulkyTVClient() {
+export function BulkyTVClient({
+  initialCategories,
+  initialVideos,
+}: {
+  initialCategories?: GetKategoriVideoResponse;
+  initialVideos?: GetVideoListResponse;
+}) {
   const t = useTranslations("BulkyTV");
   const params = useParams<{ locale: string }>();
   const locale = params?.locale === "en" ? "en" : "id";
@@ -350,6 +356,7 @@ export function BulkyTVClient() {
     key: ["video-kategoris", locale],
     endpoint: "/public/kategori-video",
     searchParams: { locale },
+    initialData: initialCategories,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -362,6 +369,7 @@ export function BulkyTVClient() {
       per_halaman: "18",
       ...(activeCategory ? { kategori: activeCategory } : {}),
     },
+    initialData: activeCategory === "" && page === 1 ? initialVideos : undefined,
     staleTime: 60_000,
   });
 

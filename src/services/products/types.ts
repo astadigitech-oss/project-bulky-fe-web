@@ -37,3 +37,39 @@ export type ProductListResponse = {
     per_page: number;
   };
 };
+
+export type ProductDetail = {
+  id: string;
+  name: string;
+  slug: string;
+  images: string[];
+  is_qc_pass: boolean;
+  price: {
+    old_price: string;
+    current_price: string;
+  };
+  detail: {
+    id_cargo: string;
+    category: string;
+    stock: number;
+    brand: string[];
+    package_condition: string;
+    product_condition: string;
+    source: string;
+    discrepancy: string;
+    warehouse: string;
+    panjang: number;
+    lebar: number;
+    tinggi: number;
+    berat: number;
+    volume: number;
+    berat_volumetrik: number;
+  };
+  document?: string;
+};
+
+export type ProductDetailResponse = {
+  success: boolean;
+  message: string;
+  data: ProductDetail;
+};
