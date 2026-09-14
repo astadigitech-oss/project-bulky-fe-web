@@ -14,6 +14,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { siteUrl } from "@/config";
 import { JsonLd } from "@/components/json-ld";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import "../globals.css";
 
 const organizationJsonLd = {
@@ -61,6 +62,7 @@ const LocaleLayout = async ({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <JsonLd data={organizationJsonLd} />
+        <GoogleAnalytics />
         <QueryProviders>
           <NuqsAdapter>
             <NextIntlClientProvider>
