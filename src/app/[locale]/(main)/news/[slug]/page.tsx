@@ -79,34 +79,32 @@ export default async function NewsDetailPage({
   const lng = clampLocale(locale);
 
   const data = await fetchNewsDetail(slug, lng);
-  if (!data) notFound();
+  const detail = data?.data?.data;
+  if (!data || !detail) notFound();
 
   const t = await getTranslations("AboutUs.section5");
-  const detail = data.data?.data;
 
-  const articleJsonLd = detail
-    ? {
-        "@context": "https://schema.org",
-        "@type": "NewsArticle",
-        headline: detail.title,
-        image: detail.image ? [detail.image] : undefined,
-        datePublished: detail.date,
-        articleSection: detail.category?.name,
-        mainEntityOfPage: `${siteUrl}/${lng}/news/${slug}`,
-        publisher: {
-          "@type": "Organization",
-          name: "Bulky.id",
-          logo: {
-            "@type": "ImageObject",
-            url: `${siteUrl}/assets/images/logo-bulky.webp`,
-          },
-        },
-      }
-    : null;
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: detail.title,
+    image: detail.image ? [detail.image] : undefined,
+    datePublished: detail.date,
+    articleSection: detail.category?.name,
+    mainEntityOfPage: `${siteUrl}/${lng}/news/${slug}`,
+    publisher: {
+      "@type": "Organization",
+      name: "Bulky.id",
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/assets/images/logo-bulky.webp`,
+      },
+    },
+  };
 
   return (
     <main className="w-full bg-white">
-      {articleJsonLd && <JsonLd data={articleJsonLd} />}
+      <JsonLd data={articleJsonLd} />
       <NewsDetailClient initialData={data} locale={lng} notFoundLabel={t("empty")} />
     </main>
   );

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { useTranslations } from "next-intl";
 import { Headset, Lightbulb, Package, ShieldCheck, Truck, Users, Warehouse } from "lucide-react";
 import { InfoSection } from "../(homepage)/_components/_sections/info";
 import { NewsSection } from "./_components/news-section";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 export const generateMetadata = async ({
   params,
@@ -11,8 +13,27 @@ export const generateMetadata = async ({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> => {
   const { locale } = await params;
+  const lng = locale === "en" ? "en" : "id";
+  const t = await getTranslations({ locale: lng, namespace: "AboutUs" });
+  const title = t("pageTitle");
+  const description = t("section1.subheading");
+
   return {
-    title: locale === "en" ? "About Us - Bulky.id" : "Tentang Kami - Bulky.id",
+    title,
+    description,
+    alternates: buildAlternates(lng, "/about-us"),
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: [{ url: "/assets/images/about-us/6A (Tentang Kami kiri) (1).webp" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/assets/images/about-us/6A (Tentang Kami kiri) (1).webp"],
+    },
   };
 };
 

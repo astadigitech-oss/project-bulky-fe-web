@@ -5,6 +5,24 @@ import { hasLocale, Locale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { buildAlternates } from "@/lib/seo/alternates";
+import { apiUrl } from "@/config";
+import type { HomepageResponse } from "./_components/client";
+
+const REQUEST_TIMEOUT_MS = 10_000;
+
+async function fetchHomepage(locale: "id" | "en"): Promise<HomepageResponse | undefined> {
+  try {
+    const response = await fetch(`${apiUrl}/web/homepage?locale=${locale}`, {
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+
+    if (!response.ok) return undefined;
+    return (await response.json()) as HomepageResponse;
+  } catch {
+    return undefined;
+  }
+}
 
 export const generateMetadata = async ({
   params,
@@ -54,7 +72,8 @@ const HomePage = async ({
   }
 
   setRequestLocale(locale);
-  return <HompageClient />;
+  const initialData = await fetchHomepage(locale === "en" ? "en" : "id");
+  return <HompageClient initialData={initialData} />;
 };
 
 export default HomePage;

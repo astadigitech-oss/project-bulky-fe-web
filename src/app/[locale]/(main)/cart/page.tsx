@@ -5,7 +5,7 @@ import { CartClient } from "./_components/client";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("CartPage");
-  return { title: t("title") };
+  return { title: t("title"), robots: { index: false, follow: false } };
 }
 
 const CartPage = () => {

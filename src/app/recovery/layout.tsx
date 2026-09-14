@@ -11,6 +11,7 @@ import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Pemulihan Akun | Bulky",
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {

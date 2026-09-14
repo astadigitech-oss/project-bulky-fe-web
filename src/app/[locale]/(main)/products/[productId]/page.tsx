@@ -4,6 +4,8 @@ import { ProductIdClient } from "./_components/client";
 import { apiUrl } from "@/config";
 import { buildAlternates } from "@/lib/seo/alternates";
 import { JsonLd } from "@/components/json-ld";
+import { notFound } from "next/navigation";
+import type { ProductDetailResponse } from "@/services/products/types";
 
 type Locale = "id" | "en";
 
@@ -12,13 +14,6 @@ const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
 // Backend yang lambat/macet tidak boleh menggantung SSR halaman selamanya.
 const REQUEST_TIMEOUT_MS = 10_000;
 
-type ProductSeoData = {
-  name: string;
-  images: string[];
-  price: { old_price: string; current_price: string };
-  detail: { category: string; stock: number };
-};
-
 async function fetchProductSeoData(productId: string, locale: Locale) {
   try {
     const url = `${apiUrl}/web/products/${encodeURIComponent(productId)}?locale=${locale}`;
@@ -26,11 +21,15 @@ async function fetchProductSeoData(productId: string, locale: Locale) {
       next: { revalidate: 300 },
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json?.data as ProductSeoData | undefined;
+    if (res.status === 404) return { status: "not-found" as const };
+    if (!res.ok) return { status: "unavailable" as const };
+
+    const json = (await res.json()) as ProductDetailResponse;
+    if (!json?.data) return { status: "unavailable" as const };
+
+    return { status: "found" as const, product: json };
   } catch {
-    return null;
+    return { status: "unavailable" as const };
   }
 }
 
@@ -43,12 +42,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, productId } = await params;
   const lng = clampLocale(locale);
-  const product = await fetchProductSeoData(productId, lng);
+  const result = await fetchProductSeoData(productId, lng);
   const alternates = buildAlternates(lng, `/products/${productId}`);
 
-  if (!product) {
+  if (result.status !== "found") {
     return { title: "Bulky.id", alternates };
   }
+
+  const product = result.product.data;
 
   const title = `${product.name} - Bulky.id`;
   const description = product.detail?.category
@@ -82,7 +83,11 @@ const ProductDetailPage = async ({
 }) => {
   const { locale, productId } = await params;
   const lng = clampLocale(locale);
-  const product = await fetchProductSeoData(productId, lng);
+  const result = await fetchProductSeoData(productId, lng);
+
+  if (result.status === "not-found") notFound();
+
+  const product = result.status === "found" ? result.product.data : null;
 
   const productJsonLd = product
     ? {
@@ -106,7 +111,9 @@ const ProductDetailPage = async ({
   return (
     <div className="w-full px-17.5 my-16 mx-auto xl:max-w-7xl max-w-5xl">
       {productJsonLd && <JsonLd data={productJsonLd} />}
-      <ProductIdClient />
+      <ProductIdClient
+        initialProduct={result.status === "found" ? result.product : undefined}
+      />
     </div>
   );
 };
