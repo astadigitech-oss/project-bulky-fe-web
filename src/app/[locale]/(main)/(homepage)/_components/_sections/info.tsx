@@ -4,6 +4,7 @@ import { ArrowRight, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Link } from "@i18n/navigation";
 
 export const InfoSection = () => {
   const t = useTranslations("Homepage.infoBanner");
@@ -31,10 +32,12 @@ export const InfoSection = () => {
             {t("description")}
           </p>
 
-          <Button className="mt-7 h-auto gap-2 rounded-full bg-white px-7 py-3 text-base font-bold text-black shadow-none hover:bg-white/90">
-            {t("getNow")}
-            <ArrowRight className="size-4" />
-          </Button>
+          <Link href="/products" className="mt-7 inline-flex">
+            <Button className="h-auto cursor-pointer gap-2 rounded-full bg-white px-7 py-3 text-base font-bold text-black shadow-none hover:bg-white/90">
+              {t("getNow")}
+              <ArrowRight className="size-4" />
+            </Button>
+          </Link>
 
           <div className="mt-6 flex items-center gap-3">
             <AvatarGroup className="*:data-[slot=avatar]:ring-[#ffcf02]">
