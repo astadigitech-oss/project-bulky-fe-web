@@ -446,7 +446,7 @@ declare const messages: {
       "titleLine1": "Shipping",
       "titleLine2": "Across <accent>Indonesia</accent>",
       "description": "We're ready to help your business needs with fast, safe, and reliable shipping across all of Indonesia.",
-      "getNow": "Get It Now",
+      "getNow": "View All Products",
       "satisfied": "Trusted by <b>5,000+</b> Customers"
     },
     "howItWorks": {

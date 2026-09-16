@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@i18n/navigation";
 import Image from "next/image";
 import React from "react";
 
@@ -38,15 +39,17 @@ export const HeroSection = ({ heroUrl }: HeroSectionProps) => {
               {t("description")}
             </p>
 
-            <Button className="group/cta mt-8 h-auto gap-4 rounded-full bg-black py-2 pr-2 pl-7 text-sm font-bold tracking-[0.1em] text-white uppercase shadow-none hover:bg-black/85 active:scale-[0.98] md:pl-8 md:text-base">
-              {t("startNow")}
-              <span className="flex size-9 items-center justify-center rounded-full bg-[#ffcf02] transition-transform duration-300 group-hover/cta:translate-x-1">
-                <ArrowRight
-                  aria-hidden
-                  className="size-4 stroke-[2.5] text-black"
-                />
-              </span>
-            </Button>
+            <Link href="/products" className="mt-8 inline-flex">
+              <Button className="group/cta h-auto cursor-pointer gap-4 rounded-full bg-black py-2 pr-2 pl-7 text-sm font-bold tracking-[0.1em] text-white uppercase shadow-none hover:bg-black/85 active:scale-[0.98] md:pl-8 md:text-base">
+                {t("startNow")}
+                <span className="flex size-9 items-center justify-center rounded-full bg-[#ffcf02] transition-transform duration-300 group-hover/cta:translate-x-1">
+                  <ArrowRight
+                    aria-hidden
+                    className="size-4 stroke-[2.5] text-black"
+                  />
+                </span>
+              </Button>
+            </Link>
           </div>
 
           <div className="relative mx-auto aspect-[1012/631] w-full max-w-[420px] sm:max-w-[520px] lg:max-w-[620px] lg:justify-self-end">
