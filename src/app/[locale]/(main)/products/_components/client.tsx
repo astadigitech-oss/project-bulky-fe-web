@@ -326,7 +326,7 @@ export const ProductClient = ({
                       .map((item) => (
                         <Label
                           key={item.value}
-                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                          className="h-8 cursor-pointer hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
                         >
                           <Checkbox
                             checked={selected.category === item.value}
@@ -345,7 +345,7 @@ export const ProductClient = ({
                       <Collapsible>
                         <CollapsibleContent />
                         <CollapsibleTrigger
-                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 cursor-pointer hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -381,7 +381,7 @@ export const ProductClient = ({
                       .map((item) => (
                         <Label
                           key={item.value}
-                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                          className="h-8 cursor-pointer hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
                         >
                           <Checkbox
                             checked={selected.brands.includes(item.value)}
@@ -402,7 +402,7 @@ export const ProductClient = ({
                       <Collapsible>
                         <CollapsibleContent />
                         <CollapsibleTrigger
-                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 cursor-pointer hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -487,7 +487,7 @@ export const ProductClient = ({
                       .map((item) => (
                         <Label
                           key={item.value}
-                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                          className="h-8 cursor-pointer hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
                         >
                           <Checkbox
                             checked={selected.packageCondition === item.value}
@@ -507,7 +507,7 @@ export const ProductClient = ({
                       <Collapsible>
                         <CollapsibleContent />
                         <CollapsibleTrigger
-                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 cursor-pointer hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -545,7 +545,7 @@ export const ProductClient = ({
                       .map((item) => (
                         <Label
                           key={item.value}
-                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                          className="h-8 cursor-pointer hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
                         >
                           <Checkbox
                             checked={selected.productCondition === item.value}
@@ -565,7 +565,7 @@ export const ProductClient = ({
                       <Collapsible>
                         <CollapsibleContent />
                         <CollapsibleTrigger
-                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 cursor-pointer hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -603,7 +603,7 @@ export const ProductClient = ({
                       .map((item) => (
                         <Label
                           key={item.value}
-                          className="h-8 hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
+                          className="h-8 cursor-pointer hover:bg-yellow-100 pl-3 rounded-md font-normal text-sm"
                         >
                           <Checkbox
                             checked={selected.source === item.value}
@@ -622,7 +622,7 @@ export const ProductClient = ({
                       <Collapsible>
                         <CollapsibleContent />
                         <CollapsibleTrigger
-                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
+                          className="text-xs text-center w-full flex items-center gap-2 pl-3 h-7 cursor-pointer hover:underline hover:underline-offset-2 font-semibold text-yellow-600"
                           onClick={() =>
                             setShowMore((prev) => ({
                               ...prev,
@@ -673,9 +673,9 @@ export const ProductClient = ({
                   render={
                     <Button
                       size={"sm"}
-                      className="rounded-lg bg-white hover:bg-gray-100 text-black"
+                      className="rounded-lg bg-white hover:bg-gray-100 text-black cursor-pointer"
                     >
-                      <ArrowDownWideNarrow className="size-3.5" />
+                      <ArrowDownWideNarrow className="size-3.5 cursor-pointer" />
                       {sortOrder === "new"
                         ? t("sortNewest")
                         : sortOrder === "cheap"
@@ -687,6 +687,7 @@ export const ProductClient = ({
                 <DropdownMenuContent align="end" sideOffset={8}>
                   <DropdownMenuGroup>
                     <DropdownMenuItem
+                      className="cursor-pointer"
                       onClick={() => {
                         setSortOrder("new");
                         setPage(1);
@@ -696,6 +697,7 @@ export const ProductClient = ({
                       {t("sortNewest")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      className="cursor-pointer"
                       onClick={() => {
                         setSortOrder("cheap");
                         setPage(1);
@@ -705,6 +707,7 @@ export const ProductClient = ({
                       {t("sortCheapest")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      className="cursor-pointer"
                       onClick={() => {
                         setSortOrder("expensive");
                         setPage(1);

@@ -1,11 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { deleteCookie, getCookie } from "cookies-next/client";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { sessionFlagCookie } from "@/config";
+import { SESSION_CHANGE_EVENT } from "@/lib/auth-session";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query";
 import type { SessionUser, CheckSessionResponse } from "@/services/auth/types";
@@ -30,7 +31,9 @@ const SessionContext = createContext<SessionContextValue>({
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   // Non-httpOnly marker; the real token cookie is only readable server-side.
-  const hasSessionFlag = getCookie(sessionFlagCookie);
+  const [hasSessionFlag, setHasSessionFlag] = useState(() =>
+    getCookie(sessionFlagCookie),
+  );
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -45,6 +48,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   async function clearSession() {
     await fetch("/api/auth/session", { method: "DELETE" });
     deleteCookie(sessionFlagCookie, { path: "/" });
+    setHasSessionFlag(undefined);
   }
 
   const logoutMutation = useMutate({
@@ -64,6 +68,16 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       clearSession();
     }
   }, [isError, hasSessionFlag]);
+
+  useEffect(() => {
+    function syncSession() {
+      queryClient.removeQueries({ queryKey: ["session"] });
+      setHasSessionFlag(getCookie(sessionFlagCookie));
+    }
+
+    window.addEventListener(SESSION_CHANGE_EVENT, syncSession);
+    return () => window.removeEventListener(SESSION_CHANGE_EVENT, syncSession);
+  }, [queryClient]);
 
   const user = !isError ? (data?.data?.user ?? null) : null;
   const isAuthenticated = !!user;

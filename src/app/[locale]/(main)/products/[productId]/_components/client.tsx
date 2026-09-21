@@ -376,7 +376,7 @@ export const ProductIdClient = ({
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
               <p className="text-[11px] text-gray-500">{t("palletId")}</p>
-              <p className="text-sm font-medium">{product.detail.id_cargo}</p>
+              <p className="text-sm font-medium">{product.detail.reference_code ?? "-"}</p>
             </div>
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
               <p className="text-[11px] text-gray-500">{t("stock")}</p>
