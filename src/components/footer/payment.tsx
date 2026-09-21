@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
 import React from "react";
-import { Button } from "../ui/button";
 import Image from "next/image";
 
 export const Payment = () => {
@@ -8,7 +7,7 @@ export const Payment = () => {
   return (
     <div className="flex flex-col gap-4">
       <p className="font-bold">{t("title")}</p>
-      <Button className="h-10 p-0 aspect-10/3 relative w-fit bg-transparent">
+      <div className="relative h-10 aspect-10/3 w-fit">
         <Image
           src={"/assets/images/xendit.png"}
           fill
@@ -16,7 +15,7 @@ export const Payment = () => {
           className="bg-contain"
           sizes="20vw"
         />
-      </Button>
+      </div>
     </div>
   );
 };

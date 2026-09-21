@@ -15,7 +15,7 @@ export const Mobile = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button className={"h-10 p-0 aspect-3/1 relative w-fit bg-transparent"}>
+          <Button className={"h-10 p-0 aspect-3/1 relative w-fit bg-transparent transition-opacity hover:opacity-80"}>
             <Image
               src={
                 locale == "id"
@@ -35,7 +35,7 @@ export const Mobile = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button className={"h-10 p-0 aspect-27/8 relative bg-transparent"}>
+          <Button className={"h-10 p-0 aspect-27/8 relative bg-transparent transition-opacity hover:opacity-80"}>
             <Image
               src={
                 locale == "id"

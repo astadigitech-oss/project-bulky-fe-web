@@ -123,4 +123,26 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    a[href] {
+        @apply cursor-pointer transition-opacity;
+    }
+
+    a[href]:hover {
+        opacity: 0.8;
+    }
+
+    a[href]:has([data-slot="button"]):hover {
+        opacity: 1;
+    }
+
+    button:not(:disabled),
+    [role="button"]:not([aria-disabled="true"]) {
+        @apply cursor-pointer;
+    }
+
+    button:disabled,
+    [role="button"][aria-disabled="true"] {
+        @apply cursor-not-allowed;
+    }
 }
