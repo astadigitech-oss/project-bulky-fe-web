@@ -33,7 +33,7 @@ export const InfoSection = () => {
           </p>
 
           <Link href="/products" className="mt-7 inline-flex">
-            <Button className="h-auto cursor-pointer gap-2 rounded-full bg-white px-7 py-3 text-base font-bold text-black shadow-none hover:bg-white/90">
+            <Button className="h-auto cursor-pointer gap-2 rounded-full bg-white px-7 py-3 text-base font-bold text-black shadow-none transition-colors hover:bg-black hover:text-white">
               {t("getNow")}
               <ArrowRight className="size-4" />
             </Button>

@@ -49,6 +49,7 @@ export type ProductDetail = {
     current_price: string;
   };
   detail: {
+    reference_code: string;
     id_cargo: string;
     category: string;
     stock: number;

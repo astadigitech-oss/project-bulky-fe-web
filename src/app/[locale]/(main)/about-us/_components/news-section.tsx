@@ -75,7 +75,7 @@ export function NewsSection() {
         <h3 className="text-4xl font-bold text-black">{t("heading")}</h3>
         <Link
           href="/news"
-          className="group flex shrink-0 items-center gap-1.5 rounded-full border border-[#b45309] px-4 py-2 text-sm font-medium text-[#b45309] transition-colors hover:bg-[#b45309] hover:text-white"
+          className="group flex shrink-0 items-center gap-1.5 rounded-full border border-[#b45309] px-4 py-2 text-sm font-medium text-[#b45309] transition-colors hover:border-[#ffcf02] hover:bg-[#ffcf02] hover:text-black"
         >
           {t("viewAll")}
           <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
