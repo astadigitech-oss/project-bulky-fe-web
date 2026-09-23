@@ -101,7 +101,7 @@ export function AuctionDetailClient() {
 
   const getShipping = async () => {
     if (!destination.address || !destination.provinsi || !destination.kota || !destination.kecamatan) {
-      toast.error("Lengkapi alamat, provinsi, kota, dan kecamatan tujuan terlebih dahulu.");
+      toast.error(t("addressIncomplete"));
       return;
     }
     setQuoteLoading(true);
@@ -113,7 +113,7 @@ export function AuctionDetailClient() {
       const firstAvailable = response.data.data.find((quote) => quote.shipping_quote_id);
       if (firstAvailable) setSelectedQuoteID(firstAvailable.shipping_quote_id);
     } catch (error) {
-      toast.error(apiError(error, "Estimasi ongkir belum tersedia untuk tujuan ini."));
+      toast.error(apiError(error, t("shippingUnavailableForDestination")));
     } finally {
       setQuoteLoading(false);
     }
@@ -122,11 +122,11 @@ export function AuctionDetailClient() {
   const reviewBid = () => {
     if (!requireLogin()) return;
     if (!inputValid) {
-      toast.error(`Nominal bid minimal ${formatRupiah(auction?.min_bid_amount ?? "0")}.`);
+      toast.error(t("minimumBidError", { amount: formatRupiah(auction?.min_bid_amount ?? "0") }));
       return;
     }
     if (!selectedQuoteID) {
-      toast.error("Hitung dan pilih salah satu estimasi ongkir sebelum mengirim bid.");
+      toast.error(t("selectShippingBeforeBid"));
       return;
     }
     setSubmitError("");
@@ -151,7 +151,7 @@ export function AuctionDetailClient() {
       setBidSuccessOpen(true);
       return response;
     } catch (error) {
-      setSubmitError(apiError(error, "Hasil pengiriman bid belum dapat dipastikan. Coba lagi dengan key yang sama."));
+      setSubmitError(apiError(error, t("submitUncertain")));
     } finally {
       setSubmitting(false);
     }
@@ -186,18 +186,18 @@ export function AuctionDetailClient() {
               <div className="relative aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-[#f4f4f4]">
                 {activeImage ? <Image src={activeImage} alt={auction.name} fill sizes="(max-width: 1024px) 100vw, 40vw" className="object-cover" /> : <PackageOpen className="absolute inset-0 m-auto size-14 text-gray-400" />}
                 {auction.images.length > 1 ? <>
-                  <button type="button" onClick={previousImage} className="absolute left-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/90 shadow-sm hover:bg-white" aria-label="Previous image"><ChevronLeft className="size-4" /></button>
-                  <button type="button" onClick={nextImage} className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/90 shadow-sm hover:bg-white" aria-label="Next image"><ChevronRight className="size-4" /></button>
+                  <button type="button" onClick={previousImage} className="absolute left-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/90 shadow-sm hover:bg-white" aria-label={t("previousImage")}><ChevronLeft className="size-4" /></button>
+                  <button type="button" onClick={nextImage} className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/90 shadow-sm hover:bg-white" aria-label={t("nextImage")}><ChevronRight className="size-4" /></button>
                 </> : null}
               </div>
-              {auction.images.length > 1 ? <div className="grid grid-cols-5 gap-2">{auction.images.slice(0, 10).map((image, index) => <button key={image} type="button" onClick={() => setImageIndex(index)} className="cursor-pointer" aria-label={`Lihat gambar ${index + 1}`}><span className={`relative block aspect-square overflow-hidden rounded-xl border ${imageIndex === index ? "border-yellow-500" : "border-gray-200"}`}><Image src={image} alt="" fill sizes="12vw" className="object-cover" /></span></button>)}</div> : null}
+              {auction.images.length > 1 ? <div className="grid grid-cols-5 gap-2">{auction.images.slice(0, 10).map((image, index) => <button key={image} type="button" onClick={() => setImageIndex(index)} className="cursor-pointer" aria-label={t("viewImage", { index: String(index + 1) })}><span className={`relative block aspect-square overflow-hidden rounded-xl border ${imageIndex === index ? "border-yellow-500" : "border-gray-200"}`}><Image src={image} alt="" fill sizes="12vw" className="object-cover" /></span></button>)}</div> : null}
             </div>
           </section>
 
           <section className="min-w-0 pt-1 lg:col-span-4 lg:pt-8">
             <p className="text-sm font-semibold text-cyan-700">{auction.code}</p>
             <h1 className="mt-2 text-3xl font-bold leading-tight text-black sm:text-4xl">{auction.name}</h1>
-            <div className="mt-4"><span className="inline-flex rounded-full border border-[#879a56] bg-[#eff4df] px-2.5 py-1 text-xs font-semibold text-[#4b5e1f]">OPEN</span></div>
+            <div className="mt-4"><span className="inline-flex rounded-full border border-[#879a56] bg-[#eff4df] px-2.5 py-1 text-xs font-semibold text-[#4b5e1f]">{t("openStatus")}</span></div>
             <div className="mt-5">
               <p className="text-sm text-gray-500">{t("batchValue")}</p>
               <p className="mt-1 text-3xl font-bold leading-tight text-orange-500">{formatRupiah(auction.grand_total)}</p>
@@ -220,12 +220,12 @@ export function AuctionDetailClient() {
       </div>
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="max-w-lg bg-white p-6">
-          <DialogHeader><DialogTitle>Konfirmasi Penawaran</DialogTitle><DialogDescription>Penawaran tidak dapat diubah atau dihapus. Anda masih dapat membuat penawaran baru setelahnya.</DialogDescription></DialogHeader>
-          <dl className="space-y-3 border-y border-[#e1e1da] py-4 text-sm"><div className="flex justify-between gap-4"><dt>Batch</dt><dd className="text-right font-semibold">{auction.name}</dd></div><div className="flex justify-between gap-4"><dt>Nominal bid</dt><dd className="font-semibold">{formatRupiah(bidAmount)}</dd></div><div className="flex justify-between gap-4"><dt>Estimasi PPN</dt><dd>{formatRupiah(ppnPreview)}</dd></div><div className="flex justify-between gap-4"><dt>Estimasi ongkir</dt><dd>{selectedQuote ? formatRupiah(selectedQuote.amount) : "-"}</dd></div><div className="flex justify-between gap-4 border-t pt-3 font-semibold"><dt>Total indikatif</dt><dd>{formatRupiah(totalPreview)}</dd></div></dl>
+          <DialogHeader><DialogTitle>{t("confirmBidTitle")}</DialogTitle><DialogDescription>{t("confirmBidDescription")}</DialogDescription></DialogHeader>
+          <dl className="space-y-3 border-y border-[#e1e1da] py-4 text-sm"><div className="flex justify-between gap-4"><dt>{t("batch")}</dt><dd className="text-right font-semibold">{auction.name}</dd></div><div className="flex justify-between gap-4"><dt>{t("bidAmount")}</dt><dd className="font-semibold">{formatRupiah(bidAmount)}</dd></div><div className="flex justify-between gap-4"><dt>{t("estimatedTax")}</dt><dd>{formatRupiah(ppnPreview)}</dd></div><div className="flex justify-between gap-4"><dt>{t("estimatedShipping")}</dt><dd>{selectedQuote ? formatRupiah(selectedQuote.amount) : "-"}</dd></div><div className="flex justify-between gap-4 border-t pt-3 font-semibold"><dt>{t("estimatedTotal")}</dt><dd>{formatRupiah(totalPreview)}</dd></div></dl>
           <div className="space-y-2"><div className="flex items-baseline justify-between gap-3"><Label htmlFor="auction-bid-note">{t("bidNote")}</Label><span className="text-xs text-gray-500">{t("optional")}</span></div><Textarea id="auction-bid-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength={1000} rows={3} placeholder={t("bidNotePlaceholder")} /><p className="text-right text-xs text-gray-500">{t("characters", { count: String(note.length), max: "1000" })}</p></div>
-          <p className="text-xs leading-5 text-[#62625d]">Total ini hanya estimasi. Biaya akhir dan pengiriman dikonfirmasi oleh operasional.</p>
+          <p className="text-xs leading-5 text-[#62625d]">{t("estimateDisclaimer")}</p>
           {submitError ? <p className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{submitError}</p> : null}
-          <DialogFooter><Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={submitting}>Batal</Button><Button onClick={submitBid} disabled={submitting} className="bg-[#ffcf02] text-black hover:bg-[#eabb00]">{submitting ? "Mengirim..." : "Kirim bid"}</Button></DialogFooter>
+          <DialogFooter><Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={submitting}>{t("cancel")}</Button><Button onClick={submitBid} disabled={submitting} className="bg-[#ffcf02] text-black hover:bg-[#eabb00]">{submitting ? t("submittingBid") : t("submitBid")}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
       <Dialog open={bidSuccessOpen} onOpenChange={setBidSuccessOpen}>
@@ -252,7 +252,7 @@ export function AuctionDetailClient() {
       </Dialog>
       <Dialog open={pdfOpen} onOpenChange={setPdfOpen}>
         <DialogContent className="h-[90vh]! w-[90vw]! max-w-6xl! p-3" showCloseButton={false}>
-          <button type="button" onClick={() => setPdfOpen(false)} aria-label="Tutup dokumen" className="absolute -right-3 -top-3 z-30 flex size-9 items-center justify-center rounded-full border-2 border-white bg-black text-white shadow-lg hover:bg-gray-800"><X className="size-4" /></button>
+          <button type="button" onClick={() => setPdfOpen(false)} aria-label={t("closeDocument")} className="absolute -right-3 -top-3 z-30 flex size-9 items-center justify-center rounded-full border-2 border-white bg-black text-white shadow-lg hover:bg-gray-800"><X className="size-4" /></button>
           {auction.pdf ? <iframe src={`${auction.pdf.url}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`} title={auction.pdf.name} className="h-full w-full" /> : null}
         </DialogContent>
       </Dialog>
@@ -268,18 +268,18 @@ function BidPanel({ mode, setMode, amountInput, setAmountInput, percentInput, se
   const sliderValue = Math.min(Math.max(typedPercent || minPercent, minPercent), sliderMax);
   return (
     <aside className="h-fit rounded-2xl border border-gray-300 bg-white p-4 shadow-sm lg:sticky lg:top-24 lg:col-span-3">
-      <h2 className="text-lg font-bold">Pasang bid</h2>
-      <p className="mt-1 text-xs leading-5 text-gray-500">Penawaran Anda bersifat tertutup.</p>
+      <h2 className="text-lg font-bold">{t("bid")}</h2>
+      <p className="mt-1 text-xs leading-5 text-gray-500">{t("privateBid")}</p>
       <div className="mt-5 grid grid-cols-2 rounded-lg border border-gray-200 bg-gray-50 p-1">
-        <button type="button" onClick={() => setMode("AMOUNT")} className={`h-9 rounded-md text-sm font-medium ${mode === "AMOUNT" ? "bg-yellow-400 text-black" : "text-gray-500"}`}>Nominal</button>
-        <button type="button" onClick={() => setMode("PERCENT")} className={`h-9 rounded-md text-sm font-medium ${mode === "PERCENT" ? "bg-yellow-400 text-black" : "text-gray-500"}`}>Persentase</button>
+        <button type="button" onClick={() => setMode("AMOUNT")} className={`h-9 rounded-md text-sm font-medium ${mode === "AMOUNT" ? "bg-yellow-400 text-black" : "text-gray-500"}`}>{t("amount")}</button>
+        <button type="button" onClick={() => setMode("PERCENT")} className={`h-9 rounded-md text-sm font-medium ${mode === "PERCENT" ? "bg-yellow-400 text-black" : "text-gray-500"}`}>{t("percentage")}</button>
       </div>
-      {mode === "AMOUNT" ? <div className="mt-5"><Label htmlFor="bid-value">Nominal bid (Rp)</Label><Input id="bid-value" inputMode="numeric" value={amountInput} onChange={(event) => setAmountInput(digitsOnly(event.target.value))} placeholder="Contoh: 1250000" className="mt-2 h-11" /></div> : <div className="mt-5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-4"><div className="flex items-center justify-between"><Label>Persentase bid</Label><strong className="text-sm text-black">{sliderValue.toFixed(1)}%</strong></div><Slider className="mt-5" value={[sliderValue]} min={minPercent} max={sliderMax} step={0.1} onValueChange={(value) => { const percent = typeof value === "number" ? value : value[0]; setPercentInput(percent.toFixed(1)); }} /><div className="mt-3 flex items-center justify-between text-[11px] text-gray-500"><span>{minPercent}%</span><span>{sliderMax}%</span></div></div>}
+      {mode === "AMOUNT" ? <div className="mt-5"><Label htmlFor="bid-value">{t("bidAmountLabel")}</Label><Input id="bid-value" inputMode="numeric" value={amountInput} onChange={(event) => setAmountInput(digitsOnly(event.target.value))} placeholder={t("bidAmountPlaceholder")} className="mt-2 h-11" /></div> : <div className="mt-5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-4"><div className="flex items-center justify-between"><Label>{t("bidPercentageLabel")}</Label><strong className="text-sm text-black">{sliderValue.toFixed(1)}%</strong></div><Slider className="mt-5" value={[sliderValue]} min={minPercent} max={sliderMax} step={0.1} onValueChange={(value) => { const percent = typeof value === "number" ? value : value[0]; setPercentInput(percent.toFixed(1)); }} /><div className="mt-3 flex items-center justify-between text-[11px] text-gray-500"><span>{minPercent}%</span><span>{sliderMax}%</span></div></div>}
       <Separator className="my-4 bg-gray-200" />
       <div className="space-y-2 text-xs text-gray-600">
-        <p>Minimum: {formatRupiah(minAmount)}</p>
-        {mode === "PERCENT" && percentInput ? <p>Nilai bid: <strong className="text-black">{formatRupiah(bidAmount)}</strong></p> : null}
-        {selectedQuote ? <p>Ongkir terpilih: <strong className="text-black">{formatRupiah(selectedQuote.amount)}</strong></p> : <p className="text-[#9a6d12]">Estimasi ongkir belum dipilih.</p>}
+        <p>{t("minimum")}: {formatRupiah(minAmount)}</p>
+        {mode === "PERCENT" && percentInput ? <p>{t("bidValue")}: <strong className="text-black">{formatRupiah(bidAmount)}</strong></p> : null}
+        {selectedQuote ? <p>{t("selectedShipping")}: <strong className="text-black">{formatRupiah(selectedQuote.amount)}</strong></p> : <p className="text-[#9a6d12]">{t("shippingNotSelected")}</p>}
       </div>
       <Button onClick={onReview} disabled={sessionLoading || !isAuthenticated || !inputValid || !selectedQuote} className="mt-6 h-11 w-full bg-yellow-400 text-black hover:bg-yellow-500">{!sessionLoading && !isAuthenticated ? t("loginToReviewBid") : t("reviewBid")}</Button>
       {!sessionLoading && !isAuthenticated ? <p className="mt-2 text-center text-xs leading-5 text-gray-500">{t("loginRequiredToReview")}</p> : null}
@@ -299,7 +299,7 @@ function AuctionInfo({ auction, onOpenPDF }: { auction: AuctionDetailResponse["d
     { label: t("source"), value: auction.source?.name, icon: <Tag className="size-4" /> },
   ].flatMap((item) => item.value ? [item] : []);
 
-  return <section className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6"><h2 className="text-xl font-bold">Detail batch</h2><div className="mt-5 grid gap-2 text-sm sm:grid-cols-2"><DetailStat label="Dimensi" value={`${formatAuctionNumber(locale, auction.dimensions.panjang_cm)} x ${formatAuctionNumber(locale, auction.dimensions.lebar_cm)} x ${formatAuctionNumber(locale, auction.dimensions.tinggi_cm)} cm`} icon={<Ruler className="size-4" />} /><DetailStat label="Berat" value={`${formatAuctionNumber(locale, auction.berat_kg)} kg`} icon={<Scale className="size-4" />} /><DetailStat label="Volume" value={`${formatAuctionNumber(locale, auction.volume_m3)} m³`} icon={<PackageOpen className="size-4" />} /><DetailStat label={t("discrepancy")} value={`${formatAuctionNumber(locale, auction.discrepancy_percentage, 2)}%`} icon={<TriangleAlert className="size-4" />} tooltip={{ ariaLabel: productDetailT("discrepancyInfoAria"), content: productDetailT("discrepancyTooltip") }} /></div>{metadata.length > 0 ? <><Separator className="my-6 bg-gray-200" /><h3 className="font-semibold">{t("classification")}</h3><div className="mt-4 grid gap-2 sm:grid-cols-2">{metadata.map((item) => <DetailStat key={item.label} {...item} />)}</div></> : null}<Separator className="my-6 bg-gray-200" /><h3 className="font-semibold">Isi batch</h3><div className="mt-3 overflow-x-auto"><table className="w-full min-w-[34rem] text-left text-sm"><thead className="border-y border-gray-200 text-xs text-gray-500"><tr><th className="py-3 font-medium">Barang</th><th className="py-3 font-medium">Qty</th><th className="py-3 text-right font-medium">Harga satuan</th><th className="py-3 text-right font-medium">Subtotal</th></tr></thead><tbody>{auction.items.map((item, index) => <tr key={`${item.name}-${index}`} className="border-b border-gray-100"><td className="py-3 font-medium">{item.name}</td><td className="py-3">{item.quantity}</td><td className="py-3 text-right">{formatRupiah(item.unit_price)}</td><td className="py-3 text-right">{formatRupiah(item.subtotal)}</td></tr>)}</tbody></table></div>{auction.pdf ? <div className="mt-6 flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-3 py-2.5"><p className="text-sm font-medium text-gray-800">Dokumen detail batch</p><Button variant="outline" className="h-9 shrink-0" onClick={onOpenPDF}><Eye className="size-4" />Lihat dokumen</Button></div> : null}</section>;
+  return <section className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6"><h2 className="text-xl font-bold">{t("detailBatch")}</h2><div className="mt-5 grid gap-2 text-sm sm:grid-cols-2"><DetailStat label={t("dimensions")} value={`${formatAuctionNumber(locale, auction.dimensions.panjang_cm)} x ${formatAuctionNumber(locale, auction.dimensions.lebar_cm)} x ${formatAuctionNumber(locale, auction.dimensions.tinggi_cm)} cm`} icon={<Ruler className="size-4" />} /><DetailStat label={t("weight")} value={`${formatAuctionNumber(locale, auction.berat_kg)} kg`} icon={<Scale className="size-4" />} /><DetailStat label={t("volume")} value={`${formatAuctionNumber(locale, auction.volume_m3)} m³`} icon={<PackageOpen className="size-4" />} /><DetailStat label={t("discrepancy")} value={`${formatAuctionNumber(locale, auction.discrepancy_percentage, 2)}%`} icon={<TriangleAlert className="size-4" />} tooltip={{ ariaLabel: productDetailT("discrepancyInfoAria"), content: productDetailT("discrepancyTooltip") }} /></div>{metadata.length > 0 ? <><Separator className="my-6 bg-gray-200" /><h3 className="font-semibold">{t("classification")}</h3><div className="mt-4 grid gap-2 sm:grid-cols-2">{metadata.map((item) => <DetailStat key={item.label} {...item} />)}</div></> : null}<Separator className="my-6 bg-gray-200" /><h3 className="font-semibold">{t("batchItems")}</h3><div className="mt-3 overflow-x-auto"><table className="w-full min-w-[34rem] text-left text-sm"><thead className="border-y border-gray-200 text-xs text-gray-500"><tr><th className="py-3 font-medium">{t("item")}</th><th className="py-3 font-medium">{t("quantity")}</th><th className="py-3 text-right font-medium">{t("unitPrice")}</th><th className="py-3 text-right font-medium">{t("subtotal")}</th></tr></thead><tbody>{auction.items.map((item, index) => <tr key={`${item.name}-${index}`} className="border-b border-gray-100"><td className="py-3 font-medium">{item.name}</td><td className="py-3">{item.quantity}</td><td className="py-3 text-right">{formatRupiah(item.unit_price)}</td><td className="py-3 text-right">{formatRupiah(item.subtotal)}</td></tr>)}</tbody></table></div>{auction.pdf ? <div className="mt-6 flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-3 py-2.5"><p className="text-sm font-medium text-gray-800">{t("batchDocument")}</p><Button variant="outline" className="h-9 shrink-0" onClick={onOpenPDF}><Eye className="size-4" />{t("viewDocument")}</Button></div> : null}</section>;
 }
 
 function DetailStat({ label, value, icon, tooltip }: { label: string; value: string; icon: React.ReactNode; tooltip?: { ariaLabel: string; content: string } }) { return <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"><div className="flex items-center gap-2 text-[11px] text-gray-500">{icon}{label}{tooltip ? <span className="relative inline-flex items-center group"><button type="button" aria-label={tooltip.ariaLabel} className="inline-flex items-center"><CircleQuestionMark className="size-3.5" /></button><span className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-72 -translate-x-1/2 rounded-md border border-gray-300 bg-white px-3 py-2 text-center text-sm text-black shadow-md opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">{tooltip.content}</span></span> : null}</div><p className="mt-1 text-sm font-medium">{value}</p></div>; }
@@ -322,5 +322,5 @@ function ShippingForm({ destination, setDestination, loading, shipping, selected
       kecamatan: resolved?.district || destination.kecamatan,
     });
   };
-  return <section className="h-fit rounded-2xl border border-gray-200 bg-white p-5"><h2 className="flex items-center gap-2 text-lg font-bold"><Truck className="size-5" />{t("shipping")}</h2><p className="mt-1 text-xs leading-5 text-gray-500">{t("shippingEstimateNote")}</p><div className="mt-5 space-y-3"><MapPickerTrigger latitude={String(destination.latitude ?? "")} longitude={String(destination.longitude ?? "")} onConfirm={applyMapLocation} /><div><Label htmlFor="destination-address">Alamat tujuan</Label><Input id="destination-address" value={destination.address} onChange={(e) => setField("address", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div><div className="grid grid-cols-2 gap-3"><div><Label htmlFor="destination-province">Provinsi</Label><Input id="destination-province" value={destination.provinsi} onChange={(e) => setField("provinsi", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div><div><Label htmlFor="destination-city">Kota/Kabupaten</Label><Input id="destination-city" value={destination.kota} onChange={(e) => setField("kota", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div></div><div><Label htmlFor="destination-district">Kecamatan</Label><Input id="destination-district" value={destination.kecamatan} onChange={(e) => setField("kecamatan", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div><Button type="button" variant="outline" onClick={onCalculate} disabled={loading || !hasCoordinates} className="mt-1 w-full">{loading ? "Menghitung..." : "Cek ongkir"}</Button></div>{shipping.length > 0 ? <div className="mt-5 space-y-2 border-t border-gray-200 pt-4">{shipping.map((quote) => { const available = Boolean(quote.shipping_quote_id); const chosen = quote.shipping_quote_id === selectedQuoteID; return <button key={quote.provider} type="button" disabled={!available} onClick={() => setSelectedQuoteID(quote.shipping_quote_id)} className={`w-full rounded-lg border p-3 text-left disabled:cursor-not-allowed disabled:opacity-55 ${chosen ? "border-yellow-500 bg-yellow-50" : "border-gray-200"}`}><div className="flex justify-between gap-3"><span className="font-semibold">{quote.label}</span><span className="font-semibold">{available ? formatRupiah(quote.amount) : t("unavailableShipping")}</span></div>{quote.sla_days ? <p className="mt-1 text-xs text-gray-500">{t("estimatedDays", { days: quote.sla_days })}</p> : null}</button>; })}</div> : null}</section>;
+  return <section className="h-fit rounded-2xl border border-gray-200 bg-white p-5"><h2 className="flex items-center gap-2 text-lg font-bold"><Truck className="size-5" />{t("shipping")}</h2><p className="mt-1 text-xs leading-5 text-gray-500">{t("shippingEstimateNote")}</p><div className="mt-5 space-y-3"><MapPickerTrigger latitude={String(destination.latitude ?? "")} longitude={String(destination.longitude ?? "")} onConfirm={applyMapLocation} /><div><Label htmlFor="destination-address">{t("destinationAddress")}</Label><Input id="destination-address" value={destination.address} onChange={(e) => setField("address", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div><div className="grid grid-cols-2 gap-3"><div><Label htmlFor="destination-province">{t("province")}</Label><Input id="destination-province" value={destination.provinsi} onChange={(e) => setField("provinsi", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div><div><Label htmlFor="destination-city">{t("cityOrRegency")}</Label><Input id="destination-city" value={destination.kota} onChange={(e) => setField("kota", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div></div><div><Label htmlFor="destination-district">{t("district")}</Label><Input id="destination-district" value={destination.kecamatan} onChange={(e) => setField("kecamatan", e.target.value)} disabled={!hasCoordinates} className="mt-1" /></div><Button type="button" variant="outline" onClick={onCalculate} disabled={loading || !hasCoordinates} className="mt-1 w-full">{loading ? t("calculatingShipping") : t("checkShipping")}</Button></div>{shipping.length > 0 ? <div className="mt-5 space-y-2 border-t border-gray-200 pt-4">{shipping.map((quote) => { const available = Boolean(quote.shipping_quote_id); const chosen = quote.shipping_quote_id === selectedQuoteID; return <button key={quote.provider} type="button" disabled={!available} onClick={() => setSelectedQuoteID(quote.shipping_quote_id)} className={`w-full rounded-lg border p-3 text-left disabled:cursor-not-allowed disabled:opacity-55 ${chosen ? "border-yellow-500 bg-yellow-50" : "border-gray-200"}`}><div className="flex justify-between gap-3"><span className="font-semibold">{quote.label}</span><span className="font-semibold">{available ? formatRupiah(quote.amount) : t("unavailableShipping")}</span></div>{quote.sla_days ? <p className="mt-1 text-xs text-gray-500">{t("estimatedDays", { days: String(quote.sla_days) })}</p> : null}</button>; })}</div> : null}</section>;
 }

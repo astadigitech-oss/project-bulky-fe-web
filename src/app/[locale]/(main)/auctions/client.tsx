@@ -130,13 +130,14 @@ function AuctionPagination({ meta, onPageChange }: { meta?: AuctionListResponse[
 
 function AuctionBannerSkeleton() {
   return (
-    <section className="mb-10 overflow-hidden rounded-lg border border-black/10 bg-white" aria-label="Memuat banner edukasi lelang" aria-busy="true">
+    <section className="mb-10 overflow-hidden rounded-lg border border-black/10 bg-white" aria-label={useTranslations("Auction")("loadingEducationBanner")} aria-busy="true">
       <div className="aspect-[1920/642] animate-pulse bg-[#e8e8e2]" />
     </section>
   );
 }
 
 function AuctionBannerCarousel({ banners }: { banners: AuctionBanner[] }) {
+  const t = useTranslations("Auction");
   const autoplay = useMemo(
     () => Autoplay({ delay: 10_000, stopOnInteraction: true, stopOnMouseEnter: true }),
     [],
@@ -204,7 +205,7 @@ function AuctionBannerCarousel({ banners }: { banners: AuctionBanner[] }) {
   }, [api, hasMultiple]);
 
   return (
-    <section className="mb-10" aria-label="Edukasi lelang">
+    <section className="mb-10" aria-label={t("auctionEducationBanner")}>
       <Carousel
         plugins={[autoplay]}
         opts={{ loop: hasMultiple }}
@@ -242,7 +243,7 @@ function AuctionBannerCarousel({ banners }: { banners: AuctionBanner[] }) {
           </CarouselContent>
           <div data-show={showProgress} className="absolute bottom-2 left-0 z-10 w-full transition-all duration-500 data-[show=false]:-bottom-5 data-[show=false]:scale-80">
             <div className="mx-auto w-1/5 rounded-full bg-white p-0.5 shadow-md">
-              <Progress value={Math.round(progress)} aria-label="Progres slide lelang" classIndicator="rounded-r-full bg-yellow-700" classTrack="h-1.5 rounded-full bg-yellow-400" className="rounded-full" />
+              <Progress value={Math.round(progress)} aria-label={t("auctionSlideProgress")} classIndicator="rounded-r-full bg-yellow-700" classTrack="h-1.5 rounded-full bg-yellow-400" className="rounded-full" />
             </div>
           </div>
         </div>
