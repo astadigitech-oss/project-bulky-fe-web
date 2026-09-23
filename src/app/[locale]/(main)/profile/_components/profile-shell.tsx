@@ -54,13 +54,13 @@ export async function ProfileShell({
         </aside>
 
         <section className="min-h-[640px] flex-1 rounded-lg bg-white p-6 shadow-sm">
-          <nav className="mb-8 flex gap-2">
+          <nav className="mb-8 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1" aria-label={t("bioData")}>
             {tabs.map((tab) => (
               <Link
                 key={tab.value}
                 href={tab.href}
                 className={cn(
-                  "flex h-9 flex-1 items-center justify-center whitespace-nowrap rounded-lg text-base font-normal text-black transition-colors",
+                  "flex h-9 min-w-max shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-3 text-sm font-normal text-black transition-colors sm:flex-1 sm:px-2 sm:text-base",
                   activeTab === tab.value
                     ? "bg-[#ffcf02] font-bold hover:bg-[#ffcf02]"
                     : "bg-[#efefef] hover:bg-[#e5e5e5]",

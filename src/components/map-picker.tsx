@@ -36,6 +36,7 @@ export type ResolvedAddress = {
 
 function parseAddressComponents(
   components: google.maps.GeocoderAddressComponent[],
+  formattedAddress?: string,
 ): ResolvedAddress {
   const get = (...types: string[]) =>
     types.reduce<string>(
@@ -44,7 +45,10 @@ function parseAddressComponents(
     );
 
   return {
-    address_detail: [get("street_number"), get("route")].filter(Boolean).join(" "),
+    address_detail:
+      [get("street_number"), get("route")].filter(Boolean).join(" ") ||
+      formattedAddress ||
+      undefined,
     village:
       get("administrative_area_level_4") ||
       get("sublocality_level_1") ||
@@ -71,7 +75,7 @@ function PlacesSearch({
     if (!placesLib || !inputRef.current) return;
 
     const autocomplete = new placesLib.Autocomplete(inputRef.current, {
-      fields: ["address_components", "geometry"],
+      fields: ["address_components", "formatted_address", "geometry"],
       componentRestrictions: { country: "id" },
     });
 
@@ -84,7 +88,7 @@ function PlacesSearch({
         lng: place.geometry.location.lng(),
       };
       const resolved = place.address_components
-        ? parseAddressComponents(place.address_components)
+        ? parseAddressComponents(place.address_components, place.formatted_address)
         : {};
 
       onPlaceSelected(pos, resolved);
@@ -129,7 +133,12 @@ function MapContent({
     (pos: LatLng) => {
       geocoderRef.current?.geocode({ location: pos }, (results, status) => {
         if (status === "OK" && results?.[0]?.address_components) {
-          onAddressResolved(parseAddressComponents(results[0].address_components));
+          onAddressResolved(
+            parseAddressComponents(
+              results[0].address_components,
+              results[0].formatted_address,
+            ),
+          );
         }
       });
     },
@@ -251,7 +260,7 @@ export function MapPickerDialog({
           )}
         </div>
 
-        <DialogFooter className="px-6 pb-6">
+        <DialogFooter className="mx-0 mb-0 rounded-b-xl border-t border-gray-200 bg-white px-6 py-3">
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             {t("cancel")}
           </Button>
@@ -282,7 +291,12 @@ export function MapPickerTrigger({
   const tTrigger = useTranslations("Profile.mapPickerDialog");
   const [open, setOpen] = useState(false);
 
-  const hasCoords = parseFloat(latitude) !== 0 || parseFloat(longitude) !== 0;
+  const parsedLatitude = Number.parseFloat(latitude);
+  const parsedLongitude = Number.parseFloat(longitude);
+  const hasCoords =
+    Number.isFinite(parsedLatitude) &&
+    Number.isFinite(parsedLongitude) &&
+    (parsedLatitude !== 0 || parsedLongitude !== 0);
 
   return (
     <>
@@ -295,7 +309,7 @@ export function MapPickerTrigger({
         <MapPin className="size-4 shrink-0" />
         {hasCoords ? (
           <span className="truncate">
-            {parseFloat(latitude).toFixed(5)}, {parseFloat(longitude).toFixed(5)}
+            {parsedLatitude.toFixed(5)}, {parsedLongitude.toFixed(5)}
           </span>
         ) : (
           tTrigger("selectPin")

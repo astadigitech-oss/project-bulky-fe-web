@@ -118,6 +118,8 @@ export default function LoginPage() {
         ? t("authRequiredBuyNow")
         : action === "add-to-cart"
           ? t("authRequiredAddToCart")
+          : action === "auction-bid"
+            ? t("authRequiredAuctionBid")
           : t("authRequired")
       : null;
 
