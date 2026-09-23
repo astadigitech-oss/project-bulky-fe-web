@@ -48,7 +48,7 @@ export function AuctionBidsDialog({
       <DialogContent className="max-h-[88vh] max-w-[calc(100%-2rem)] overflow-hidden p-0 sm:max-w-4xl">
         <DialogHeader className="border-b border-gray-200 px-6 py-5 pr-12">
           <DialogTitle className="text-xl font-bold">{title ?? t("myBids")}</DialogTitle>
-          <DialogDescription>{batchID && bidsQuery.data ? t("submittedBids", { count: bidsQuery.data.meta.total_items }) : t("bidHistory")}</DialogDescription>
+          <DialogDescription>{batchID && bidsQuery.data ? t("submittedBids", { count: String(bidsQuery.data.meta.total_items) }) : t("bidHistory")}</DialogDescription>
         </DialogHeader>
 
         <div className="max-h-[calc(88vh-6.5rem)] overflow-y-auto px-6 py-5">
