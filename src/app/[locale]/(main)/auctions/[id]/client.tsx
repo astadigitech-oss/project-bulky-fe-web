@@ -64,7 +64,7 @@ export function AuctionDetailClient() {
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [auctionTermsOpen, setAuctionTermsOpen] = useState(false);
-  const [agreedTermsHash, setAgreedTermsHash] = useState("");
+  const [agreedTermsVersion, setAgreedTermsVersion] = useState("");
   const [bidSuccessOpen, setBidSuccessOpen] = useState(false);
   const [pdfOpen, setPdfOpen] = useState(false);
   const [batchBidsOpen, setBatchBidsOpen] = useState(false);
@@ -80,10 +80,10 @@ export function AuctionDetailClient() {
     key: ["auction-terms-conditions", locale],
     endpoint: "/web/syarat-ketentuan-lelang",
     searchParams: { locale },
-    enabled: confirmOpen && auctionTermsOpen,
+    enabled: confirmOpen,
   });
   const auctionTerms = auctionTermsQuery.data?.data;
-  const termsAgreed = Boolean(auctionTerms?.hash_konten && agreedTermsHash === auctionTerms.hash_konten);
+  const termsAgreed = Boolean(auctionTerms?.terms_version && agreedTermsVersion === auctionTerms.terms_version);
   const auction = detailQuery.data?.data;
   const numericAmount = Number(digitsOnly(amountInput)) || 0;
   const numericPercent = Number(percentInput.replace(",", ".")) || 0;
@@ -102,7 +102,7 @@ export function AuctionDetailClient() {
   }, [auction, slug]);
 
   useEffect(() => {
-    if (!confirmOpen) setAgreedTermsHash("");
+    if (!confirmOpen) setAgreedTermsVersion("");
   }, [confirmOpen]);
 
   const requireLogin = () => {
@@ -151,7 +151,7 @@ export function AuctionDetailClient() {
 
   const submitBid = async () => {
     if (!auction || !selectedQuoteID) return;
-    if (!termsAgreed || !auctionTerms?.id || !auctionTerms.hash_konten) {
+    if (!termsAgreed || !auctionTerms?.terms_version) {
       toast.error(t("submitTermsRequired"));
       return;
     }
@@ -160,9 +160,8 @@ export function AuctionDetailClient() {
     const key = pendingKey.current ?? `bid-${crypto.randomUUID()}`;
     pendingKey.current = key;
     const consent = {
-      setuju_syarat_ketentuan_lelang: termsAgreed,
-      dokumen_syarat_ketentuan_lelang_id: auctionTerms.id,
-      hash_konten_syarat_ketentuan_lelang: auctionTerms.hash_konten,
+      terms_agreed: termsAgreed,
+      terms_version: auctionTerms.terms_version,
     };
     const body = mode === "AMOUNT"
       ? { input_mode: "AMOUNT", amount: String(bidAmount), shipping_quote_id: selectedQuoteID, note: note.trim(), ...consent }
@@ -255,7 +254,7 @@ export function AuctionDetailClient() {
               <button type="button" aria-haspopup="dialog" onClick={() => setAuctionTermsOpen(true)} className="shrink-0 text-xs font-semibold text-[#806a00] underline underline-offset-2">{t("viewAuctionTerms")}</button>
             </div>
             <label className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-[#30302d]">
-              <Checkbox checked={termsAgreed} onCheckedChange={(checked) => setAgreedTermsHash(checked === true ? auctionTerms?.hash_konten ?? "" : "")} disabled={auctionTermsQuery.isLoading || auctionTermsQuery.isError || !auctionTerms?.konten || !auctionTerms.hash_konten} />
+              <Checkbox checked={termsAgreed} onCheckedChange={(checked) => setAgreedTermsVersion(checked === true ? auctionTerms?.terms_version ?? "" : "")} disabled={auctionTermsQuery.isLoading || auctionTermsQuery.isError || !auctionTerms?.konten || !auctionTerms.terms_version} />
               <span>{t("agreeAuctionTerms")}</span>
             </label>
           </section>
@@ -270,7 +269,7 @@ export function AuctionDetailClient() {
             </DialogContent>
           </Dialog>
           {submitError ? <p className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{submitError}</p> : null}
-          <DialogFooter><Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={submitting}>{t("cancel")}</Button><Button onClick={submitBid} disabled={submitting || !termsAgreed || auctionTermsQuery.isLoading || auctionTermsQuery.isError || !auctionTermsQuery.data?.data?.konten || !auctionTermsQuery.data?.data?.hash_konten} className="bg-[#ffcf02] text-black hover:bg-[#eabb00]">{submitting ? t("submittingBid") : t("submitBid")}</Button></DialogFooter>
+          <DialogFooter><Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={submitting}>{t("cancel")}</Button><Button onClick={submitBid} disabled={submitting || !termsAgreed || auctionTermsQuery.isLoading || auctionTermsQuery.isError || !auctionTermsQuery.data?.data?.konten || !auctionTermsQuery.data?.data?.terms_version} className="bg-[#ffcf02] text-black hover:bg-[#eabb00]">{submitting ? t("submittingBid") : t("submitBid")}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
       <Dialog open={bidSuccessOpen} onOpenChange={setBidSuccessOpen}>
