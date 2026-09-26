@@ -5,6 +5,7 @@ export type TermsConditionsData = {
   judul: string;
   slug: string;
   konten: string; // HTML string
+  hash_konten: string;
 };
 
 export type GetTermsConditionsResponse = {
