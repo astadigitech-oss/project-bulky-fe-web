@@ -264,7 +264,7 @@ export function AuctionDetailClient() {
                 <DialogTitle>{t("auctionTermsTitle")}</DialogTitle>
               </DialogHeader>
               <div className="max-h-[calc(85vh-8rem)] overflow-y-auto rounded-lg border border-[#e1e1da] bg-white p-4 text-sm leading-6 text-[#4e4e49]">
-                {auctionTermsQuery.isLoading ? <p>{t("auctionTermsLoading")}</p> : auctionTermsQuery.isError || !auctionTermsQuery.data?.data?.konten ? <p className="text-red-600">{t("auctionTermsLoadError")}</p> : <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: auctionTermsQuery.data.data.konten }} />}
+                {auctionTermsQuery.isLoading ? <p>{t("auctionTermsLoading")}</p> : auctionTermsQuery.isError || !auctionTermsQuery.data?.data?.konten ? <p className="text-red-600">{t("auctionTermsLoadError")}</p> : <div className="prose prose-sm max-w-none text-[#3f3f3f] [&_h2]:mt-6 [&_h2]:mb-2 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:text-black [&_h2]:first:mt-0 [&_h3]:mt-4 [&_h3]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-black [&_p]:mb-3 [&_p]:leading-relaxed [&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1.5 [&_table]:mt-4 [&_table]:mb-4 [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-gray-200 [&_th]:bg-[#fef8ec] [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold [&_td]:border [&_td]:border-gray-200 [&_td]:px-3 [&_td]:py-2" dangerouslySetInnerHTML={{ __html: auctionTermsQuery.data.data.konten }} />}
               </div>
             </DialogContent>
           </Dialog>
