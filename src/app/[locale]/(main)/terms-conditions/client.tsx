@@ -20,14 +20,14 @@ type Locale = "id" | "en";
 
 const clampLocale = (value?: string): Locale => (value === "en" ? "en" : "id");
 
-const TermsConditionsClient = () => {
-  const t = useTranslations("TermsConditions");
+const TermsConditionsClient = ({ auction = false }: { auction?: boolean }) => {
+  const t = useTranslations(auction ? "AuctionTermsConditions" : "TermsConditions");
   const params = useParams<{ locale: string }>();
   const locale = clampLocale(params?.locale);
 
   const termsQuery = useApiQuery<GetTermsConditionsResponse>({
-    key: ["terms-conditions", locale],
-    endpoint: "/web/syarat-ketentuan",
+    key: [auction ? "auction-terms-conditions" : "terms-conditions", locale],
+    endpoint: auction ? "/web/syarat-ketentuan-lelang" : "/web/syarat-ketentuan",
     searchParams: { locale },
   });
 

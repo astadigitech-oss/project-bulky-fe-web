@@ -510,6 +510,7 @@
       "aboutPayment": "Informasi Pembayaran",
       "faq": "Pertanyaan Umum",
       "termsCondition": "Syarat dan Ketentuan",
+      "auctionTerms": "Syarat dan Ketentuan Lelang",
       "privacyPolicy": "Kebijakan Privasi"
     },
     "others": {
@@ -825,6 +826,7 @@
     "myBids": "Bid Saya",
     "batchBidHistory": "Riwayat bid pada batch ini",
     "submittedBids": "{count} bid telah dikirim",
+    "submitted": "Terkirim",
     "bidHistory": "Riwayat penawaran dan estimasi saat bid disimpan.",
     "bidHistoryError": "Histori bid belum dapat dimuat.",
     "noBids": "Belum ada penawaran",
@@ -864,6 +866,11 @@
     "openStatus": "DIBUKA",
     "confirmBidTitle": "Konfirmasi Penawaran",
     "confirmBidDescription": "Penawaran tidak dapat diubah atau dihapus. Anda masih dapat membuat penawaran baru setelahnya.",
+    "auctionTermsTitle": "Syarat dan Ketentuan Lelang",
+    "auctionTermsLoading": "Memuat syarat dan ketentuan lelang...",
+    "auctionTermsLoadError": "Syarat dan ketentuan lelang belum dapat dimuat.",
+    "agreeAuctionTerms": "Saya telah membaca dan menyetujui syarat dan ketentuan lelang.",
+    "submitTermsRequired": "Setujui syarat dan ketentuan lelang terlebih dahulu.",
     "batch": "Batch",
     "bidAmount": "Nominal bid",
     "estimatedTax": "Estimasi PPN",
@@ -1234,6 +1241,16 @@
     "breadcrumbLabel": "Syarat dan Ketentuan",
     "loading": "Memuat konten...",
     "loadError": "Gagal memuat konten. Silakan coba lagi nanti.",
+    "stillNeedHelp": "Masih ada pertanyaan?",
+    "contactCta": "Hubungi Kami"
+  },
+  "AuctionTermsConditions": {
+    "pageTitle": "Syarat dan Ketentuan Lelang - Bulky.id",
+    "heading": "Syarat dan Ketentuan Lelang",
+    "home": "Beranda",
+    "breadcrumbLabel": "Syarat dan Ketentuan Lelang",
+    "loading": "Memuat konten...",
+    "loadError": "Gagal memuat syarat dan ketentuan lelang.",
     "stillNeedHelp": "Masih ada pertanyaan?",
     "contactCta": "Hubungi Kami"
   },

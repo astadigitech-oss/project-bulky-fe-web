@@ -3,7 +3,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, CircleQuestionMark, Eye, History, MapPin, PackageOpen, Scale, Ruler, Tag, Tags, TriangleAlert, Truck, X } from "lucide-react";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
@@ -32,6 +33,7 @@ import { MapPickerTrigger, type ResolvedAddress } from "@/components/map-picker"
 import { AuctionBidsDialog } from "@/components/navbar/auction-bids-dialog";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import type { AuctionDetailResponse, OwnBidResponse, ShippingDestination, ShippingEstimate, ShippingEstimatesResponse } from "@/services/auctions/types";
+import type { GetTermsConditionsResponse } from "@/services/terms-conditions/types";
 
 type BidMode = "AMOUNT" | "PERCENT";
 
@@ -61,6 +63,7 @@ export function AuctionDetailClient() {
   const [selectedQuoteID, setSelectedQuoteID] = useState("");
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [termsAgreed, setTermsAgreed] = useState(false);
   const [bidSuccessOpen, setBidSuccessOpen] = useState(false);
   const [pdfOpen, setPdfOpen] = useState(false);
   const [batchBidsOpen, setBatchBidsOpen] = useState(false);
@@ -71,6 +74,12 @@ export function AuctionDetailClient() {
 
   const detailQuery = useApiQuery<AuctionDetailResponse>({
     key: ["auction-detail", locale, slug], endpoint: `/web/auctions/${slug}`, searchParams: { locale }, enabled: Boolean(slug), retry: false,
+  });
+  const auctionTermsQuery = useApiQuery<GetTermsConditionsResponse>({
+    key: ["auction-terms-conditions", locale],
+    endpoint: "/web/syarat-ketentuan-lelang",
+    searchParams: { locale },
+    enabled: confirmOpen,
   });
   const auction = detailQuery.data?.data;
   const numericAmount = Number(digitsOnly(amountInput)) || 0;
@@ -88,6 +97,10 @@ export function AuctionDetailClient() {
     viewRecorded.current = true;
     void axios.post(`${apiProxyUrl}/web/auctions/${auction.id}/views`, { event_id: crypto.randomUUID() }).catch(() => undefined);
   }, [auction, slug]);
+
+  useEffect(() => {
+    if (!confirmOpen) setTermsAgreed(false);
+  }, [confirmOpen]);
 
   const requireLogin = () => {
     if (isAuthenticated) return true;
@@ -135,6 +148,10 @@ export function AuctionDetailClient() {
 
   const submitBid = async () => {
     if (!auction || !selectedQuoteID) return;
+    if (!termsAgreed) {
+      toast.error(t("submitTermsRequired"));
+      return;
+    }
     setSubmitting(true);
     setSubmitError("");
     const key = pendingKey.current ?? `bid-${crypto.randomUUID()}`;
@@ -224,8 +241,21 @@ export function AuctionDetailClient() {
           <dl className="space-y-3 border-y border-[#e1e1da] py-4 text-sm"><div className="flex justify-between gap-4"><dt>{t("batch")}</dt><dd className="text-right font-semibold">{auction.name}</dd></div><div className="flex justify-between gap-4"><dt>{t("bidAmount")}</dt><dd className="font-semibold">{formatRupiah(bidAmount)}</dd></div><div className="flex justify-between gap-4"><dt>{t("estimatedTax")}</dt><dd>{formatRupiah(ppnPreview)}</dd></div><div className="flex justify-between gap-4"><dt>{t("estimatedShipping")}</dt><dd>{selectedQuote ? formatRupiah(selectedQuote.amount) : "-"}</dd></div><div className="flex justify-between gap-4 border-t pt-3 font-semibold"><dt>{t("estimatedTotal")}</dt><dd>{formatRupiah(totalPreview)}</dd></div></dl>
           <div className="space-y-2"><div className="flex items-baseline justify-between gap-3"><Label htmlFor="auction-bid-note">{t("bidNote")}</Label><span className="text-xs text-gray-500">{t("optional")}</span></div><Textarea id="auction-bid-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength={1000} rows={3} placeholder={t("bidNotePlaceholder")} /><p className="text-right text-xs text-gray-500">{t("characters", { count: String(note.length), max: "1000" })}</p></div>
           <p className="text-xs leading-5 text-[#62625d]">{t("estimateDisclaimer")}</p>
+          <section className="space-y-3 rounded-xl border border-[#e1e1da] bg-[#fafaf7] p-4">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-black">{t("auctionTermsTitle")}</h3>
+              <Link href="/auction-terms-conditions" className="shrink-0 text-xs font-semibold text-[#806a00] underline underline-offset-2">{t("auctionTermsTitle")}</Link>
+            </div>
+            <div className="max-h-40 overflow-y-auto rounded-lg border border-[#e1e1da] bg-white p-3 text-xs leading-5 text-[#4e4e49]">
+              {auctionTermsQuery.isLoading ? <p>{t("auctionTermsLoading")}</p> : auctionTermsQuery.isError || !auctionTermsQuery.data?.data?.konten ? <p className="text-red-600">{t("auctionTermsLoadError")}</p> : <div className="prose prose-xs max-w-none" dangerouslySetInnerHTML={{ __html: auctionTermsQuery.data.data.konten }} />}
+            </div>
+            <label className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-[#30302d]">
+              <Checkbox checked={termsAgreed} onCheckedChange={(checked) => setTermsAgreed(checked === true)} disabled={auctionTermsQuery.isLoading || auctionTermsQuery.isError || !auctionTermsQuery.data?.data?.konten} />
+              <span>{t("agreeAuctionTerms")}</span>
+            </label>
+          </section>
           {submitError ? <p className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{submitError}</p> : null}
-          <DialogFooter><Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={submitting}>{t("cancel")}</Button><Button onClick={submitBid} disabled={submitting} className="bg-[#ffcf02] text-black hover:bg-[#eabb00]">{submitting ? t("submittingBid") : t("submitBid")}</Button></DialogFooter>
+          <DialogFooter><Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={submitting}>{t("cancel")}</Button><Button onClick={submitBid} disabled={submitting || !termsAgreed || auctionTermsQuery.isLoading || auctionTermsQuery.isError || !auctionTermsQuery.data?.data?.konten} className="bg-[#ffcf02] text-black hover:bg-[#eabb00]">{submitting ? t("submittingBid") : t("submitBid")}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
       <Dialog open={bidSuccessOpen} onOpenChange={setBidSuccessOpen}>

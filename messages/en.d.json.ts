@@ -513,6 +513,7 @@ declare const messages: {
       "aboutPayment": "Payment Information",
       "faq": "Frequently Asked Questions",
       "termsCondition": "Terms and Conditions",
+      "auctionTerms": "Auction Terms and Conditions",
       "privacyPolicy": "Privacy Policy"
     },
     "others": {
@@ -828,6 +829,7 @@ declare const messages: {
     "myBids": "My Bids",
     "batchBidHistory": "Bid history for this batch",
     "submittedBids": "{count} bids submitted",
+    "submitted": "Submitted",
     "bidHistory": "Your bid history and the estimates saved with each bid.",
     "bidHistoryError": "Bid history could not be loaded.",
     "noBids": "No bids yet",
@@ -867,6 +869,11 @@ declare const messages: {
     "openStatus": "OPEN",
     "confirmBidTitle": "Confirm Your Bid",
     "confirmBidDescription": "A submitted bid cannot be changed or deleted. You may submit another bid afterwards.",
+    "auctionTermsTitle": "Auction Terms and Conditions",
+    "auctionTermsLoading": "Loading auction terms and conditions...",
+    "auctionTermsLoadError": "Auction terms and conditions could not be loaded.",
+    "agreeAuctionTerms": "I have read and agree to the auction terms and conditions.",
+    "submitTermsRequired": "Agree to the auction terms and conditions first.",
     "batch": "Batch",
     "bidAmount": "Bid amount",
     "estimatedTax": "Estimated VAT",
@@ -1237,6 +1244,16 @@ declare const messages: {
     "breadcrumbLabel": "Terms and Conditions",
     "loading": "Loading content...",
     "loadError": "Failed to load content. Please try again later.",
+    "stillNeedHelp": "Still have questions?",
+    "contactCta": "Contact Us"
+  },
+  "AuctionTermsConditions": {
+    "pageTitle": "Auction Terms and Conditions - Bulky.id",
+    "heading": "Auction Terms and Conditions",
+    "home": "Home",
+    "breadcrumbLabel": "Auction Terms and Conditions",
+    "loading": "Loading content...",
+    "loadError": "Failed to load auction terms and conditions.",
     "stillNeedHelp": "Still have questions?",
     "contactCta": "Contact Us"
   },

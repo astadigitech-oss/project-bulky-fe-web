@@ -83,7 +83,7 @@ export type OwnBid = {
   id: string;
   thumbnail_url: string | null;
   batch_name: string;
-  status: "PENDING" | "WON" | "LOST";
+  submitted: boolean;
   bid: { input_mode: "AMOUNT" | "PERCENT"; amount: string; input_percent: string };
   shipping_estimate: {
     provider: string;

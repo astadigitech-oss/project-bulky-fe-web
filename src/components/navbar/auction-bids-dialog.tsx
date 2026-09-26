@@ -16,12 +16,6 @@ import { useApiQuery } from "@/lib/query/use-query";
 import { formatRupiah } from "@/lib/utils";
 import type { MyBidsResponse, OwnBid } from "@/services/auctions/types";
 
-const statusClass: Record<OwnBid["status"], string> = {
-  PENDING: "border-[#d8b84b] bg-[#fff8d7] text-[#735a10]",
-  WON: "border-[#7fa166] bg-[#eef7e9] text-[#41672a]",
-  LOST: "border-[#b8b8b2] bg-[#f2f2ee] text-[#5a5a56]",
-};
-
 export function AuctionBidsDialog({
   open,
   onOpenChange,
@@ -112,9 +106,7 @@ function AuctionBidRow({ bid }: { bid: OwnBid }) {
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <h2 className="truncate font-semibold">{bid.batch_name}</h2>
-          <span className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${statusClass[bid.status]}`}>
-            {bid.status}
-          </span>
+          {bid.submitted ? <span className="rounded-full border border-[#7fa166] bg-[#eef7e9] px-2 py-0.5 text-xs font-semibold text-[#41672a]">{t("submitted")}</span> : null}
         </div>
         <p className="mt-1 text-sm text-gray-600">
           {bidInput} · {formatRupiah(bid.bid.amount)}
