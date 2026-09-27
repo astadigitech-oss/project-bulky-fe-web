@@ -94,9 +94,9 @@ export function PushNotificationPrompt() {
         <BellRing className="size-5" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="font-semibold">{locale === "en" ? "Get Bulky notifications" : "Aktifkan notifikasi Bulky"}</p>
+        <p className="font-semibold">{locale === "en" ? "Get Bulky.id notifications" : "Aktifkan notifikasi Bulky.id"}</p>
         <p className="text-sm text-neutral-600 dark:text-neutral-300">
-          {locale === "en" ? "We’ll notify you when your auction bid is submitted." : "Kami akan memberi tahu saat bid lelangmu berhasil dikirim."}
+          {locale === "en" ? "Stay updated on your activity, auctions, news, and offers from Bulky.id." : "Dapatkan info terbaru tentang aktivitasmu, lelang, berita, dan penawaran dari Bulky.id."}
         </p>
       </div>
       <div className="flex shrink-0 gap-2">
