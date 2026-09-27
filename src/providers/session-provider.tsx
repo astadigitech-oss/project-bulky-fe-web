@@ -10,6 +10,7 @@ import { SESSION_CHANGE_EVENT } from "@/lib/auth-session";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useMutate } from "@/lib/query";
 import type { SessionUser, CheckSessionResponse } from "@/services/auth/types";
+import { unregisterCurrentWebPush } from "@/lib/firebase/push-client";
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
@@ -82,7 +83,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const user = !isError ? (data?.data?.user ?? null) : null;
   const isAuthenticated = !!user;
 
-  function logout() {
+  async function logout() {
+    await unregisterCurrentWebPush();
     logoutMutation.mutate({});
   }
 
