@@ -122,7 +122,7 @@ function AuctionCard({ item, preloadImage }: { item: AuctionListResponse["data"]
             <p className="line-clamp-1 text-[11px] leading-none text-gray-400">
               {t("items", { count: String(item.total_quantity) })} <span className="mx-1">/</span>{t("minimumBid")} {formatRupiah(item.min_bid_amount)}
             </p>
-          )}
+          ) : null}
         </div>
       </article>
     </Link>
