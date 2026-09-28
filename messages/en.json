@@ -799,7 +799,6 @@
     "loadError": "Auction batches could not be loaded. Please try again.",
     "empty": "No auctions are currently open",
     "activeAuctions": "Active Auctions",
-    "activeAuctionsDescription": "Batches that are still accepting bids.",
     "closedAuctions": "Completed Auctions",
     "closedAuctionsDescription": "Batches that already have a winner.",
     "previousPage": "Previous page",

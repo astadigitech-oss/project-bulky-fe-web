@@ -799,7 +799,6 @@
     "loadError": "Batch lelang belum dapat dimuat. Silakan coba lagi.",
     "empty": "Belum ada lelang yang dibuka",
     "activeAuctions": "Lelang Aktif",
-    "activeAuctionsDescription": "Batch yang masih menerima penawaran.",
     "closedAuctions": "Lelang Selesai",
     "closedAuctionsDescription": "Batch yang telah memiliki pemenang.",
     "previousPage": "Halaman sebelumnya",

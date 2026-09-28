@@ -241,7 +241,7 @@ export function AuctionDetailClient() {
             </div>
             <Separator className="my-5 bg-gray-200" />
             <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-x-4 gap-y-3 text-sm">
-              {isOpen ? <><p className="text-gray-700">{t("minimumBid")}</p><p className="font-medium">{formatRupiah(auction.min_bid_amount)} <span className="font-normal text-gray-500">({formatAuctionNumber(locale, auction.min_bid_percent, 4)}%)</span></p></> : <><p className="text-gray-700">{t("closedStatus")}</p><p className="font-medium text-gray-700">{t("closedAuctionTitle")}</p></>}
+              {isOpen ? <><p className="text-gray-700">{t("minimumBid")}</p><p className="font-medium">{formatRupiah(auction.min_bid_amount)} <span className="font-normal text-gray-500">({formatAuctionNumber(locale, auction.min_bid_percent, 4)}%)</span></p></> : null}
               <p className="text-gray-700">{t("origin")}</p><p className="flex items-start gap-1.5 leading-snug"><MapPin className="mt-0.5 size-4 shrink-0" />{auction.origin.label}{auction.origin.city ? `, ${auction.origin.city}` : ""}</p>
             </div>
             {auction.description ? <><Separator className="my-5 bg-gray-200" /><p className="whitespace-pre-line text-sm leading-6 text-gray-700">{auction.description}</p></> : null}
