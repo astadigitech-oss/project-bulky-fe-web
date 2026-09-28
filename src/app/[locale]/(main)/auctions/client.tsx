@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { PackageOpen, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { CircleCheck, PackageOpen, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { useLocale, useTranslations } from "next-intl";
@@ -37,6 +37,8 @@ export function AuctionListClient() {
   const data = list.data?.data ?? [];
   const meta = list.data?.meta;
   const bannerItems = useMemo(() => banners.data?.data ?? [], [banners.data]);
+  const openBatches = data.filter((item) => item.status === "OPEN");
+  const soldBatches = data.filter((item) => item.status === "SOLD");
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] py-8 sm:py-12">
@@ -60,10 +62,22 @@ export function AuctionListClient() {
             <h2 className="font-semibold text-[#272724]">{t("empty")}</h2>
           </div>
         ) : null}
-        {data.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {data.map((item, index) => <AuctionCard key={item.id} item={item} preloadImage={index === 0} />)}
-          </div>
+        {openBatches.length > 0 ? (
+          <AuctionSection
+            title={t("activeAuctions")}
+            description={t("activeAuctionsDescription")}
+            items={openBatches}
+            preloadFirstImage
+          />
+        ) : null}
+        {soldBatches.length > 0 ? (
+          <AuctionSection
+            title={t("closedAuctions")}
+            description={t("closedAuctionsDescription")}
+            items={soldBatches}
+            preloadFirstImage={openBatches.length === 0}
+            className={openBatches.length > 0 ? "mt-12 border-t border-[#ddddd6] pt-10" : ""}
+          />
         ) : null}
         {data.length > 0 ? (
           <AuctionPagination meta={meta} onPageChange={setPage} />
@@ -73,13 +87,35 @@ export function AuctionListClient() {
   );
 }
 
+function AuctionSection({ title, description, items, preloadFirstImage, className = "" }: { title: string; description: string; items: AuctionListResponse["data"]; preloadFirstImage: boolean; className?: string }) {
+  return (
+      <section className={className}>
+        <div className="mb-5">
+          <div>
+            <h2 className="text-xl font-bold text-[#242421]">{title}</h2>
+            <p className="mt-1 text-sm text-[#6a6a63]">{description}</p>
+          </div>
+        </div>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        {items.map((item, index) => (
+          <AuctionCard key={item.id} item={item} preloadImage={preloadFirstImage && index === 0} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function AuctionCard({ item, preloadImage }: { item: AuctionListResponse["data"][number]; preloadImage: boolean }) {
   const t = useTranslations("Auction");
   return (
     <Link href={`/auctions/${item.slug}`} className="group block">
       <article className="w-full overflow-hidden rounded-3xl border border-gray-300 bg-white transition-shadow group-hover:shadow-md">
         <div className="relative aspect-square w-full bg-[#e9e9e9]">
-          {item.thumbnail_url ? <Image src={item.thumbnail_url} alt={item.name} fill loading={preloadImage ? "eager" : "lazy"} sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover" /> : <PackageOpen className="absolute inset-0 m-auto size-11 text-[#9a9a92]" />}
+          {item.thumbnail_url ? <Image src={item.thumbnail_url} alt={item.name} fill loading={preloadImage ? "eager" : "lazy"} sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className={`object-cover ${item.status === "SOLD" ? "grayscale-[35%] opacity-80" : ""}`} /> : <PackageOpen className="absolute inset-0 m-auto size-11 text-[#9a9a92]" />}
+          <span className={`absolute left-3 top-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold shadow-sm ${item.status === "SOLD" ? "bg-white/95 text-gray-700" : "bg-[#eff4df] text-[#4b5e1f]"}`}>
+            {item.status === "SOLD" ? <CircleCheck className="size-3" /> : null}
+            {item.status === "SOLD" ? t("closedStatus") : t("openStatus")}
+          </span>
         </div>
         <div className="flex w-full flex-col gap-2 px-3 py-2.5">
           <h2 className="line-clamp-1 text-sm font-medium leading-tight text-gray-900">{item.name}</h2>
@@ -87,9 +123,13 @@ function AuctionCard({ item, preloadImage }: { item: AuctionListResponse["data"]
             <p className="text-[11px] leading-none text-gray-400">{t("batchValue")}</p>
             <p className="whitespace-nowrap text-xl font-bold leading-tight text-orange-500">{formatRupiah(item.grand_total)}</p>
           </div>
-          <p className="line-clamp-1 text-[11px] leading-none text-gray-400">
-            {t("items", { count: String(item.total_quantity) })} <span className="mx-1">/</span>{t("minimumBid")} {formatRupiah(item.min_bid_amount)}
-          </p>
+          {item.status === "SOLD" ? (
+            <p className="line-clamp-1 text-[11px] leading-none text-gray-500">{t("closedAuctionDescription")}</p>
+          ) : (
+            <p className="line-clamp-1 text-[11px] leading-none text-gray-400">
+              {t("items", { count: String(item.total_quantity) })} <span className="mx-1">/</span>{t("minimumBid")} {formatRupiah(item.min_bid_amount)}
+            </p>
+          )}
         </div>
       </article>
     </Link>

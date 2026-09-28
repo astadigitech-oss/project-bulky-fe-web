@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, CircleQuestionMark, Eye, History, MapPin, PackageOpen, Scale, Ruler, Tag, Tags, TriangleAlert, Truck, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, CircleCheck, CircleQuestionMark, Eye, History, MapPin, PackageOpen, Scale, Ruler, Tag, Tags, TriangleAlert, Truck, X } from "lucide-react";
 import { toast } from "sonner";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
@@ -85,6 +85,7 @@ export function AuctionDetailClient() {
   const auctionTerms = auctionTermsQuery.data?.data;
   const termsAgreed = Boolean(auctionTerms?.terms_version && agreedTermsVersion === auctionTerms.terms_version);
   const auction = detailQuery.data?.data;
+  const isOpen = auction?.status === "OPEN";
   const numericAmount = Number(digitsOnly(amountInput)) || 0;
   const numericPercent = Number(percentInput.replace(",", ".")) || 0;
   const percentAmount = auction ? Math.ceil((Number(auction.grand_total) * numericPercent) / 100) : 0;
@@ -116,6 +117,10 @@ export function AuctionDetailClient() {
   };
 
   const getShipping = async () => {
+    if (!auction || auction.status !== "OPEN") {
+      toast.warning(t("closedBidToast"));
+      return;
+    }
     if (!destination.address || !destination.provinsi || !destination.kota || !destination.kecamatan) {
       toast.error(t("addressIncomplete"));
       return;
@@ -136,6 +141,10 @@ export function AuctionDetailClient() {
   };
 
   const reviewBid = () => {
+    if (!auction || auction.status !== "OPEN") {
+      toast.warning(t("closedBidToast"));
+      return;
+    }
     if (!requireLogin()) return;
     if (!inputValid) {
       toast.error(t("minimumBidError", { amount: formatRupiah(auction?.min_bid_amount ?? "0") }));
@@ -150,7 +159,7 @@ export function AuctionDetailClient() {
   };
 
   const submitBid = async () => {
-    if (!auction || !selectedQuoteID) return;
+    if (!auction || auction.status !== "OPEN" || !selectedQuoteID) return;
     if (!termsAgreed || !auctionTerms?.terms_version) {
       toast.error(t("submitTermsRequired"));
       return;
@@ -221,25 +230,33 @@ export function AuctionDetailClient() {
           <section className="min-w-0 pt-1 lg:col-span-4 lg:pt-8">
             <p className="text-sm font-semibold text-cyan-700">{auction.code}</p>
             <h1 className="mt-2 text-3xl font-bold leading-tight text-black sm:text-4xl">{auction.name}</h1>
-            <div className="mt-4"><span className="inline-flex rounded-full border border-[#879a56] bg-[#eff4df] px-2.5 py-1 text-xs font-semibold text-[#4b5e1f]">{t("openStatus")}</span></div>
+            <div className="mt-4">
+              <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${isOpen ? "border-[#879a56] bg-[#eff4df] text-[#4b5e1f]" : "border-gray-300 bg-gray-100 text-gray-600"}`}>
+                {isOpen ? t("openStatus") : t("closedStatus")}
+              </span>
+            </div>
             <div className="mt-5">
               <p className="text-sm text-gray-500">{t("batchValue")}</p>
               <p className="mt-1 text-3xl font-bold leading-tight text-orange-500">{formatRupiah(auction.grand_total)}</p>
             </div>
             <Separator className="my-5 bg-gray-200" />
             <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-x-4 gap-y-3 text-sm">
-              <p className="text-gray-700">{t("minimumBid")}</p><p className="font-medium">{formatRupiah(auction.min_bid_amount)} <span className="font-normal text-gray-500">({formatAuctionNumber(locale, auction.min_bid_percent, 4)}%)</span></p>
+              {isOpen ? <><p className="text-gray-700">{t("minimumBid")}</p><p className="font-medium">{formatRupiah(auction.min_bid_amount)} <span className="font-normal text-gray-500">({formatAuctionNumber(locale, auction.min_bid_percent, 4)}%)</span></p></> : <><p className="text-gray-700">{t("closedStatus")}</p><p className="font-medium text-gray-700">{t("closedAuctionTitle")}</p></>}
               <p className="text-gray-700">{t("origin")}</p><p className="flex items-start gap-1.5 leading-snug"><MapPin className="mt-0.5 size-4 shrink-0" />{auction.origin.label}{auction.origin.city ? `, ${auction.origin.city}` : ""}</p>
             </div>
             {auction.description ? <><Separator className="my-5 bg-gray-200" /><p className="whitespace-pre-line text-sm leading-6 text-gray-700">{auction.description}</p></> : null}
           </section>
 
-          <BidPanel mode={mode} setMode={(value) => { setMode(value); setAmountInput(""); setPercentInput(value === "PERCENT" ? String(auction.min_bid_percent) : ""); }} amountInput={amountInput} setAmountInput={setAmountInput} percentInput={percentInput} setPercentInput={setPercentInput} bidAmount={bidAmount} minAmount={minAmount} minPercent={auction.min_bid_percent} selectedQuote={selectedQuote} inputValid={inputValid} isAuthenticated={isAuthenticated} sessionLoading={sessionLoading} onReview={reviewBid} onOpenHistory={() => setBatchBidsOpen(true)} />
+          {isOpen ? (
+            <BidPanel mode={mode} setMode={(value) => { setMode(value); setAmountInput(""); setPercentInput(value === "PERCENT" ? String(auction.min_bid_percent) : ""); }} amountInput={amountInput} setAmountInput={setAmountInput} percentInput={percentInput} setPercentInput={setPercentInput} bidAmount={bidAmount} minAmount={minAmount} minPercent={auction.min_bid_percent} selectedQuote={selectedQuote} inputValid={inputValid} isAuthenticated={isAuthenticated} sessionLoading={sessionLoading} onReview={reviewBid} onOpenHistory={() => setBatchBidsOpen(true)} />
+          ) : (
+            <ClosedAuctionPanel onOpenHistory={() => setBatchBidsOpen(true)} />
+          )}
         </div>
 
-        <section className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <section className={`mt-10 grid gap-6 ${isOpen ? "lg:grid-cols-[minmax(0,1fr)_22rem]" : ""}`}>
           <AuctionInfo auction={auction} onOpenPDF={() => setPdfOpen(true)} />
-          <ShippingForm destination={destination} setDestination={setDestination} loading={quoteLoading} shipping={shipping} selectedQuoteID={selectedQuoteID} setSelectedQuoteID={setSelectedQuoteID} onCalculate={getShipping} />
+          {isOpen ? <ShippingForm destination={destination} setDestination={setDestination} loading={quoteLoading} shipping={shipping} selectedQuoteID={selectedQuoteID} setSelectedQuoteID={setSelectedQuoteID} onCalculate={getShipping} /> : null}
         </section>
       </div>
       <Dialog open={confirmOpen} onOpenChange={(open) => { setConfirmOpen(open); if (!open) setAuctionTermsOpen(false); }}>
@@ -328,6 +345,25 @@ function BidPanel({ mode, setMode, amountInput, setAmountInput, percentInput, se
       <Button onClick={onReview} disabled={sessionLoading || !isAuthenticated || !inputValid || !selectedQuote} className="mt-6 h-11 w-full bg-yellow-400 text-black hover:bg-yellow-500">{!sessionLoading && !isAuthenticated ? t("loginToReviewBid") : t("reviewBid")}</Button>
       {!sessionLoading && !isAuthenticated ? <p className="mt-2 text-center text-xs leading-5 text-gray-500">{t("loginRequiredToReview")}</p> : null}
       <Button type="button" variant="outline" onClick={onOpenHistory} className="mt-2 h-10 w-full"><History className="size-4" />{t("batchBidHistory")}</Button>
+    </aside>
+  );
+}
+
+function ClosedAuctionPanel({ onOpenHistory }: { onOpenHistory: () => void }) {
+  const t = useTranslations("Auction");
+  return (
+    <aside className="h-fit rounded-2xl border border-[#d7d7d2] bg-[#f8f8f6] p-5 shadow-sm lg:sticky lg:top-24 lg:col-span-3">
+      <div className="flex items-start gap-3">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#e7ece0] text-[#52672d]"><CircleCheck className="size-5" /></span>
+        <div>
+          <h2 className="text-lg font-bold text-[#242421]">{t("closedAuctionTitle")}</h2>
+          <p className="mt-1 text-sm leading-6 text-gray-600">{t("closedAuctionDescription")}</p>
+        </div>
+      </div>
+      <Button type="button" variant="outline" onClick={onOpenHistory} className="mt-5 h-10 w-full">
+        <History className="size-4" />
+        {t("batchBidHistory")}
+      </Button>
     </aside>
   );
 }

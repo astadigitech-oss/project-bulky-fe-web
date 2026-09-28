@@ -18,7 +18,7 @@ export type AuctionCard = {
   slug: string;
   name: string;
   thumbnail_url: string | null;
-  status: "OPEN";
+  status: "OPEN" | "SOLD";
   currency: "IDR";
   grand_total: string;
   min_bid_percent: number;
