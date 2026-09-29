@@ -7,6 +7,7 @@ import { apiUrl, cookiesKey } from "@/config";
 export const runtime = "nodejs";
 
 const REQUEST_TIMEOUT_MS = 15_000;
+const AUCTION_SHIPPING_TIMEOUT_MS = 60_000;
 
 // Backend has no brute-force protection on these endpoints (see
 // /memories/repo/production-errors.md), so it's enforced here instead.
@@ -62,9 +63,14 @@ async function handler(
   const headers = new Headers();
   const contentType = req.headers.get("content-type");
   if (contentType) headers.set("content-type", contentType);
+  const idempotencyKey = req.headers.get("idempotency-key");
+  if (idempotencyKey) headers.set("idempotency-key", idempotencyKey);
   if (token) headers.set("authorization", `Bearer ${token}`);
 
   const hasBody = !["GET", "HEAD"].includes(req.method);
+  const timeout = targetPath.endsWith("/shipping-estimates")
+    ? AUCTION_SHIPPING_TIMEOUT_MS
+    : REQUEST_TIMEOUT_MS;
   // Buffered (not streamed): piping req.body directly into fetch() is flaky
   // across Next.js runtimes ("expected non-null body source"). Request
   // bodies here (JSON, review/photo uploads) are small enough to buffer.
@@ -75,13 +81,22 @@ async function handler(
       method: req.method,
       headers,
       body,
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      signal: AbortSignal.timeout(timeout),
       cache: "no-store",
     });
 
     const resHeaders = new Headers();
     const resContentType = res.headers.get("content-type");
     if (resContentType) resHeaders.set("content-type", resContentType);
+    for (const header of [
+      "retry-after",
+      "x-ratelimit-limit",
+      "x-ratelimit-remaining",
+      "x-ratelimit-reset",
+    ]) {
+      const value = res.headers.get(header);
+      if (value) resHeaders.set(header, value);
+    }
 
     const resBody = await res.arrayBuffer();
     return new NextResponse(resBody, { status: res.status, headers: resHeaders });

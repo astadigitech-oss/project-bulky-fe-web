@@ -18,6 +18,7 @@ const staticRoutes = [
   "/payment-information",
   "/privacy-policy",
   "/terms-conditions",
+  "/auction-terms-conditions",
 ];
 
 function localizedEntry(

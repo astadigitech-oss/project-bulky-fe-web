@@ -29,6 +29,11 @@ export const Help = () => {
             {t("termsCondition")}
           </li>
         </Link>
+        <Link href={"/auction-terms-conditions"}>
+          <li className="hover:underline underline-offset-2">
+            {t("auctionTerms")}
+          </li>
+        </Link>
         <Link href={"/privacy-policy"}>
           <li className="hover:underline underline-offset-2">
             {t("privacyPolicy")}

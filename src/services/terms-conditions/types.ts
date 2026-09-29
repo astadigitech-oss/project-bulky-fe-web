@@ -5,6 +5,7 @@ export type TermsConditionsData = {
   judul: string;
   slug: string;
   konten: string; // HTML string
+  terms_version: string;
 };
 
 export type GetTermsConditionsResponse = {

@@ -15,6 +15,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { siteUrl } from "@/config";
 import { JsonLd } from "@/components/json-ld";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { PushNotificationPrompt } from "@/components/push-notification-prompt";
 import "../globals.css";
 
 const organizationJsonLd = {
@@ -67,6 +68,7 @@ const LocaleLayout = async ({
           <NuqsAdapter>
             <NextIntlClientProvider>
               <SessionProvider>
+                <PushNotificationPrompt />
                 <GoogleMapsProvider>
                   <ToastProvider />
                   <MobileRedirectModal />

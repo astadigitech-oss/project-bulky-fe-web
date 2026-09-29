@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useSyncExternalStore } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { Button } from "@ui/button";
-import { Phone, LogOut, User, CreditCard, Package, Users } from "lucide-react";
+import { Phone, LogOut, User, CreditCard, Package, Users, Gavel } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@i18n/navigation";
@@ -23,11 +23,13 @@ import { Search } from "./search";
 import { useSession } from "@/providers/session-provider";
 import { useApiQuery } from "@/lib/query/use-query";
 import type { GetCartResponse } from "@/services/cart/types";
+import { AuctionBidsDialog } from "./auction-bids-dialog";
 
 export const Navbar = () => {
   const t = useTranslations("Header.auth");
   const topBarT = useTranslations("Header.topBar");
   const headerT = useTranslations("Header");
+  const auctionT = useTranslations("Auction");
   const { user, isAuthenticated, isLoading, logout } = useSession();
   const mounted = useSyncExternalStore(
     () => () => undefined,
@@ -43,6 +45,7 @@ export const Navbar = () => {
   });
 
   const cartCount = cartQuery.data?.data?.data?.length ?? 0;
+  const [bidsOpen, setBidsOpen] = useState(false);
 
   return (
     <header className="sticky -top-10 w-full z-50">
@@ -124,6 +127,10 @@ export const Navbar = () => {
                       <Users className="mr-2 h-4 w-4" />
                       {t("patungan")}
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setBidsOpen(true)}>
+                      <Gavel className="mr-2 h-4 w-4" />
+                      {auctionT("myBids")}
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
@@ -147,6 +154,7 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
+      <AuctionBidsDialog open={bidsOpen} onOpenChange={setBidsOpen} />
     </header>
   );
 };

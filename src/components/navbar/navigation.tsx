@@ -10,6 +10,7 @@ export const Navigation = () => {
   const navData = [
     { label: t("home"), href: "/" },
     { label: t("products"), href: "/products" },
+    { label: t("auctions"), href: "/auctions" },
     { label: t("about"), href: "/about-us" },
     { label: t("contact"), href: "/contact-us" },
   ];
