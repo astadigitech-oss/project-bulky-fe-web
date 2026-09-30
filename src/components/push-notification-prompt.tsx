@@ -40,17 +40,30 @@ export function PushNotificationPrompt() {
 
   useEffect(() => {
     function showForegroundNotification(event: Event) {
-      const payload = (event as CustomEvent<{ notification?: { title?: string; body?: string }; data?: { deep_link?: string } }>).detail;
+      const payload = (event as CustomEvent<{
+        notification?: { title?: string; body?: string };
+        data?: { deep_link?: string; type?: string; event?: string };
+      }>).detail;
       const title = payload.notification?.title ?? (locale === "en" ? "Bulky notification" : "Notifikasi Bulky");
       const body = payload.notification?.body ?? "";
+      const type = payload.data?.event ?? payload.data?.type;
+      const fallback = type === "NEW_PRODUCT" || type === "PRODUCT"
+        ? `/${locale}/products`
+        : type === "ORDER_STATUS_UPDATED" || type === "ORDER"
+          ? `/${locale}/profile/orders`
+          : `/${locale}/profile/bids`;
+      const actionLabel = type === "NEW_PRODUCT" || type === "PRODUCT"
+        ? (locale === "en" ? "View product" : "Lihat produk")
+        : type === "ORDER_STATUS_UPDATED" || type === "ORDER"
+          ? (locale === "en" ? "View order" : "Lihat pesanan")
+          : (locale === "en" ? "View bids" : "Lihat bid");
       toast(title, {
         description: body,
         action: {
-          label: locale === "en" ? "View bids" : "Lihat bid",
+          label: actionLabel,
           onClick: () => {
-            const fallback = `/${locale}/profile/bids`;
             const target = payload.data?.deep_link || fallback;
-            window.location.assign(target.startsWith("/") ? target : fallback);
+            window.location.assign(target.startsWith("/") && !target.startsWith("//") ? target : fallback);
           },
         },
       });
