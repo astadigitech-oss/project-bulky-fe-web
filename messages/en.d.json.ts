@@ -219,6 +219,7 @@ declare const messages: {
     "category": "Category",
     "brand": "Brand",
     "price": "Price",
+    "applyPriceFilter": "Apply",
     "packageCondition": "Package Condition",
     "productCondition": "Product Condition",
     "source": "Source",

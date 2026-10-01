@@ -166,6 +166,8 @@ export const ProductClient = ({
 
   const [priceRange, setPriceRange] =
     useState<[number, number]>(initialPriceRange);
+  const [appliedPriceRange, setAppliedPriceRange] =
+    useState<[number, number]>(initialPriceRange);
 
   const isInitialProductRequest =
     page === initialRequest.page &&
@@ -179,8 +181,8 @@ export const ProductClient = ({
     sortOrder === initialRequest.order &&
     hasPriceFilter === initialHasPriceFilter &&
     (!hasPriceFilter ||
-      (priceRange[0] === initialPriceRange[0] &&
-        priceRange[1] === initialPriceRange[1]));
+      (appliedPriceRange[0] === initialPriceRange[0] &&
+        appliedPriceRange[1] === initialPriceRange[1]));
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
@@ -204,8 +206,8 @@ export const ProductClient = ({
     selected.brands.forEach((brand) => sp.append("brand", brand));
 
     if (hasPriceFilter) {
-      sp.set("min-price", String(priceRange[0]));
-      sp.set("max-price", String(priceRange[1]));
+      sp.set("min-price", String(appliedPriceRange[0]));
+      sp.set("max-price", String(appliedPriceRange[1]));
     }
 
     const nextQuery = sp.toString();
@@ -219,7 +221,7 @@ export const ProductClient = ({
     debouncedSearch,
     page,
     pathname,
-    priceRange,
+    appliedPriceRange,
     query,
     router,
     selected,
@@ -234,7 +236,8 @@ export const ProductClient = ({
       page,
       selected,
       sortOrder,
-      priceRange,
+      appliedPriceRange,
+      hasPriceFilter,
       debouncedSearch,
     ],
     endpoint: "/web/products",
@@ -245,8 +248,8 @@ export const ProductClient = ({
       source: selected.source || undefined,
       "package-condition": selected.packageCondition || undefined,
       "product-condition": selected.productCondition || undefined,
-      "min-price": hasPriceFilter ? String(priceRange[0]) : undefined,
-      "max-price": hasPriceFilter ? String(priceRange[1]) : undefined,
+      "min-price": hasPriceFilter ? String(appliedPriceRange[0]) : undefined,
+      "max-price": hasPriceFilter ? String(appliedPriceRange[1]) : undefined,
       q: debouncedSearch.trim() || undefined,
       order: sortOrder,
       sort: sortOrder === "new" ? "desc" : "asc",
@@ -257,6 +260,18 @@ export const ProductClient = ({
 
   const updatePage = (next: number) => {
     setPage(next);
+  };
+
+  const hasUnappliedPriceRange =
+    priceRange[0] !== appliedPriceRange[0] ||
+    priceRange[1] !== appliedPriceRange[1];
+
+  const applyPriceFilter = () => {
+    if (!hasUnappliedPriceRange) return;
+
+    setAppliedPriceRange(priceRange);
+    setHasPriceFilter(true);
+    setPage(1);
   };
 
   const totalApplied =
@@ -280,6 +295,7 @@ export const ProductClient = ({
     setDebouncedSearch("");
     setSortOrder("new");
     setPriceRange(defaultPriceRange);
+    setAppliedPriceRange(defaultPriceRange);
     setHasPriceFilter(false);
     setPage(1);
   };
@@ -438,8 +454,6 @@ export const ProductClient = ({
                         value={priceRange}
                         onValueChange={(v) => {
                           setPriceRange(v as [number, number]);
-                          setHasPriceFilter(true);
-                          setPage(1);
                         }}
                         min={defaultPriceRange[0]}
                         max={defaultPriceRange[1]}
@@ -470,6 +484,14 @@ export const ProductClient = ({
                           </InputGroupAddon>
                         </InputGroup>
                       </div>
+                      <Button
+                        size="sm"
+                        className="w-full bg-yellow-400 text-black hover:bg-yellow-500"
+                        disabled={!hasUnappliedPriceRange}
+                        onClick={applyPriceFilter}
+                      >
+                        {t("applyPriceFilter")}
+                      </Button>
                     </div>
                   </AccordionContent>
                 </AccordionItem>
