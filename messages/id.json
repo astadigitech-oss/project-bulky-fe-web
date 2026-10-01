@@ -216,6 +216,7 @@
     "category": "Kategori",
     "brand": "Brand",
     "price": "Harga",
+    "applyPriceFilter": "Terapkan",
     "packageCondition": "Kondisi Paket",
     "productCondition": "Kondisi Produk",
     "source": "Sumber",
