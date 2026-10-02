@@ -51,6 +51,7 @@ export type AuctionDetail = AuctionCard & {
     unit_price: string;
     subtotal: string;
   }>;
+  brands: string[];
   origin: { type: "SUPPLIER" | "BULKY_WAREHOUSE"; label: string; city: string | null };
   opened_at: string | null;
   discrepancy_percentage: number;
