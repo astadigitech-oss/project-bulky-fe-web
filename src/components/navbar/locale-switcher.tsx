@@ -1,4 +1,5 @@
 import React, { useRef, useState, useTransition } from "react";
+import axios from "axios";
 import { Button } from "@ui/button";
 import { MyFlag } from "@components/flag";
 import { Command, CommandItem, CommandList } from "@ui/command";
@@ -6,6 +7,7 @@ import { Locale, useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useOnClickOutside } from "usehooks-ts";
+import { apiProxyUrl } from "@/config";
 
 export const LocaleSwitcher = () => {
   const locale = useLocale();
@@ -17,10 +19,32 @@ export const LocaleSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
 
-  const handleSelect = async (locale: Locale) => {
+  const handleSelect = async (nextLocale: Locale) => {
     const query = Object.fromEntries(searchParams.entries());
+    let nextPathname = pathname;
+    const auctionDetailMatch = pathname.match(/^\/auctions\/([^/]+)$/);
+
+    if (auctionDetailMatch) {
+      try {
+        const currentSlug = decodeURIComponent(auctionDetailMatch[1]);
+        const response = await axios.get<{
+          data: { slug_id?: string; slug_en?: string };
+        }>(`${apiProxyUrl}/web/auctions/${encodeURIComponent(currentSlug)}`, {
+          params: { locale },
+        });
+        const localizedSlug = nextLocale === "en"
+          ? response.data.data.slug_en
+          : response.data.data.slug_id;
+        if (localizedSlug) {
+          nextPathname = `/auctions/${encodeURIComponent(localizedSlug)}`;
+        }
+      } catch {
+        // Keep the current path; the detail endpoint accepts the other locale's slug as a fallback.
+      }
+    }
+
     startTransition(() => {
-      router.replace({ pathname, query }, { locale: locale });
+      router.replace({ pathname: nextPathname, query }, { locale: nextLocale });
     });
   };
 

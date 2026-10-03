@@ -43,6 +43,8 @@ export type AuctionTaxonomy = {
 };
 
 export type AuctionDetail = AuctionCard & {
+  slug_id: string;
+  slug_en: string;
   description: string | null;
   images: string[];
   items: Array<{
@@ -51,6 +53,7 @@ export type AuctionDetail = AuctionCard & {
     unit_price: string;
     subtotal: string;
   }>;
+  brands: string[];
   origin: { type: "SUPPLIER" | "BULKY_WAREHOUSE"; label: string; city: string | null };
   opened_at: string | null;
   discrepancy_percentage: number;

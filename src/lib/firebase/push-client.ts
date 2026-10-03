@@ -12,6 +12,7 @@ import {
 } from "firebase/messaging";
 
 const fidStorageKey = "bulky.push.fid.v1";
+let currentLocale: "id" | "en" = "id";
 
 function firebaseConfig() {
   return {
@@ -48,7 +49,7 @@ async function saveFID(fid: string) {
     const response = await fetch("/api/proxy/notifications/devices", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fid, platform: "web" }),
+      body: JSON.stringify({ fid, platform: "web", locale: currentLocale }),
     });
     if (!response.ok) console.warn("Could not register this push device with Bulky.");
   } catch {
@@ -83,7 +84,8 @@ function attachMessagingListeners(messaging: Messaging) {
   });
 }
 
-export async function registerCurrentWebPush() {
+export async function registerCurrentWebPush(locale: string = "id") {
+  currentLocale = locale === "en" ? "en" : "id";
   const messaging = await messagingClient();
   if (!messaging || !("serviceWorker" in navigator)) return false;
   const serviceWorkerRegistration = await navigator.serviceWorker.register(
@@ -95,6 +97,8 @@ export async function registerCurrentWebPush() {
     vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
     serviceWorkerRegistration,
   });
+  const existingFID = window.localStorage.getItem(fidStorageKey);
+  if (existingFID) await saveFID(existingFID);
   return true;
 }
 

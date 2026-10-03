@@ -24,7 +24,7 @@ export function PushNotificationPrompt() {
     if (!("Notification" in window) || !isWebPushConfigured()) return;
 
     if (Notification.permission === "granted") {
-      void registerCurrentWebPush().catch((error) => {
+      void registerCurrentWebPush(locale).catch((error) => {
         console.warn("Could not register Bulky web push notifications.", error);
       });
       return;
@@ -36,21 +36,44 @@ export function PushNotificationPrompt() {
     ) {
       setVisible(true);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, locale]);
 
   useEffect(() => {
     function showForegroundNotification(event: Event) {
-      const payload = (event as CustomEvent<{ notification?: { title?: string; body?: string }; data?: { deep_link?: string } }>).detail;
+      const payload = (event as CustomEvent<{
+        notification?: { title?: string; body?: string };
+        data?: { deep_link?: string; type?: string; event?: string };
+      }>).detail;
       const title = payload.notification?.title ?? (locale === "en" ? "Bulky notification" : "Notifikasi Bulky");
       const body = payload.notification?.body ?? "";
+      const type = payload.data?.event ?? payload.data?.type;
+      const isProduct = type === "NEW_PRODUCT" || type === "PRODUCT";
+      const isOrder = type === "ORDER_STATUS_UPDATED" || type === "ORDER";
+      const isAuction = type === "NEW_AUCTION_BATCH" || type === "AUCTION_BATCH" || type === "AUCTION_BID_SUBMITTED";
+      const isPromotion = type === "PROMO_ONGOING";
+      const fallback = isProduct
+        ? `/${locale}/products`
+        : isOrder
+          ? `/${locale}/profile/orders`
+          : isAuction
+            ? `/${locale}/auctions`
+            : `/${locale}/products`;
+      const actionLabel = isProduct
+        ? (locale === "en" ? "View product" : "Lihat produk")
+        : isOrder
+          ? (locale === "en" ? "View order" : "Lihat pesanan")
+          : isAuction
+            ? (locale === "en" ? "View auction" : "Lihat lelang")
+            : isPromotion
+              ? (locale === "en" ? "View promotion" : "Lihat promo")
+              : (locale === "en" ? "View store" : "Lihat toko");
       toast(title, {
         description: body,
         action: {
-          label: locale === "en" ? "View bids" : "Lihat bid",
+          label: actionLabel,
           onClick: () => {
-            const fallback = `/${locale}/profile/bids`;
             const target = payload.data?.deep_link || fallback;
-            window.location.assign(target.startsWith("/") ? target : fallback);
+            window.location.assign(target.startsWith("/") && !target.startsWith("//") ? target : fallback);
           },
         },
       });
@@ -68,7 +91,7 @@ export function PushNotificationPrompt() {
         toast.info(locale === "en" ? "Notifications were not enabled." : "Notifikasi belum diaktifkan.");
         return;
       }
-      if (!(await registerCurrentWebPush())) {
+      if (!(await registerCurrentWebPush(locale))) {
         toast.error(locale === "en" ? "Push notifications are not supported here." : "Push notification tidak didukung di browser ini.");
       } else {
         toast.success(locale === "en" ? "Notifications are enabled." : "Notifikasi berhasil diaktifkan.");
