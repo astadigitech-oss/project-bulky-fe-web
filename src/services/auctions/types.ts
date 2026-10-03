@@ -43,6 +43,8 @@ export type AuctionTaxonomy = {
 };
 
 export type AuctionDetail = AuctionCard & {
+  slug_id: string;
+  slug_en: string;
   description: string | null;
   images: string[];
   items: Array<{

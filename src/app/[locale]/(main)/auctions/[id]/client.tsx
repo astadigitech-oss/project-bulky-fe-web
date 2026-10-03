@@ -103,6 +103,11 @@ export function AuctionDetailClient() {
   }, [auction, slug]);
 
   useEffect(() => {
+    if (!auction?.slug || auction.slug === slug) return;
+    router.replace(`/auctions/${encodeURIComponent(auction.slug)}`);
+  }, [auction?.slug, router, slug]);
+
+  useEffect(() => {
     if (!confirmOpen) setAgreedTermsVersion("");
   }, [confirmOpen]);
 
