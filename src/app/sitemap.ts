@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/config";
 import { fetchAllProductSlugs, fetchAllNewsSlugs } from "@/lib/seo/fetch-list";
+import { getPathname } from "@/i18n/navigation";
 
 export const revalidate = 3600;
 
@@ -17,7 +18,6 @@ const staticRoutes = [
   "/how-to-buy",
   "/payment-information",
   "/privacy-policy",
-  "/terms-conditions",
   "/auction-terms-conditions",
 ];
 
@@ -43,6 +43,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries = staticRoutes.flatMap((path) =>
     localizedEntry(path, path === "" ? "daily" : "weekly", path === "" ? 1 : 0.7),
   );
+
+  const localizedTermsPaths = {
+    id: siteUrl + getPathname({ locale: "id", href: "/terms-conditions" }),
+    en: siteUrl + getPathname({ locale: "en", href: "/terms-conditions" }),
+  };
+  const termsEntries: MetadataRoute.Sitemap = locales.map((locale) => ({
+    url: localizedTermsPaths[locale],
+    changeFrequency: "weekly",
+    priority: 0.7,
+    alternates: {
+      languages: {
+        ...localizedTermsPaths,
+        "x-default": localizedTermsPaths.id,
+      },
+    },
+  }));
 
   const [productSlugsId, productSlugsEn, newsSlugsId, newsSlugsEn] =
     await Promise.all([
@@ -100,6 +116,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticEntries,
+    ...termsEntries,
     ...productEntries,
     ...productEntriesEn,
     ...newsEntries,

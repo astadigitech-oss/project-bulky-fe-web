@@ -17,6 +17,20 @@ const nextConfig: NextConfig = {
       { protocol: "http", hostname: "127.0.0.1" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/en/terms-conditions",
+        destination: "/en/terms-and-conditions",
+        permanent: true,
+      },
+      {
+        source: "/id/terms-conditions",
+        destination: "/id/syarat-dan-ketentuan",
+        permanent: true,
+      },
+    ];
+  },
   allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS?.split(",").map((origin) =>
     origin.trim(),
   ),
