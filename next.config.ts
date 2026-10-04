@@ -20,6 +20,26 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/video",
+        destination: "https://bulky.id/en/bulky-live",
+        permanent: true,
+      },
+      {
+        source: "/how-to-shop",
+        destination: "https://bulky.id/en/how-to-buy",
+        permanent: true,
+      },
+      {
+        source: "/kebijakan-privasi",
+        destination: "https://bulky.id/id/privacy-policy",
+        permanent: true,
+      },
+      {
+        source: "/about-payment",
+        destination: "https://bulky.id/id/payment-information",
+        permanent: true,
+      },
+      {
         source: "/en/terms-conditions",
         destination: "/en/terms-and-conditions",
         permanent: true,
