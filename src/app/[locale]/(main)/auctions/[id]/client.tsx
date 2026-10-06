@@ -88,10 +88,11 @@ export function AuctionDetailClient() {
   const isOpen = auction?.status === "OPEN";
   const numericAmount = Number(digitsOnly(amountInput)) || 0;
   const numericPercent = Number(percentInput.replace(",", ".")) || 0;
+  const minBidPercent = Math.ceil(Math.min(100, Math.max(5, Number(auction?.min_bid_percent ?? 5))));
   const percentAmount = auction ? Math.ceil((Number(auction.grand_total) * numericPercent) / 100) : 0;
   const bidAmount = mode === "AMOUNT" ? numericAmount : percentAmount;
   const minAmount = Number(auction?.min_bid_amount ?? 0);
-  const inputValid = bidAmount >= minAmount && (mode === "AMOUNT" ? numericAmount > 0 : numericPercent >= (auction?.min_bid_percent ?? 0.1));
+  const inputValid = bidAmount >= minAmount && (mode === "AMOUNT" ? numericAmount > 0 : Number.isInteger(numericPercent) && numericPercent >= minBidPercent && numericPercent <= 100);
   const selectedQuote = shipping.find((quote) => quote.shipping_quote_id === selectedQuoteID);
   const ppnPreview = selectedQuote ? Math.ceil((bidAmount * 11) / 100) : 0;
   const totalPreview = selectedQuote ? bidAmount + ppnPreview + Number(selectedQuote.amount) : 0;
@@ -222,7 +223,7 @@ export function AuctionDetailClient() {
           <section className="lg:col-span-5">
             <div className="flex flex-col gap-3">
               <div className="relative aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-[#f4f4f4]">
-                {activeImage ? <Image src={activeImage} alt={auction.name} fill sizes="(max-width: 1024px) 100vw, 40vw" className="object-cover" /> : <PackageOpen className="absolute inset-0 m-auto size-14 text-gray-400" />}
+                {activeImage ? <Image src={activeImage} alt={auction.name} fill sizes="(max-width: 1024px) 100vw, 40vw" loading={imageIndex === 0 ? "eager" : "lazy"} className="object-cover" /> : <PackageOpen className="absolute inset-0 m-auto size-14 text-gray-400" />}
                 {auction.images.length > 1 ? <>
                   <button type="button" onClick={previousImage} className="absolute left-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/90 shadow-sm hover:bg-white" aria-label={t("previousImage")}><ChevronLeft className="size-4" /></button>
                   <button type="button" onClick={nextImage} className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/90 shadow-sm hover:bg-white" aria-label={t("nextImage")}><ChevronRight className="size-4" /></button>
@@ -253,7 +254,7 @@ export function AuctionDetailClient() {
           </section>
 
           {isOpen ? (
-            <BidPanel mode={mode} setMode={(value) => { setMode(value); setAmountInput(""); setPercentInput(value === "PERCENT" ? String(auction.min_bid_percent) : ""); }} amountInput={amountInput} setAmountInput={setAmountInput} percentInput={percentInput} setPercentInput={setPercentInput} bidAmount={bidAmount} minAmount={minAmount} minPercent={auction.min_bid_percent} selectedQuote={selectedQuote} inputValid={inputValid} isAuthenticated={isAuthenticated} sessionLoading={sessionLoading} onReview={reviewBid} onOpenHistory={() => setBatchBidsOpen(true)} />
+            <BidPanel mode={mode} setMode={(value) => { setMode(value); setAmountInput(""); setPercentInput(value === "PERCENT" ? String(minBidPercent) : ""); }} amountInput={amountInput} setAmountInput={setAmountInput} percentInput={percentInput} setPercentInput={setPercentInput} bidAmount={bidAmount} minAmount={minAmount} minPercent={minBidPercent} selectedQuote={selectedQuote} inputValid={inputValid} isAuthenticated={isAuthenticated} sessionLoading={sessionLoading} onReview={reviewBid} onOpenHistory={() => setBatchBidsOpen(true)} />
           ) : (
             <ClosedAuctionPanel onOpenHistory={() => setBatchBidsOpen(true)} />
           )}
@@ -330,8 +331,16 @@ export function AuctionDetailClient() {
 function BidPanel({ mode, setMode, amountInput, setAmountInput, percentInput, setPercentInput, bidAmount, minAmount, minPercent, selectedQuote, inputValid, isAuthenticated, sessionLoading, onReview, onOpenHistory }: { mode: BidMode; setMode: (mode: BidMode) => void; amountInput: string; setAmountInput: (value: string) => void; percentInput: string; setPercentInput: (value: string) => void; bidAmount: number; minAmount: number; minPercent: number; selectedQuote?: ShippingEstimate; inputValid: boolean; isAuthenticated: boolean; sessionLoading: boolean; onReview: () => void; onOpenHistory: () => void }) {
   const t = useTranslations("Auction");
   const typedPercent = Number(percentInput.replace(",", "."));
+  const sliderMin = Math.max(5, minPercent);
   const sliderMax = 100;
-  const sliderValue = Math.min(Math.max(typedPercent || minPercent, minPercent), sliderMax);
+  const sliderValue = Math.min(Math.max(typedPercent || sliderMin, sliderMin), sliderMax);
+  const normalizePercent = () => {
+    if (!percentInput.trim() || !Number.isFinite(typedPercent)) {
+      setPercentInput(String(sliderMin));
+      return;
+    }
+    setPercentInput(String(Math.min(Math.max(Math.round(typedPercent), sliderMin), sliderMax)));
+  };
   return (
     <aside className="h-fit rounded-2xl border border-gray-300 bg-white p-4 shadow-sm lg:sticky lg:top-24 lg:col-span-3">
       <h2 className="text-lg font-bold">{t("bid")}</h2>
@@ -340,7 +349,7 @@ function BidPanel({ mode, setMode, amountInput, setAmountInput, percentInput, se
         <button type="button" onClick={() => setMode("AMOUNT")} className={`h-9 rounded-md text-sm font-medium ${mode === "AMOUNT" ? "bg-yellow-400 text-black" : "text-gray-500"}`}>{t("amount")}</button>
         <button type="button" onClick={() => setMode("PERCENT")} className={`h-9 rounded-md text-sm font-medium ${mode === "PERCENT" ? "bg-yellow-400 text-black" : "text-gray-500"}`}>{t("percentage")}</button>
       </div>
-      {mode === "AMOUNT" ? <div className="mt-5"><Label htmlFor="bid-value">{t("bidAmountLabel")}</Label><Input id="bid-value" inputMode="numeric" value={amountInput} onChange={(event) => setAmountInput(digitsOnly(event.target.value))} placeholder={t("bidAmountPlaceholder")} className="mt-2 h-11" /></div> : <div className="mt-5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-4"><div className="flex items-center justify-between"><Label>{t("bidPercentageLabel")}</Label><strong className="text-sm text-black">{sliderValue.toFixed(1)}%</strong></div><Slider className="mt-5" value={[sliderValue]} min={minPercent} max={sliderMax} step={0.1} onValueChange={(value) => { const percent = typeof value === "number" ? value : value[0]; setPercentInput(percent.toFixed(1)); }} /><div className="mt-3 flex items-center justify-between text-[11px] text-gray-500"><span>{minPercent}%</span><span>{sliderMax}%</span></div></div>}
+      {mode === "AMOUNT" ? <div className="mt-5"><Label htmlFor="bid-value">{t("bidAmountLabel")}</Label><Input id="bid-value" inputMode="numeric" value={amountInput} onChange={(event) => setAmountInput(digitsOnly(event.target.value))} placeholder={t("bidAmountPlaceholder")} className="mt-2 h-11" /></div> : <div className="mt-5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-4"><div className="flex items-center justify-between gap-3"><Label htmlFor="bid-percentage">{t("bidPercentageLabel")}</Label><div className="flex items-center gap-1"><Input id="bid-percentage" type="number" inputMode="numeric" min={sliderMin} max={sliderMax} step="1" value={percentInput} onChange={(event) => { const value = event.target.value; if (value === "" || /^\d+$/.test(value)) setPercentInput(value); }} onBlur={normalizePercent} className="h-8 w-20 px-2 text-right text-sm font-semibold" /><span className="text-sm font-semibold text-black">%</span></div></div><Slider className="mt-5" value={[sliderValue]} min={sliderMin} max={sliderMax} step={1} onValueChange={(value) => { const percent = typeof value === "number" ? value : value[0]; setPercentInput(String(Math.round(percent))); }} /><div className="mt-3 flex items-center justify-between text-[11px] text-gray-500"><span>{sliderMin}%</span><span>{sliderMax}%</span></div></div>}
       <Separator className="my-4 bg-gray-200" />
       <div className="space-y-2 text-xs text-gray-600">
         <p>{t("minimum")}: {formatRupiah(minAmount)}</p>
