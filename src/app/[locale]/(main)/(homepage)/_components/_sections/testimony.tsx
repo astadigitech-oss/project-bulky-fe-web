@@ -1,5 +1,5 @@
 import { AnimatedTestimonials } from "@/components/ui/testimoni";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 
 type TestimoniItem = {
@@ -75,7 +75,20 @@ const fallbackData = [
   },
 ];
 
+const formatTestimonyDate = (value: string, locale: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+  }).format(date);
+};
+
 export const TestimonySection = ({ testimonials }: TestimonySectionProps) => {
+  const locale = useLocale();
   const t = useTranslations("Homepage.testimony");
 
   const data = testimonials?.length
@@ -86,7 +99,7 @@ export const TestimonySection = ({ testimonials }: TestimonySectionProps) => {
         rating: item.rating,
         description: item.deskripsi,
         images: item.image,
-        date: item.tanggal,
+        date: formatTestimonyDate(item.tanggal, locale),
       }))
     : fallbackData;
 

@@ -91,7 +91,7 @@ export function AuctionDetailClient() {
   const percentAmount = auction ? Math.ceil((Number(auction.grand_total) * numericPercent) / 100) : 0;
   const bidAmount = mode === "AMOUNT" ? numericAmount : percentAmount;
   const minAmount = Number(auction?.min_bid_amount ?? 0);
-  const inputValid = bidAmount >= minAmount && (mode === "AMOUNT" ? numericAmount > 0 : numericPercent >= (auction?.min_bid_percent ?? 0.1));
+  const inputValid = bidAmount >= minAmount && (mode === "AMOUNT" ? numericAmount > 0 : numericPercent >= (auction?.min_bid_percent ?? 5));
   const selectedQuote = shipping.find((quote) => quote.shipping_quote_id === selectedQuoteID);
   const ppnPreview = selectedQuote ? Math.ceil((bidAmount * 11) / 100) : 0;
   const totalPreview = selectedQuote ? bidAmount + ppnPreview + Number(selectedQuote.amount) : 0;
