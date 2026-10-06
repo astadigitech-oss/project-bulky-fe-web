@@ -33,6 +33,7 @@ import {
   TicketPercent,
 } from "lucide-react";
 import { cn, formatRupiah } from "@/lib/utils";
+import { getPaginationItems } from "@/lib/pagination";
 import { Slider } from "@/components/ui/slider";
 import {
   InputGroup,
@@ -828,53 +829,22 @@ export const ProductClient = ({
                 <span className="sr-only">{t("pagination.previous")}</span>
               </Button>
 
-              {meta && (
-                <>
-                  <Button
-                    size={"icon"}
-                    variant={meta.current_page === 1 ? "default" : "ghost"}
-                    onClick={() => updatePage(1)}
-                  >
-                    1
-                  </Button>
-                  {meta.last_page > 5 && (
-                    <Button size={"icon"} variant={"ghost"} disabled>
-                      <MoreHorizontal />
-                      <span className="sr-only">{t("pagination.morePages")}</span>
-                    </Button>
-                  )}
-                  {Array.from(
-                    { length: Math.min(3, Math.max(0, meta.last_page - 2)) },
-                    (_, i) => i + 2,
-                  ).map((page) => (
-                    <Button
-                      key={page}
-                      size={"icon"}
-                      variant={meta.current_page === page ? "default" : "ghost"}
-                      className={cn(
-                        meta.current_page === page &&
-                          "bg-yellow-400 text-black",
-                      )}
-                      onClick={() => updatePage(page)}
-                    >
-                      {page}
-                    </Button>
-                  ))}
-                  {meta.last_page > 4 && (
-                    <Button
-                      size={"icon"}
-                      variant={
-                        meta.current_page === meta.last_page
-                          ? "default"
-                          : "ghost"
-                      }
-                      onClick={() => updatePage(meta.last_page)}
-                    >
-                      {meta.last_page}
-                    </Button>
-                  )}
-                </>
-              )}
+              {meta && getPaginationItems(meta.current_page, meta.last_page).map((item, index) => item === "ellipsis" ? (
+                <Button key={`ellipsis-${index}`} size="icon" variant="ghost" disabled>
+                  <MoreHorizontal />
+                  <span className="sr-only">{t("pagination.morePages")}</span>
+                </Button>
+              ) : (
+                <Button
+                  key={item}
+                  size="icon"
+                  variant={meta.current_page === item ? "default" : "ghost"}
+                  className={cn(meta.current_page === item && "bg-yellow-400 text-black")}
+                  onClick={() => updatePage(item)}
+                >
+                  {item}
+                </Button>
+              ))}
 
               <Button
                 size={"icon"}

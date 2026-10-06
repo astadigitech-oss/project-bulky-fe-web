@@ -41,7 +41,7 @@ async function fetchProductList(
       sort: "desc",
     });
     const res = await fetch(url, {
-      next: { revalidate: 60 },
+      cache: "no-store",
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
     if (!res.ok) return null;

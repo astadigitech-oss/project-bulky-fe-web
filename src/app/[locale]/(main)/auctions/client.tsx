@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { formatRupiah } from "@/lib/utils";
+import { getPaginationItems } from "@/lib/pagination";
 import { useApiQuery } from "@/lib/query/use-query";
 import {
   Carousel,
@@ -136,10 +137,7 @@ function AuctionGridSkeleton() {
 function AuctionPagination({ meta, onPageChange }: { meta?: AuctionListResponse["meta"]; onPageChange: (page: number) => void }) {
   const t = useTranslations("Auction");
   if (!meta || meta.last_page <= 1) return null;
-  const middlePages = Array.from(
-    { length: Math.min(3, Math.max(0, meta.last_page - 2)) },
-    (_, index) => index + 2,
-  );
+  const pageItems = getPaginationItems(meta.current_page, meta.last_page);
 
   return (
     <nav className="mt-8 flex items-center justify-center gap-2" aria-label={t("title")}>
@@ -147,12 +145,11 @@ function AuctionPagination({ meta, onPageChange }: { meta?: AuctionListResponse[
         <ChevronLeft />
         <span className="sr-only">{t("previousPage")}</span>
       </Button>
-      <Button size="icon" variant={meta.current_page === 1 ? "default" : "ghost"} className={meta.current_page === 1 ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""} onClick={() => onPageChange(1)}>1</Button>
-      {meta.last_page > 5 ? <Button size="icon" variant="ghost" disabled><MoreHorizontal /><span className="sr-only">...</span></Button> : null}
-      {middlePages.map((itemPage) => (
-        <Button key={itemPage} size="icon" variant={meta.current_page === itemPage ? "default" : "ghost"} className={meta.current_page === itemPage ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""} onClick={() => onPageChange(itemPage)}>{itemPage}</Button>
+      {pageItems.map((item, index) => item === "ellipsis" ? (
+        <Button key={`ellipsis-${index}`} size="icon" variant="ghost" disabled><MoreHorizontal /><span className="sr-only">...</span></Button>
+      ) : (
+        <Button key={item} size="icon" variant={meta.current_page === item ? "default" : "ghost"} className={meta.current_page === item ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""} onClick={() => onPageChange(item)}>{item}</Button>
       ))}
-      {meta.last_page > 4 ? <Button size="icon" variant={meta.current_page === meta.last_page ? "default" : "ghost"} className={meta.current_page === meta.last_page ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""} onClick={() => onPageChange(meta.last_page)}>{meta.last_page}</Button> : null}
       <Button size="icon" variant="ghost" disabled={meta.current_page >= meta.last_page} onClick={() => onPageChange(meta.current_page + 1)}>
         <ChevronRight />
         <span className="sr-only">{t("nextPage")}</span>
