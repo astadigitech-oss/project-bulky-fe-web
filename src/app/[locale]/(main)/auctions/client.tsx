@@ -28,7 +28,7 @@ export function AuctionListClient() {
   const list = useApiQuery<AuctionListResponse>({
     key: ["auction-list", locale, page],
     endpoint: "/web/auctions",
-    searchParams: { locale, page, per_page: 9 },
+    searchParams: { locale, page, per_page: 12 },
   });
   const banners = useApiQuery<{ success: boolean; data: AuctionBanner[] }>({
     key: ["auction-banners", locale],
