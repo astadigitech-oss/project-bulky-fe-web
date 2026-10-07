@@ -106,7 +106,11 @@ function AuctionSection({ title, description, items, preloadFirstImage, classNam
 }
 
 function AuctionCard({ item, preloadImage }: { item: AuctionListResponse["data"][number]; preloadImage: boolean }) {
+  const locale = useLocale();
   const t = useTranslations("Auction");
+  const minBidPercent = new Intl.NumberFormat(locale === "en" ? "en-US" : "id-ID", {
+    maximumFractionDigits: 4,
+  }).format(item.min_bid_percent);
   return (
     <Link href={`/auctions/${item.slug}`} className="group block">
       <article className="w-full overflow-hidden rounded-3xl border border-gray-300 bg-white transition-shadow group-hover:shadow-md">
@@ -120,8 +124,8 @@ function AuctionCard({ item, preloadImage }: { item: AuctionListResponse["data"]
             <p className="whitespace-nowrap text-xl font-bold leading-tight text-orange-500">{formatRupiah(item.grand_total)}</p>
           </div>
           {item.status === "OPEN" ? (
-            <p className="line-clamp-1 text-[11px] leading-none text-gray-400">
-              {t("items", { count: String(item.total_quantity) })} <span className="mx-1">/</span>{t("minimumBid")} {formatRupiah(item.min_bid_amount)}
+            <p className="text-[11px] leading-tight text-gray-400">
+              {t("items", { count: String(item.total_quantity) })} <span className="mx-1">/</span>{t("minimumBid")} ({minBidPercent}%): {formatRupiah(item.min_bid_amount)}
             </p>
           ) : null}
         </div>
