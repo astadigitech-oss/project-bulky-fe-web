@@ -125,7 +125,7 @@ function AuctionCard({ item, preloadImage }: { item: AuctionListResponse["data"]
           </div>
           {item.status === "OPEN" ? (
             <p className="text-[11px] leading-tight text-gray-400">
-              {t("items", { count: String(item.total_quantity) })} <span className="mx-1">/</span>{t("minimumBid")} ({minBidPercent}%): {formatRupiah(item.min_bid_amount)}
+              {t("items", { count: String(item.total_quantity) })} <span className="mx-1">|</span>{t("minimumBid")}: {formatRupiah(item.min_bid_amount)} <span className="mx-1">|</span>{minBidPercent}%
             </p>
           ) : null}
         </div>
