@@ -24,6 +24,7 @@ import { useSession } from "@/providers/session-provider";
 import { useApiQuery } from "@/lib/query/use-query";
 import type { GetCartResponse } from "@/services/cart/types";
 import { AuctionBidsDialog } from "./auction-bids-dialog";
+import type { WebSeasonalCampaignResponse } from "@/services/seasonal-campaign/types";
 
 export const Navbar = () => {
   const t = useTranslations("Header.auth");
@@ -46,6 +47,23 @@ export const Navbar = () => {
 
   const cartCount = cartQuery.data?.data?.data?.length ?? 0;
   const [bidsOpen, setBidsOpen] = useState(false);
+  const [failedSeasonalLogoUrl, setFailedSeasonalLogoUrl] = useState<string | null>(null);
+  const [failedSeasonalDecorationUrl, setFailedSeasonalDecorationUrl] = useState<string | null>(null);
+
+  const seasonalCampaignQuery = useApiQuery<WebSeasonalCampaignResponse>({
+    key: ["seasonal-campaign", "web"],
+    endpoint: "/web/seasonal-campaign",
+    staleTime: 60_000,
+    refetchInterval: 60_000,
+  });
+  const seasonalCampaign = seasonalCampaignQuery.data?.data ?? null;
+  const seasonalLogoUrl = seasonalCampaign?.web_logo_url ?? null;
+  const seasonalDecorationUrl = seasonalCampaign?.web_navbar_decoration_url ?? null;
+  const showSeasonalLogo = !!seasonalLogoUrl && failedSeasonalLogoUrl !== seasonalLogoUrl;
+  const showSeasonalDecoration =
+    !!seasonalDecorationUrl && failedSeasonalDecorationUrl !== seasonalDecorationUrl;
+  const activeSeasonalLogoUrl = showSeasonalLogo ? seasonalLogoUrl : null;
+  const logoHeightClass = "h-7";
 
   return (
     <header className="sticky -top-10 w-full z-50">
@@ -55,18 +73,27 @@ export const Navbar = () => {
         <p>|</p>
         <p>{topBarT("shippingInfo")}</p>
       </div>
-      <nav className="px-8 h-16 flex items-center bg-white w-full shadow-lg">
+      <nav className="relative z-30 px-8 h-16 flex items-center bg-white w-full shadow-lg">
         <div className="xl:max-w-7xl max-w-5xl w-full mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href={"/"}>
               <Button className="p-1 h-auto" variant="ghost">
-                <div className="relative h-7 aspect-19/4">
+                <div className={`relative aspect-19/4 ${logoHeightClass}`}>
                   <Image
-                    src={"/assets/images/logo-bulky.webp"}
-                    alt="logo_bulky"
+                    src={activeSeasonalLogoUrl ?? "/assets/images/logo-bulky.webp"}
+                    alt={
+                      activeSeasonalLogoUrl
+                        ? `Bulky ${seasonalCampaign?.nama ?? ""}`
+                        : "Bulky"
+                    }
                     fill
                     className="object-contain"
                     sizes="(max-width: 768px) 100vw, 1280px"
+                    onError={() => {
+                      if (activeSeasonalLogoUrl) {
+                        setFailedSeasonalLogoUrl(activeSeasonalLogoUrl);
+                      }
+                    }}
                   />
                 </div>
               </Button>
@@ -154,6 +181,18 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
+      {showSeasonalDecoration && seasonalDecorationUrl && (
+        <div className="pointer-events-none absolute -mt-1 left-0 top-full z-20 aspect-[12/1] w-full overflow-hidden">
+          <Image
+            src={seasonalDecorationUrl}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+            onError={() => setFailedSeasonalDecorationUrl(seasonalDecorationUrl)}
+          />
+        </div>
+      )}
       <AuctionBidsDialog open={bidsOpen} onOpenChange={setBidsOpen} />
     </header>
   );
