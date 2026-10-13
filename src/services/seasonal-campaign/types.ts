@@ -1,9 +1,9 @@
 export type WebSeasonalCampaign = {
   id: string;
-  nama: string;
+  name: string;
   web_logo_url: string | null;
   web_navbar_decoration_url: string | null;
-  tanggal_selesai: string;
+  ends_at: string;
 };
 
 export type WebSeasonalCampaignResponse = {

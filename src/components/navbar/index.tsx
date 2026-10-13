@@ -83,7 +83,7 @@ export const Navbar = () => {
                     src={activeSeasonalLogoUrl ?? "/assets/images/logo-bulky.webp"}
                     alt={
                       activeSeasonalLogoUrl
-                        ? `Bulky ${seasonalCampaign?.nama ?? ""}`
+                        ? `Bulky ${seasonalCampaign?.name ?? ""}`
                         : "Bulky"
                     }
                     fill
