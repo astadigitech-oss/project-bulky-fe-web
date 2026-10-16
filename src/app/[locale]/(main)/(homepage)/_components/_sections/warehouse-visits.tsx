@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, CalendarDays } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
   Dialog,
@@ -21,29 +22,33 @@ export function WarehouseVisitSection() {
   return (
     <>
       <section className="w-full px-4 pb-10 sm:px-6 md:px-8 md:pb-14">
-        <div className="mx-auto grid max-w-6xl gap-6 rounded-2xl border border-[#f0e3bd] bg-[#fef8ec] p-5 sm:p-7 md:grid-cols-[1fr_auto] md:items-center md:gap-10 md:px-9 md:py-8">
-          <div className="flex items-start gap-4">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#ffcf02] text-black">
-              <CalendarDays aria-hidden="true" className="size-5" />
-            </div>
-            <div className="max-w-2xl">
-              <p className="mb-2 text-xs font-bold tracking-[0.16em] text-[#775f00] uppercase">
-                {t("eyebrow")}
-              </p>
-              <h2 className="text-xl font-bold text-black md:text-2xl">
-                {t("title")}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b] md:text-base">
-                {t("description")}
-              </p>
-            </div>
+        <div className="mx-auto grid max-w-6xl grid-cols-[6rem_minmax(0,1fr)] items-center gap-x-3 gap-y-4 rounded-2xl border border-[#f0e3bd] bg-[#fef8ec] p-4 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-x-5 sm:gap-y-5 sm:p-6 lg:grid-cols-[10rem_minmax(0,1fr)_auto] lg:gap-x-7 lg:gap-y-0 lg:px-8 lg:py-5">
+          <div className="flex h-20 w-24 shrink-0 items-center justify-center sm:h-28 sm:w-32 lg:h-32 lg:w-40">
+            <Image
+              src="/assets/images/warehouse-visit-reservation.png"
+              alt=""
+              width={240}
+              height={200}
+              sizes="(max-width: 640px) 96px, (max-width: 1024px) 128px, 160px"
+              className="h-full w-full object-contain"
+            />
+          </div>
+          <div className="min-w-0">
+            <p className="mb-1 text-xs font-bold tracking-[0.16em] text-[#775f00] uppercase">
+              {t("eyebrow")}
+            </p>
+            <h2 className="text-lg font-bold text-black sm:text-xl md:text-2xl">
+              {t("title")}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b] md:text-base">
+              {t("description")}
+            </p>
           </div>
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex h-11 w-full items-center justify-center gap-2 justify-self-start rounded-lg bg-[#ffcf02] px-5 text-sm font-bold text-black transition-colors hover:bg-[#f0c300] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black sm:w-fit md:justify-self-end"
+            className="col-span-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#ffcf02] px-5 text-sm font-bold text-black transition-colors hover:bg-[#f0c300] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black sm:w-fit sm:justify-self-end lg:col-span-1"
           >
-            <CalendarDays aria-hidden="true" className="size-4" />
             {t("cta")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </button>
