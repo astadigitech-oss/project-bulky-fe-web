@@ -13,6 +13,10 @@ import type {
   GoogleLoginNewUserData,
 } from "@/services/auth/types";
 
+function getSafeNextPath(value: string | null) {
+  return value?.startsWith("/") && !value.startsWith("//") ? value : "/";
+}
+
 export default function GoogleOAuthCallbackPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -30,8 +34,10 @@ export default function GoogleOAuthCallbackPage() {
           .split("; ")
           .find((entry) => entry.startsWith("NEXT_LOCALE="))
           ?.split("=")[1] ?? "id";
+      const nextPath = getSafeNextPath(sessionStorage.getItem("bulky_auth_next_path"));
 
       if (errorParam || !code) {
+        sessionStorage.removeItem("bulky_auth_next_path");
         if (!cancelled) {
           setError("Login dengan Google dibatalkan. / Google login was cancelled.");
           redirectTimer = setTimeout(() => router.replace(`/${locale}/login`), 2000);
@@ -53,7 +59,8 @@ export default function GoogleOAuthCallbackPage() {
           // Existing user — login directly
           const existing = data as GoogleLoginExistingUserData;
           if (await establishSession(existing.access_token)) {
-            router.replace(`/${locale}`);
+            sessionStorage.removeItem("bulky_auth_next_path");
+            router.replace(nextPath === "/" ? `/${locale}` : `/${locale}${nextPath}`);
           }
         } else {
           // New user — needs phone number
@@ -62,6 +69,7 @@ export default function GoogleOAuthCallbackPage() {
           router.replace(`/${locale}/oauth/add-phone`);
         }
       } catch {
+        sessionStorage.removeItem("bulky_auth_next_path");
         if (!cancelled) {
           setError("Gagal login dengan Google. Silakan coba lagi. / Failed to login with Google. Please try again.");
           redirectTimer = setTimeout(() => router.replace(`/${locale}/login`), 2000);

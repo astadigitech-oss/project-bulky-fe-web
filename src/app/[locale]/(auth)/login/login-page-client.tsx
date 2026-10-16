@@ -91,10 +91,15 @@ export default function LoginPage() {
 
   const { isAuthenticated } = useSession();
 
-  // Redirect to home if already logged in
+  const requestedNext = searchParams.get("next");
+  const nextPath = requestedNext?.startsWith("/") && !requestedNext.startsWith("//")
+    ? requestedNext
+    : "/";
+
+  // Return to the requested local page after authentication.
   useEffect(() => {
-    if (isAuthenticated) router.replace("/");
-  }, [isAuthenticated, router]);
+    if (isAuthenticated) router.replace(nextPath);
+  }, [isAuthenticated, nextPath, router]);
 
   const loginMutation = useMutate<LoginResponse, LoginBody>({
     endpoint: "/auth/login",
@@ -103,7 +108,8 @@ export default function LoginPage() {
     onSuccess: async (data) => {
       const token = data.data.data?.token;
       if (token && (await establishSession(token))) {
-        router.push("/");
+        sessionStorage.removeItem("bulky_auth_next_path");
+        router.push(nextPath);
       }
     },
     onError: { title: "LOGIN" },
@@ -140,6 +146,8 @@ export default function LoginPage() {
   function handleGoogleLogin() {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (!clientId) return;
+    if (nextPath === "/") sessionStorage.removeItem("bulky_auth_next_path");
+    else sessionStorage.setItem("bulky_auth_next_path", nextPath);
     const redirectUri = `${window.location.origin}/oauth/google/callback`;
     const params = new URLSearchParams({
       client_id: clientId,

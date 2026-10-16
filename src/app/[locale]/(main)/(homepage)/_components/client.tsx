@@ -8,6 +8,7 @@ import { InfoSection } from "./_sections/info";
 import { HowToWorkSecttion } from "./_sections/how-to-work";
 import { TestimonySection } from "./_sections/testimony";
 import { WholesaleSection } from "./_sections/wholesale";
+import { WarehouseVisitSection } from "./_sections/warehouse-visits";
 import { useApiQuery } from "@/lib/query/use-query";
 import { useParams } from "next/navigation";
 import { PageLoader } from "@/components/ui/page-loader";
@@ -86,6 +87,7 @@ export const HompageClient = ({
       <HeroSection heroUrl={homepage?.hero_url} />
       <PromoSection promos={homepage?.promo} />
       <ProductSection products={homepage?.produk} />
+      <WarehouseVisitSection />
       <TVSection bulkyTv={homepage?.bulky_tv} />
       <InfoSection />
       <HowToWorkSecttion />

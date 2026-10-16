@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { SuccessCheckAnimation } from "@/components/success-check-animation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -59,7 +60,6 @@ import {
   type ResolvedAddress,
 } from "@/components/map-picker";
 import { AuctionBidsDialog } from "@/components/navbar/auction-bids-dialog";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import type {
   AuctionDetailResponse,
   OwnBidResponse,
@@ -673,13 +673,7 @@ export function AuctionDetailClient() {
               {t("bidSuccessDescription")}
             </p>
           </div>
-          <DotLottieReact
-            src="/assets/lottie/bid-success.lottie"
-            autoplay
-            loop
-            className="size-52"
-            aria-label={t("bidSuccessTitle")}
-          />
+          <SuccessCheckAnimation label={t("bidSuccessTitle")} />
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:gap-4">
             <Button
               className="h-12 w-full rounded-full bg-gray-200 text-black hover:bg-gray-300 sm:flex-1"

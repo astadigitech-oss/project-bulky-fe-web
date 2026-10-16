@@ -459,6 +459,12 @@ declare const messages: {
       "sort": "Sorting",
       "distribution": "Distribution"
     },
+    "warehouseVisitShortcut": {
+      "eyebrow": "Warehouse Visit",
+      "title": "Unsure about buying in bulk online?",
+      "description": "See and choose products at the Bulky.id warehouse. Reserve your visit date.",
+      "cta": "Reserve a visit"
+    },
     "testimony": {
       "title": "Testimonials",
       "description": "What do customers say about our products and services? See their experiences here.",
@@ -796,6 +802,61 @@ declare const messages: {
       }
     }
   },
+  "WarehouseVisits": {
+    "booking": {
+      "pageTitle": "Warehouse Visit Booking",
+      "eyebrow": "Shop in Person at Our Warehouse",
+      "heading": "Plan your warehouse shopping visit",
+      "description": "Check available dates before coming to shop in person at the Bulky.id warehouse. Please reserve a date in advance so your visit is scheduled.",
+      "datesTitle": "Choose a visit date",
+      "datesDescription": "Availability is shown for each date. Hours are operating information, not arrival time slots.",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "loading": "Loading visit dates...",
+      "loadError": "Visit dates could not be loaded.",
+      "retry": "Try again",
+      "noDatesTitle": "No available dates yet",
+      "noDatesDescription": "No visit dates are open this month yet. Check next month or come back later.",
+      "full": "Full",
+      "remaining": "{count} places left",
+      "visitCapacity": "Visit capacity: {capacity} buyers",
+      "selectDatePrompt": "Choose a date that works for your visit",
+      "hoursNote": "Warehouse operating hours · no arrival time slots",
+      "confirmBooking": "Reserve this date",
+      "loginToBook": "Sign in to reserve",
+      "processing": "Processing reservation...",
+      "successTitle": "Visit reservation confirmed",
+      "successDescription": "Your visit on {date} is reserved. We look forward to welcoming you at the Bulky.id warehouse.",
+      "viewHistory": "View reservation history",
+      "closeDialog": "Close",
+      "historyPrompt": "Reserved a visit before?",
+      "errors": {
+        "unavailable": "This date is full or you already have an active reservation.",
+        "loginAgain": "Your session expired. Sign in again to continue.",
+        "generic": "Your reservation could not be completed. Please try again."
+      }
+    },
+    "history": {
+      "pageTitle": "Visit Reservation History",
+      "heading": "Visit reservation history",
+      "description": "Review the status and dates of your warehouse visits.",
+      "loadError": "Reservation history could not be loaded. Please reload the page.",
+      "emptyTitle": "No warehouse visit reservations yet",
+      "emptyDescription": "Your warehouse visit reservations will appear here.",
+      "browseDates": "Find a visit date",
+      "visitDate": "Visit date",
+      "visitCapacity": "Visit capacity: {capacity} buyers",
+      "page": "Page {current} of {total}",
+      "previous": "Previous",
+      "next": "Next",
+      "status": {
+        "CONFIRMED": "Confirmed",
+        "CANCELLED": "Cancelled",
+        "ATTENDED": "Attended",
+        "NO_SHOW": "No show"
+      }
+    }
+  },
   "Auction": {
     "eyebrow": "Limited batch offers",
     "title": "Auctions",
@@ -925,6 +986,7 @@ declare const messages: {
       "orders": "Orders",
       "patungan": "Group Buy",
       "review": "Reviews",
+      "warehouseVisits": "Warehouse Visits",
       "bids": "My Bids",
       "edit": "Edit Profile"
     },

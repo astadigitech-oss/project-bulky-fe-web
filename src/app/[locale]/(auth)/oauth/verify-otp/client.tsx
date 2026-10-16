@@ -105,7 +105,12 @@ export default function OAuthVerifyOtpClient({ phoneNumber }: { phoneNumber?: st
       const accessToken = data.data?.access_token;
       if (accessToken && (await establishSession(accessToken))) {
         sessionStorage.removeItem("bulky_oauth_token");
-        router.push("/");
+        const requestedNext = sessionStorage.getItem("bulky_auth_next_path");
+        const nextPath = requestedNext?.startsWith("/") && !requestedNext.startsWith("//")
+          ? requestedNext
+          : "/";
+        sessionStorage.removeItem("bulky_auth_next_path");
+        router.push(nextPath);
       }
     } catch (err: any) {
       setError(err?.message || t("errors.failed"));

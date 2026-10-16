@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { ProfileSidebarClient } from "./profile-sidebar-client";
 
-type ProfileTab = "payments" | "orders" | "group-buy" | "review" | "edit";
+type ProfileTab = "payments" | "orders" | "group-buy" | "review" | "warehouse-visits" | "edit";
 
 
 export async function ProfileShell({
@@ -23,6 +23,7 @@ export async function ProfileShell({
     { href: "/profile/orders", label: t("tabs.orders"), value: "orders" },
     { href: "/profile/group-buy", label: t("tabs.patungan"), value: "group-buy" },
     { href: "/profile/review", label: t("tabs.review"), value: "review" },
+    { href: "/profile/warehouse-visits", label: t("tabs.warehouseVisits"), value: "warehouse-visits" },
     { href: "/profile/edit", label: t("tabs.edit"), value: "edit" },
   ] as const;
 

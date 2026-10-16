@@ -456,6 +456,12 @@
       "sort": "Penyortiran",
       "distribution": "Distribusi"
     },
+    "warehouseVisitShortcut": {
+      "eyebrow": "Kunjungan Gudang",
+      "title": "Belum yakin borong online?",
+      "description": "Lihat dan pilih barang langsung di gudang Bulky.id. Reservasi tanggal kunjunganmu.",
+      "cta": "Reservasi kunjungan"
+    },
     "testimony": {
       "title": "Testimoni",
       "description": "Apa kata pelanggan tentang produk dan layanan kami? Lihat pengalaman mereka di sini.",
@@ -793,6 +799,61 @@
       }
     }
   },
+  "WarehouseVisits": {
+    "booking": {
+      "pageTitle": "Booking Kunjungan Gudang",
+      "eyebrow": "Belanja Langsung di Gudang",
+      "heading": "Rencanakan kunjungan belanjamu",
+      "description": "Lihat tanggal yang tersedia sebelum datang dan berbelanja langsung di gudang Bulky.id. Reservasi terlebih dahulu agar kunjunganmu terjadwal.",
+      "datesTitle": "Pilih tanggal kunjungan",
+      "datesDescription": "Kuota tersedia ditampilkan per tanggal. Catatan jam adalah informasi operasional, bukan slot kedatangan.",
+      "previousMonth": "Bulan sebelumnya",
+      "nextMonth": "Bulan berikutnya",
+      "loading": "Memuat tanggal kunjungan...",
+      "loadError": "Tanggal kunjungan belum dapat dimuat.",
+      "retry": "Coba lagi",
+      "noDatesTitle": "Belum ada tanggal yang tersedia",
+      "noDatesDescription": "Belum ada tanggal kunjungan yang dibuka untuk bulan ini. Coba bulan berikutnya atau cek kembali nanti.",
+      "full": "Penuh",
+      "remaining": "Sisa {count} tempat",
+      "visitCapacity": "Kapasitas kunjungan: {capacity} buyer",
+      "selectDatePrompt": "Pilih tanggal yang cocok untuk kunjunganmu",
+      "hoursNote": "Jam operasional gudang · bukan slot kedatangan",
+      "confirmBooking": "Reservasi tanggal ini",
+      "loginToBook": "Masuk untuk reservasi",
+      "processing": "Memproses reservasi...",
+      "successTitle": "Reservasi kunjungan berhasil",
+      "successDescription": "Reservasimu untuk {date} sudah tercatat. Kami tunggu kedatanganmu di gudang Bulky.id.",
+      "viewHistory": "Lihat riwayat reservasi",
+      "closeDialog": "Tutup",
+      "historyPrompt": "Sudah reservasi sebelumnya?",
+      "errors": {
+        "unavailable": "Kuota tanggal ini habis atau kamu sudah memiliki reservasi aktif.",
+        "loginAgain": "Sesi kamu berakhir. Masuk kembali untuk melanjutkan.",
+        "generic": "Reservasi belum berhasil dibuat. Silakan coba lagi."
+      }
+    },
+    "history": {
+      "pageTitle": "Riwayat Reservasi Kunjungan",
+      "heading": "Riwayat reservasi kunjungan",
+      "description": "Lihat status dan tanggal kunjungan yang sudah kamu reservasi.",
+      "loadError": "Riwayat reservasi belum dapat dimuat. Silakan muat ulang halaman.",
+      "emptyTitle": "Belum ada reservasi kunjungan",
+      "emptyDescription": "Reservasi kunjungan yang sudah kamu buat akan muncul di sini.",
+      "browseDates": "Cari tanggal kunjungan",
+      "visitDate": "Tanggal kunjungan",
+      "visitCapacity": "Kapasitas kunjungan: {capacity} buyer",
+      "page": "Halaman {current} dari {total}",
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "status": {
+        "CONFIRMED": "Dikonfirmasi",
+        "CANCELLED": "Dibatalkan",
+        "ATTENDED": "Hadir",
+        "NO_SHOW": "Tidak hadir"
+      }
+    }
+  },
   "Auction": {
     "eyebrow": "Penawaran batch terbatas",
     "title": "Lelang",
@@ -922,6 +983,7 @@
       "orders": "Pesanan",
       "patungan": "Patungan",
       "review": "Ulasan",
+      "warehouseVisits": "Kunjungan Gudang",
       "bids": "Bid Saya",
       "edit": "Edit Profil"
     },

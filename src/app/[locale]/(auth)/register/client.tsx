@@ -132,6 +132,7 @@ export default function RegisterPage() {
   function handleGoogleRegister() {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (!clientId) return;
+    sessionStorage.removeItem("bulky_auth_next_path");
     const redirectUri = `${window.location.origin}/oauth/google/callback`;
     const params = new URLSearchParams({
       client_id: clientId,
