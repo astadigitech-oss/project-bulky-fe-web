@@ -458,9 +458,9 @@
     },
     "warehouseVisitShortcut": {
       "eyebrow": "Kunjungan Gudang",
-      "title": "Belum yakin borong online?",
-      "description": "Lihat dan pilih barang langsung di gudang Bulky.id. Reservasi tanggal kunjunganmu.",
-      "cta": "Reservasi kunjungan"
+      "title": "Belum yakin belanja grosir online?",
+      "description": "Lihat dan pilih barang langsung di gudang Bulky.id. Pilih tanggal kunjunganmu.",
+      "cta": "Pilih tanggal kunjungan"
     },
     "testimony": {
       "title": "Testimoni",

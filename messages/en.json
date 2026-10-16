@@ -458,9 +458,9 @@
     },
     "warehouseVisitShortcut": {
       "eyebrow": "Warehouse Visit",
-      "title": "Unsure about buying in bulk online?",
-      "description": "See and choose products at the Bulky.id warehouse. Reserve your visit date.",
-      "cta": "Reserve a visit"
+      "title": "Unsure about buying wholesale online?",
+      "description": "See and choose products at the Bulky.id warehouse. Pick a date for your visit.",
+      "cta": "Choose a visit date"
     },
     "testimony": {
       "title": "Testimonials",
